@@ -9,7 +9,7 @@ export async function authenticate(formData: FormData) {
     await signIn("credentials", {
       username: formData.get("username"),
       password: formData.get("password"),
-      redirectTo: "/",
+      redirectTo: "/thesis",
     });
   } catch (error) {
     if (error instanceof AuthError) {

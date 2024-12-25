@@ -1,6 +1,7 @@
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
+import { jwtDecode } from "jwt-decode";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -26,12 +27,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   callbacks: {
     authorized: ({ auth, request }) => {
-      //   if (request.method === "POST") {
-      //     return true;
-      //   }
-
-      if (request.nextUrl.pathname === "/login" && Boolean(auth?.user)) {
-        return NextResponse.redirect(new URL("/", request.url));
+      if (
+        (request.nextUrl.pathname === "/login" ||
+          request.nextUrl.pathname === "/") &&
+        Boolean(auth?.user)
+      ) {
+        return NextResponse.redirect(new URL("/thesis", request.url));
       }
 
       return Boolean(auth?.user);
@@ -45,6 +46,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.name = String(user.name);
         token.title = user.title;
 
+        return token;
+      } else if (
+        jwtDecode(token.accessToken).exp &&
+        Number(jwtDecode(token.accessToken).exp) * 1000 < Date.now()
+      ) {
         return token;
       }
 
