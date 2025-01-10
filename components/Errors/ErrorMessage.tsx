@@ -32,9 +32,13 @@ export default function ErrorMessage() {
 
   const errorMessage = setErrorMessage(error);
 
+  if (!errorMessage) {
+    return null;
+  }
+
   return (
-    <span className="w-full pt-2 block text-center text-sm text-rose-600">
-      {errorMessage}
-    </span>
+    <div className="px-3 py-2 rounded-lg bg-red-50 border border-red-100">
+      <p className="text-[15px] text-red-600">{errorMessage}</p>
+    </div>
   );
 }
