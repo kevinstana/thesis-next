@@ -8,7 +8,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       authorize: async (credentials) => {
-        const user: User = await fetch("http://localhost:9090/api/login", {
+
+        
+        const url = `${process.env.API_URL}/${
+          credentials.isExternal !== 'null' ? "login-external" : "login"
+        }`;
+        
+        console.log(credentials, url)
+        const user: User = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -41,10 +48,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.username = user.username;
-        token.email = String(user.email);
-        token.name = String(user.name);
-        token.title = user.title;
+        // token.username = user.username;
+        // token.email = String(user.email);
+        // token.name = String(user.name);
+        // token.title = user.title;
 
         return token;
       } else if (
@@ -59,15 +66,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     session({ session, token }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-      session.username = token.username;
-      session.email = token.email;
-      session.name = token.name;
-      session.title = token.title;
+      // session.username = token.username;
+      // session.email = token.email;
+      // session.name = token.name;
+      // session.title = token.title;
 
       return session;
     },
   },
   pages: {
     signIn: "/login",
+    signOut: "/logout",
   },
 });

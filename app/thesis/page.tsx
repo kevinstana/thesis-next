@@ -1,7 +1,10 @@
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { redirect } from "next/navigation";
+// import { customLogout } from "../logout/actions";
+// import { redirect } from "next/navigation";
+import Balls from "./clientbutton";
+import { test } from "./actions";
 
 export default async function ThesisPage() {
   const session = await auth();
@@ -34,24 +37,6 @@ export default async function ThesisPage() {
             // icon: Activity,
             value: "1,247",
             change: "+19%",
-          },
-          {
-            title: "Conversion Rate",
-            // icon: BarChart,
-            value: "12.5%",
-            change: "+4.75%",
-          },
-          {
-            title: "Conversion Rate",
-            // icon: BarChart,
-            value: "12.5%",
-            change: "+4.75%",
-          },
-          {
-            title: "Conversion Rate",
-            // icon: BarChart,
-            value: "12.5%",
-            change: "+4.75%",
           },
           {
             title: "Conversion Rate",
@@ -107,15 +92,15 @@ export default async function ThesisPage() {
           </div>
         </section>
       ))}
-      <form
-        action={async () => {
-          "use server";
-          // await signOut({ redirect: true, redirectTo: "/login" });
-          redirect("/error");
-        }}
-      >
-        <button type="submit">Logout</button>
+      {/* <form action={customLogout}>
+      <button type="button" onClick={() => redirect('/logout')}>Logout</button>
+      </form> */}
+
+      <form action={test}>
+        <button type="submit">test</button>
       </form>
+
+      <Balls />
     </div>
   );
 }

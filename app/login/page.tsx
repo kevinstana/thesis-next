@@ -1,21 +1,9 @@
-import { authenticate } from "./actions";
+import LoginForm from "@/components/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div>
-      <form action={authenticate}>
-        <div className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="username">Username</label>
-            <input name="username" type="text" placeholder="it5432" />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input name="password" type="password" />
-          </div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <LoginForm />
     </div>
   );
 }

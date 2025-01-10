@@ -9,6 +9,7 @@ export async function authenticate(formData: FormData) {
     await signIn("credentials", {
       username: formData.get("username"),
       password: formData.get("password"),
+      isExternal: formData.get("isExternal"),
       redirectTo: "/thesis",
     });
   } catch (error) {
