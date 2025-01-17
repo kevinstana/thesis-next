@@ -28,7 +28,7 @@ export default function Sidebar({ role }: { role: Role }) {
                   pathname === item.path && "bg-gray-200"
                 )}
               >
-                <div className="flex items-center">
+                <div className="flex pl-2 gap-3 items-center">
                   {item.icon}
                   {item.name}
                 </div>
@@ -44,7 +44,7 @@ export default function Sidebar({ role }: { role: Role }) {
                   pathname === item.path && "bg-gray-200"
                 )}
               >
-                <div className="flex items-center">
+                <div className="flex pl-2 gap-3 items-center">
                   {item.icon}
                   {item.name}
                 </div>

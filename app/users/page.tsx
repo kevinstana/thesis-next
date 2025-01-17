@@ -118,7 +118,7 @@ export default function UsersPage() {
 
     <div className="overflow-hidden bg-dark-bg-secondary rounded-lg border border-dark-border w-[80vw]">
       
-      <div className="overflow-auto w-full">
+      <div className="overflow-auto">
         <table className="w-full divide-y divide-dark-border">
           <thead className="bg-dark-bg-tertiary">
             {table.getHeaderGroups().map((headerGroup) => (

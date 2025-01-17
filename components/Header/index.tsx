@@ -21,7 +21,7 @@ export default function Header() {
             placeholder="Search..."
             className="border rounded-lg pl-10 pr-4 py-2 focus:outline-none"
           /> */}
-          <h1 className="pl-10 pr-4 py-2 text-xl font-medium">Dashboard</h1>
+          <h1 className="pl-10 pr-4 py-2 text-2xl font-medium">Dashboard</h1>
         </div>
       </div>
 
