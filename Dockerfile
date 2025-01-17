@@ -23,11 +23,19 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
+ARG AUTH_SECRET
+ARG AUTH_TRUST_HOST
+ARG API_URL
+
 RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
+
+ARG AUTH_SECRET
+ARG AUTH_TRUST_HOST
+ARG API_URL
 
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.

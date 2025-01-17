@@ -2,25 +2,16 @@
 
 import { useSearchParams } from "next/navigation";
 
-// const formattedError = {
-//   invalidCredentials: "Invalid credentials",
-//   unknownError: "Something went wrong. Please try again later",
-// };
-
 function setErrorMessage(error: string | null) {
   switch (error) {
-    case "Invalid_credentials":
+    case "invalid_credentials":
       return "Invalid Credentials";
     case "something_went_wrong":
       return "Something went wrong";
-    case "password_mismatch":
-      return "Passwords don't match";
-    case "email_exists":
-      return "Email exists";
-    case "weak_password":
-      return "Password must contain at least one uppercase letter, one lowercase letter, and one number";
-    case "invalid_regNo":
-      return "Registration Number must be a positive integer";
+    case "access_denied":
+      return "Access denied. Please contact your system administrator.";
+    case "account_disabled":
+      return "Account disabled. Please contact your system administrator.";
     default:
       return "";
   }

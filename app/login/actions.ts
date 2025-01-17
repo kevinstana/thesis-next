@@ -10,13 +10,13 @@ export async function authenticate(formData: FormData) {
       username: formData.get("username"),
       password: formData.get("password"),
       isExternal: formData.get("isExternal"),
-      redirectTo: "/thesis",
+      redirectTo: "/",
     });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          redirect("/login?error=Invalid_credentials");
+          redirect("/login?error=invalid_credentials");
         default:
           redirect("/login?error=something_went_wrong");
       }

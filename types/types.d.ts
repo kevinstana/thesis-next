@@ -1,32 +1,44 @@
+// NextAuth type augmentation
 declare module "next-auth" {
   interface User {
-    accessToken: string
-    refreshToken: string
-    username: string
-    email: string
-    name: string
-    title: string
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: Role;
+    isExternal?: boolean;
+    accessToken: string;
+    refreshToken: string;
+    message?: string;
   }
 
   interface Session {
-    accessToken: string
-    refreshToken: string
-    username: string
-    email: string
-    name: string
-    title: string
+    id: number;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: Role;
+    isExternal?: boolean;
+    accessToken: string;
+    failedRefresh: boolean;
   }
 }
 
 import "next-auth/jwt";
+import { Role } from "./app-types";
 
 declare module "next-auth/jwt" {
   interface JWT {
-    accessToken: string
-    refreshToken: string
-    username: string
-    email: string
-    name: string
-    title: string
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: Role;
+    isExternal?: boolean;
+    accessToken: string;
+    refreshToken: string;
+    accessExp: number;
+    failedRefresh: boolean;
   }
 }

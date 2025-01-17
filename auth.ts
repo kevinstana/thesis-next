@@ -2,19 +2,18 @@ import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
+import { isAdminPath } from "./lib/paths";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       name: "Credentials",
       authorize: async (credentials) => {
-
-        
+        console.log(`${process.env.API_URL}`);
         const url = `${process.env.API_URL}/${
-          credentials.isExternal !== 'null' ? "login-external" : "login"
+          credentials.isExternal !== "null" ? "login-external" : "login"
         }`;
-        
-        console.log(credentials, url)
+
         const user: User = await fetch(url, {
           method: "POST",
           headers: {
@@ -23,55 +22,130 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           body: JSON.stringify(credentials),
         }).then((res) => res.json());
 
-        if (!user.accessToken) {
-          return null;
-        }
-
         return user;
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 3600 },
   callbacks: {
-    authorized: ({ auth, request }) => {
-      if (
-        (request.nextUrl.pathname === "/login" ||
-          request.nextUrl.pathname === "/") &&
-        Boolean(auth?.user)
-      ) {
-        return NextResponse.redirect(new URL("/thesis", request.url));
+    signIn({ user }) {
+      if (user.message) {
+        switch (user.message) {
+          case "Invalid credentials":
+            return "/login?error=invalid_credentials";
+          case "Access denied. Please contact your system administrator.":
+            return "/login?error=access_denied";
+          case "Account disabled. Please contact your system administrator.":
+            return "/login?error=account_disabled";
+        }
+
+        return "/login?error=something_went_wrong";
       }
 
-      return Boolean(auth?.user);
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        // token.username = user.username;
-        // token.email = String(user.email);
-        // token.name = String(user.name);
-        // token.title = user.title;
+        const {
+          accessToken,
+          refreshToken,
+          username,
+          email,
+          firstName,
+          lastName,
+          role,
+          isExternal,
+        } = user;
+
+        token.accessToken = accessToken;
+        token.refreshToken = refreshToken;
+        token.accessExp = Number(jwtDecode(accessToken).exp);
+        token.refreshExp = Number(jwtDecode(refreshToken).exp);
+
+        token.username = username;
+        token.email = String(email);
+        token.firstName = firstName;
+        token.lastName = lastName;
+        token.role = role;
+        token.isExternal = isExternal ?? false;
+        token.failedRefresh = false;
 
         return token;
-      } else if (
-        jwtDecode(token.accessToken).exp &&
-        Number(jwtDecode(token.accessToken).exp) * 1000 < Date.now()
-      ) {
+      } else if (token.accessExp * 1000 < Date.now()) {
+        const res = await fetch(`${process.env.API_URL}/refresh-token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.accessToken}`,
+          },
+          body: JSON.stringify(token.refreshToken),
+        });
+
+        if (!res.ok) {
+          token.failedRefresh = true;
+
+          return token;
+        }
+
+        const newTokens = await res.json();
+        if (!token.accessToken) {
+          token.failedRefresh = true;
+
+          return token;
+        }
+
+        token.accessToken = newTokens.accessToken;
+        token.refreshToken = newTokens.refreshToken;
+        token.accessExp = Number(jwtDecode(newTokens.accessToken).exp);
+        token.refreshExp = Number(jwtDecode(newTokens.refreshToken).exp);
+
         return token;
       }
 
       return token;
     },
     session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      // session.username = token.username;
-      // session.email = token.email;
-      // session.name = token.name;
-      // session.title = token.title;
+      const {
+        accessToken,
+        sub,
+        username,
+        firstName,
+        lastName,
+        role,
+        isExternal,
+        failedRefresh,
+      } = token;
+
+      session.accessToken = accessToken;
+      session.user.id = String(sub);
+      session.user.username = username;
+      session.user.firstName = firstName;
+      session.user.lastName = lastName;
+      session.user.role = role;
+      session.user.isExternal = isExternal;
+      session.failedRefresh = failedRefresh;
 
       return session;
+    },
+    authorized: ({ auth, request }) => {
+      if (auth?.failedRefresh) {
+        return NextResponse.redirect(new URL("/logout", request.url));
+      }
+
+      if (Boolean(auth?.user)) {
+        const role = auth?.user?.role;
+        const url = request.nextUrl.pathname;
+
+        if (role !== "ADMIN" && isAdminPath(url)) {
+          return NextResponse.redirect(new URL("/", request.url));
+        }
+
+        if (url === "/login") {
+          return NextResponse.redirect(new URL("/", request.url));
+        }
+      }
+
+      return Boolean(auth?.user);
     },
   },
   pages: {

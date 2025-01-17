@@ -1,76 +1,57 @@
 "use client";
 
-// import Link from "next/link";
-// import { Button } from "../ui/button";
-// import { ScrollArea } from "../ui/scroll-area";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+import logo from "@/public/hua-logo.png";
+import Link from "next/link";
+import { clsx } from "clsx";
+import { Role } from "@/types/app-types";
+import { roleSpecificMenuItems, sharedMenuItems } from "@/lib/sidebarMenu";
 
-export default function Sidebar() {
+export default function Sidebar({ role }: { role: Role }) {
   const pathname = usePathname();
 
-  if (pathname === "/settings") {
-    return null;
-  }
-
   return (
-    <aside className="left-0 h-[calc(100vh-32px)] w-[256px] bg-neutral-600 overflow-auto">
-      sidebar
-      <nav>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
-        <div>hello 1</div>
-        <div>hello 2</div>
-        <div>hello 3</div>
-        <div>hello 4</div>
-        <div>hello 5</div>
+    <aside className="border-r min-w-64 overflow-x-hidden hidden md:block">
+      <div className="h-16 flex items-center justify-center px-4 border-b">
+        <Image src={logo} height={42} alt="HUA Logo" priority />
+      </div>
+
+      <nav className="p-1 space-y-2">
+        <ul className="space-y-2 pt-6">
+          {sharedMenuItems.map((item, index) => (
+            <li key={index}>
+              <Link
+                href={item.path}
+                className={clsx(
+                  "block p-2 rounded hover:bg-gray-300",
+                  pathname === item.path && "bg-gray-200"
+                )}
+              >
+                <div className="flex items-center">
+                  {item.icon}
+                  {item.name}
+                </div>
+              </Link>
+            </li>
+          ))}
+          {roleSpecificMenuItems[role].map((item, index) => (
+            <li key={index}>
+              <Link
+                href={item.path}
+                className={clsx(
+                  "block p-2 rounded hover:bg-gray-300",
+                  pathname === item.path && "bg-gray-200"
+                )}
+              >
+                <div className="flex items-center">
+                  {item.icon}
+                  {item.name}
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
     </aside>
   );

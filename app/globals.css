@@ -66,6 +66,10 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  .Invisible_Scrollbar::-webkit-scrollbar {
+    @apply w-0 h-0
+   }
 }
 
 @layer base {

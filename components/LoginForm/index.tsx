@@ -14,7 +14,6 @@ export default function LoginForm() {
 
       <form className="space-y-4" action={authenticate}>
         <ErrorMessage />
-
         <div>
           <input
             name="username"
