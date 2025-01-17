@@ -13,6 +13,11 @@ body {
 }
 
 @layer base {
+
+  html, body {
+    @apply h-full antialiased;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;

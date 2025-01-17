@@ -18,14 +18,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body
-        className={`h-screen overflow-hidden ${inter.className} antialiased`}
-      >
+      <body className={inter.className}>
         <div className="flex h-screen">
           {session?.user ? <Sidebar role={session.user?.role} /> : null}
-          <div className="flex-1 flex flex-col">
+          <div className="flex flex-1 flex-col min-w-0">
             {session?.user ? <Header /> : null}
-            <main className="flex flex-col flex-1 overflow-auto py-20 px-16">{children}</main>
+            <main className="flex-1 overflow-auto py-20 px-16">
+              <div className="w-full">{children}</div>
+            </main>
           </div>
         </div>
       </body>

@@ -13,19 +13,11 @@ export default function Header() {
 
   return (
     <header className="h-16 border-b flex items-center justify-between px-6">
-      {/* Search */}
+
       <div className="flex items-center space-x-4">
-        <div className="relative">
-          {/* <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded-lg pl-10 pr-4 py-2 focus:outline-none"
-          /> */}
-          <h1 className="pl-10 pr-4 py-2 text-2xl font-medium">Dashboard</h1>
-        </div>
+        <h1 className="pl-10 pr-4 py-2 text-xl md:text-2xl font-medium">Dashboard</h1>
       </div>
 
-      {/* Right Section */}
       <div className="flex items-center space-x-4">
         <form action={customLogout}>
           <LogoutButton />
