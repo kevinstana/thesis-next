@@ -15,7 +15,7 @@ export async function authFetch(
   const accessToken = session?.accessToken ?? "";
 
   const body = requestBody ? JSON.stringify(requestBody) : null;
-  const res = await fetch((`${process.env.API_URL}/${url}`), {
+  const res = await fetch(`${process.env.API_URL}/${url}`, {
     method,
     headers: {
       "Content-Type": "application/json",
