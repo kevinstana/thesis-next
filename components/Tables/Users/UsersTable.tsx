@@ -20,7 +20,7 @@ export default function UsersTable({ usersPage }: { usersPage: AppUserPage }) {
       <div className="overflow-hidden bg-dark-bg-secondary rounded-lg border border-dark-border mx-auto max-w-full lg:w-[80vw]">
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dark-border">
-            <thead className="bg-dark-bg-tertiary">
+            <thead>
               <tr>
                 {headers.map((header) => (
                   <HeaderCell key={header} header={header} />
