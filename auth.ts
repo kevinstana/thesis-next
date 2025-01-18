@@ -9,7 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       authorize: async (credentials) => {
-        console.log(`${process.env.API_URL}`);
         const url = `${process.env.API_URL}/${
           credentials.isExternal !== "null" ? "login-external" : "login"
         }`;

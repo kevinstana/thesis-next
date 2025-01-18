@@ -6,7 +6,7 @@ import logo from "@/public/hua-logo.png";
 import Link from "next/link";
 import { clsx } from "clsx";
 import { Role } from "@/types/app-types";
-import { roleSpecificMenuItems, sharedMenuItems } from "@/lib/sidebarMenu";
+import { roleSpecificMenuItems, sharedMenuItems } from "@/components/SideBar/menu";
 
 export default function Sidebar({ role }: { role: Role }) {
   const pathname = usePathname();
