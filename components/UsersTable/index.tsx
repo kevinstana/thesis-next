@@ -1,8 +1,7 @@
 "use client";
 
-import HeaderCell from "../lib/HeaderCell";
+import HeaderCell from "../Table/HeaderCell";
 import UserTableBodyCell from "./UserTableBodyCell";
-import Pagination from "../lib/Pagination";
 import {
   AppUserPage,
   ExternalUserPage,
@@ -14,14 +13,15 @@ import SharedTable from "../SharedTable";
 import SharedTableHeader from "../SharedTable/SharedTableHeader";
 import SharedTableBody from "../SharedTable/SharedTableBody";
 import { getKeys } from "@/lib/utils";
+import Pagination from "@/components/Pagination";
 
 export default function UsersTable({
   usersPage,
   path,
-}: {
+}: Readonly<{
   usersPage: AppUserPage | ExternalUserPage | HuaUserPage;
   path: string;
-}) {
+}>) {
   if (usersPage.content.length === 0) {
     return <h2 className="pl-1 pt-2">No results found.</h2>;
   }

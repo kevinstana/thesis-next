@@ -1,5 +1,5 @@
-import UsersTable from "@/components/Tables/Users/UsersTable";
-import UserTableOptions from "@/components/Tables/Users/UserTableOptions";
+import UsersTable from "@/components/UsersTable";
+import UserTableOptions from "@/components/UsersTable/UserTableOptions";
 import { authFetch } from "@/lib/utils";
 import { AppUserPage } from "@/types/response-types";
 

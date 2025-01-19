@@ -3,10 +3,10 @@ import { AppUser } from "@/types/app-types";
 export default function UserTableBodyCell({
   header,
   cellValue,
-}: {
+}: Readonly<{
   header: string;
   cellValue: AppUser[keyof AppUser];
-}) {
+}>) {
   if (header === "isEnabled") {
     return (
       <td className="px-6 py-4 whitespace-nowrap text-sm">

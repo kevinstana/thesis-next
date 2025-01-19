@@ -1,17 +1,19 @@
-import UsersTable from "@/components/Tables/Users/UsersTable";
-import UserTableOptions from "@/components/Tables/Users/UserTableOptions";
+import UsersTable from "@/components/UsersTable";
+import UserTableOptions from "@/components/UsersTable/UserTableOptions";
 import { authFetch, isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { AppUserPage } from "@/types/response-types";
 
-export default async function UsersPage(props: {
-  searchParams?: Promise<{
-    page?: string;
-    size?: string;
-    roles?: string;
-    enabled?: string;
-  }>;
-}) {
+export default async function UsersPage(
+  props: Readonly<{
+    searchParams?: Promise<{
+      page?: string;
+      size?: string;
+      roles?: string;
+      enabled?: string;
+    }>;
+  }>
+) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) >= 0 ? Number(searchParams?.page) : 0;
   const size =
@@ -28,9 +30,16 @@ export default async function UsersPage(props: {
   const urlSearchParams = new URLSearchParams();
   urlSearchParams.append("page", String(page));
   urlSearchParams.append("size", String(size));
-  validRoles ? urlSearchParams.append("roles", validRoles.join(",")) : null;
-  enabled === "true" ? urlSearchParams.append("enabled", "true") : null;
-  enabled === "false" ? urlSearchParams.append("enabled", "false") : null;
+
+  if (validRoles.length > 0) {
+    urlSearchParams.append("roles", validRoles.join(","));
+  }
+
+  if (enabled === "true") {
+    urlSearchParams.append("enabled", "true");
+  } else if (enabled === "false") {
+    urlSearchParams.append("enabled", "false");
+  }
 
   const usersPage: AppUserPage = await authFetch(
     `users?${urlSearchParams}`,
@@ -39,7 +48,7 @@ export default async function UsersPage(props: {
 
   return (
     <div className="flex flex-col gap-2">
-      <UserTableOptions path="users"/>
+      <UserTableOptions path="users" />
       <UsersTable usersPage={usersPage} path="users" />
     </div>
   );

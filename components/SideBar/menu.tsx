@@ -5,7 +5,7 @@ export const sharedMenuItems = [
   { path: "/", name: "Home", icon: <Home size={21} className="ml-1 mr-6" /> },
 ];
 
-export const roleSpecificMenuItems: { [role in Role]: SidebarMenuType[] } = {
+export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   ADMIN: [
     {
       path: "/users",

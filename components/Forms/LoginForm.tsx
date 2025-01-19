@@ -1,6 +1,6 @@
 import { authenticate } from "@/app/login/actions";
-import ErrorMessage from "../../Errors/ErrorMessage";
-import LoginButton from "../../Buttons/LoginButton";
+import ErrorMessage from "../Error/ErrorMessage";
+import LoginButton from "../Buttons/LoginButton";
 
 export default function LoginForm() {
   return (

@@ -1,14 +1,14 @@
-import UsersTable from "@/components/Tables/Users/UsersTable";
-import UserTableOptions from "@/components/Tables/Users/UserTableOptions";
+import UsersTable from "@/components/UsersTable";
+import UserTableOptions from "@/components/UsersTable/UserTableOptions";
 import { authFetch } from "@/lib/utils";
 import { HuaUserPage } from "@/types/response-types";
 
-export default async function HuaUsersPage(props: {
+export default async function HuaUsersPage(props: Readonly<{
   searchParams?: Promise<{
     page?: string;
     size?: string;
   }>;
-}) {
+}>) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) >= 0 ? Number(searchParams?.page) : 0;
   const size =

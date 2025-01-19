@@ -11,13 +11,13 @@ export default function Pagination({
   totalElements,
   totalPages,
   path,
-}: {
+}: Readonly<{
   size: number;
   number: number;
   totalElements: number;
   totalPages: number;
   path: string;
-}) {
+}>) {
   const router = useRouter();
 
   const currentParams = useSearchParams();

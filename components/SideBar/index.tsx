@@ -8,7 +8,7 @@ import { clsx } from "clsx";
 import { Role } from "@/types/app-types";
 import { roleSpecificMenuItems, sharedMenuItems } from "@/components/SideBar/menu";
 
-export default function Sidebar({ role }: { role: Role }) {
+export default function Sidebar({ role }: Readonly<{ role: Role }>) {
   const pathname = usePathname();
 
   return (

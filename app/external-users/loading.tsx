@@ -1,5 +1,5 @@
-import PaginationSkeleton from "@/components/Tables/lib/Skeletons/PaginationSkeleton";
-import TableSkeleton from "@/components/Tables/lib/Skeletons/TableSkeleton";
+import PaginationSkeleton from "@/components/Skeletons/PaginationSkeleton";
+import TableSkeleton from "@/components/Skeletons/TableSkeleton";
 
 export default function UsersLoading() {
   return (
