@@ -24,7 +24,7 @@ export default function UsersTable({
   path: string;
 }) {
   if (usersPage.content.length === 0) {
-    return null;
+    return <h2 className="pl-1 pt-2">No results found.</h2>;
   }
 
   const users = usersPage.content;

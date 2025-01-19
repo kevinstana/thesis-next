@@ -1,4 +1,3 @@
-import AddExternalUserModalWrapper from "@/components/Modals/AddExtenalUserModal";
 import UsersTable from "@/components/Tables/Users/UsersTable";
 import UserTableOptions from "@/components/Tables/Users/UserTableOptions";
 import { authFetch } from "@/lib/utils";
