@@ -11,7 +11,7 @@ export default function AddExternalUserButton({
   return (
     <>
       <Button
-        className="border rounded-lg max-w-fit h-[2.625rem]"
+        className="border rounded-lg max-w-fit pr-6 h-[2.625rem]"
         onClick={() => {
           modalRef.current?.openDialog("hello from button")
         }}

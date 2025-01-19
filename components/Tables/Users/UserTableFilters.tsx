@@ -29,18 +29,23 @@ export default function UserTableFilters({ path }: Readonly<{ path: string }>) {
   const handleApplyFilters = useCallback(() => {
     const urlSearchParams = new URLSearchParams();
     urlSearchParams.append("size", `${pageSize}`);
-    roles.length > 0 ? urlSearchParams.append("roles", `${roles}`) : null;
-    enabled !== null ? urlSearchParams.append("enabled", `${enabled}`) : null;
+    if (roles.length > 0) {
+      urlSearchParams.append("roles", `${roles}`);
+    }
+
+    if (enabled !== null) {
+      urlSearchParams.append("enabled", `${enabled}`);
+    }
 
     router.push(`/${path}?${urlSearchParams}`);
     setOpen(false);
-  }, [pageSize, roles, enabled]);
+  }, [pageSize, roles, enabled, router, path]);
 
   const handleClearAll = useCallback(() => {
     setPageSize(10);
     setRoles([]);
     setEnabled(null);
-  }, [pageSize, roles, enabled]);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -62,7 +67,7 @@ export default function UserTableFilters({ path }: Readonly<{ path: string }>) {
     <div className="relative">
       <button
         className="flex items-center justify-center border gap-2 p-2 rounded-lg hover:bg-neutral-100"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen(!open)}
       >
         <Filter size={20} />
         Filters
