@@ -1,6 +1,5 @@
 "use client";
 
-import { AppUser } from "@/types/app-types";
 import HeaderCell from "../lib/HeaderCell";
 import UserTableBodyCell from "./UserTableBodyCell";
 import Pagination from "../lib/Pagination";
