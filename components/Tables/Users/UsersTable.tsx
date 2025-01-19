@@ -4,69 +4,79 @@ import { AppUser } from "@/types/app-types";
 import HeaderCell from "../lib/HeaderCell";
 import UserTableBodyCell from "./UserTableBodyCell";
 import Pagination from "../lib/Pagination";
-import { AppUserPage } from "@/types/response-types";
+import {
+  AppUserPage,
+  ExternalUserPage,
+  HuaUserPage,
+} from "@/types/response-types";
 import { Pencil, SquareArrowOutUpRight } from "lucide-react";
+import SharedTableAndPaginationContainer from "../SharedTable/SharedTableAndPaginationContainer";
+import SharedTable from "../SharedTable";
+import SharedTableHeader from "../SharedTable/SharedTableHeader";
+import SharedTableBody from "../SharedTable/SharedTableBody";
+import { getKeys } from "@/lib/utils";
 
-export default function UsersTable({ usersPage }: { usersPage: AppUserPage }) {
+export default function UsersTable({
+  usersPage,
+  path,
+}: {
+  usersPage: AppUserPage | ExternalUserPage | HuaUserPage;
+  path: string;
+}) {
   if (usersPage.content.length === 0) {
     return null;
   }
 
   const users = usersPage.content;
   const { size, number, totalElements, totalPages } = usersPage.page;
-  const headers = Object.keys(users[0]);
+  const headers = getKeys(users[0]);
 
   return (
-    <div className="flex flex-1">
-      <div className="overflow-hidden bg-dark-bg-secondary rounded-lg border border-dark-border mx-auto max-w-full lg:w-[80vw]">
-        <div className="overflow-x-auto">
-          <table className="w-full divide-y divide-dark-border">
-            <thead>
-              <tr>
-                {headers.map((header, index) => (
-                  <HeaderCell key={header} header={header} />
-                ))}
-                <th className="sticky right-0 z-50 bg-neutral-200 px-6 py-3 text-center text-xs font-medium text-dark-text-secondary uppercase tracking-wider whitespace-nowrap">
-                  ACTIONS
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-dark-border">
-              {users.map((user) => (
-                <tr
-                  key={user.username}
-                  className="hover:bg-dark-bg-tertiary transition-colors"
-                >
-                  {headers.map((header, index) => (
-                    <UserTableBodyCell
-                      key={header}
-                      header={header}
-                      cellValue={user[header as keyof AppUser]}
-                    />
-                  ))}
-                  <td className="sticky right-0 z-50  flex items-center justify-center bg-neutral-100 px-6 py-4">
-                    <div className="flex items-center justify-center gap-[1.25rem]">
-                    <button>
-                      <Pencil size={18} strokeWidth={1.5} />
-                    </button>
-                    <button>
-                      <SquareArrowOutUpRight size={18} strokeWidth={1.5}/>
-                    </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <SharedTableAndPaginationContainer>
+      <SharedTable>
+        <SharedTableHeader>
+          <tr>
+            {headers.map((header) => (
+              <HeaderCell key={header} header={header} />
+            ))}
+            <th className="sticky right-0 z-50 bg-neutral-200 px-6 py-3 text-center text-xs font-medium uppercase tracking-wider whitespace-nowrap">
+              ACTIONS
+            </th>
+          </tr>
+        </SharedTableHeader>
 
-        <Pagination
-          size={size}
-          number={number}
-          totalElements={totalElements}
-          totalPages={totalPages}
-        />
-      </div>
-    </div>
+        <SharedTableBody>
+          {users.map((user) => (
+            <tr key={user.username}>
+              {headers.map((header) => (
+                <UserTableBodyCell
+                  key={header}
+                  header={header}
+                  cellValue={user[header]}
+                />
+              ))}
+              <td className="sticky right-0 z-50 flex items-center justify-center bg-neutral-100 px-6 py-4 h-[3.25rem]">
+                <div className="flex items-center justify-center gap-[1.25rem]">
+                  <button>
+                    <Pencil size={18} strokeWidth={1.5} />
+                  </button>
+                  <button>
+                    <SquareArrowOutUpRight size={18} strokeWidth={1.5} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </SharedTableBody>
+      </SharedTable>
+
+      <Pagination
+        size={size}
+        number={number}
+        totalElements={totalElements}
+        totalPages={totalPages}
+        path={path}
+      />
+    </SharedTableAndPaginationContainer>
   );
 }

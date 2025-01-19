@@ -1,6 +1,6 @@
 import { authenticate } from "@/app/login/actions";
-import ErrorMessage from "../Errors/ErrorMessage";
-import LoginButton from "../LoginButton";
+import ErrorMessage from "../../Errors/ErrorMessage";
+import LoginButton from "../../Buttons/LoginButton";
 
 export default function LoginForm() {
   return (
@@ -18,7 +18,7 @@ export default function LoginForm() {
           <input
             name="username"
             className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-            placeholder="username"
+            placeholder="Username"
             maxLength={256}
             required
           />

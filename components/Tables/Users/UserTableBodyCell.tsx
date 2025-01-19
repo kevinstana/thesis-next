@@ -7,7 +7,7 @@ export default function UserTableBodyCell({
   header: string;
   cellValue: AppUser[keyof AppUser];
 }) {
-  if (header === "enabled") {
+  if (header === "isEnabled") {
     return (
       <td className="px-6 py-4 whitespace-nowrap text-sm">
         <span

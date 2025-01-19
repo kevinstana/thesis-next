@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function TableSkeleton() {
     return (
-          <div className="overflow-hidden bg-dark-bg-secondary rounded-lg mx-auto max-w-full lg:w-[80vw]">
+          <div className="overflow-hidden rounded-lg mx-auto min-w-full lg:w-[80vw]">
             <div className="overflow-none">
               <table className="w-full">
                 <thead>
