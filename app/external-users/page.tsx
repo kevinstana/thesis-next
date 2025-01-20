@@ -1,13 +1,17 @@
+import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
 import UsersTable from "@/components/UsersTable";
 import UserTableOptions from "@/components/UsersTable/UserTableOptions";
-import { authFetch } from "@/lib/utils";
-import { AppUserPage } from "@/types/response-types";
+import { authFetch, isValidRole } from "@/lib/utils";
+import { Role } from "@/types/app-types";
+import { ExternalUserPage } from "@/types/response-types";
 
 export default async function ExternalUsersPage(
   props: Readonly<{
     searchParams?: Promise<{
       page?: string;
       size?: string;
+      roles?: string;
+      enabled?: string;
     }>;
   }>
 ) {
@@ -16,19 +20,41 @@ export default async function ExternalUsersPage(
   const size =
     Number(searchParams?.size) >= 0 ? Number(searchParams?.size) : 10;
 
+  const rolesStr = String(searchParams?.roles);
+  const roles: string[] =
+    rolesStr.length > 0 ? String(searchParams?.roles).split(",") : [];
+
+  const validRoles: Role[] = roles.filter(isValidRole);
+
+  const enabled = String(searchParams?.enabled);
+
   const urlSearchParams = new URLSearchParams();
   urlSearchParams.append("page", String(page));
   urlSearchParams.append("size", String(size));
 
-  const usersPage: AppUserPage = await authFetch(
+  if (validRoles.length > 0) {
+    urlSearchParams.append("roles", validRoles.join(","));
+  }
+
+  if (enabled === "true") {
+    urlSearchParams.append("enabled", "true");
+  } else if (enabled === "false") {
+    urlSearchParams.append("enabled", "false");
+  }
+
+  const usersPage: ExternalUserPage = await authFetch(
     `external-users?${urlSearchParams}`,
-    "GET"
+    "GET",
+    null,
+    "external-users"
   );
 
   return (
     <div className="flex flex-col gap-2">
-      <UserTableOptions canAddExternal path="external-users" />
-      <UsersTable usersPage={usersPage} path="external-users" />
+      <NotificationProviderWrapper>
+        <UserTableOptions canAddExternal path="external-users" />
+        <UsersTable usersPage={usersPage} path="external-users" />
+      </NotificationProviderWrapper>
     </div>
   );
 }

@@ -4,7 +4,10 @@ import { AddExternalUserModalRef } from "@/types/app-types";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import AddExternalUserButton from "../Buttons/AddExternalUserButton";
 import AddExternalUserForm from "../Forms/AddExternalUserForm";
-import { X } from 'lucide-react';
+import { X } from "lucide-react";
+import { NotificationProvider } from "@/providers/NotificationProvider";
+import { Toaster } from "../ui/toaster";
+import Test from "./test";
 
 const AddExternalUserModal = forwardRef<AddExternalUserModalRef>((_, ref) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -21,7 +24,7 @@ const AddExternalUserModal = forwardRef<AddExternalUserModalRef>((_, ref) => {
         open ? "block" : "hidden"
       }`}
     >
-      <div className="bg-white w-full max-w-[60%] h-[90%] rounded-lg p-6 flex flex-col relative">
+      <div className="bg-white w-full max-w-[60%] h-[90%] rounded-lg flex flex-col relative">
         {/* Close Button (X icon) */}
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
@@ -31,17 +34,26 @@ const AddExternalUserModal = forwardRef<AddExternalUserModalRef>((_, ref) => {
         </button>
 
         {/* Dialog Header */}
-        <div className="mb-4">
-          <h2 className="text-primary-700 text-base">Add an External User</h2>
+        <div className="mb-4 border-b p-4">
+          <h2 className="text-primary-700 text-base pl-3">
+            Add an External User
+          </h2>
         </div>
 
         {/* Dialog Body */}
-        <div className="flex flex-col flex-grow justify-between p-4 overflow-auto" tabIndex={-1}>
+        <div
+          className="flex flex-col flex-grow justify-between p-4 overflow-auto"
+          tabIndex={-1}
+        >
           {/* Form Component */}
-          <AddExternalUserForm />
+          {/* <NotificationProvider> */}
+            <AddExternalUserForm setOpen={setOpen} />
+            {/* <Toaster /> */}
+          {/* </NotificationProvider> */}
 
           {/* Dialog Footer */}
           <div className="flex justify-end mt-4">
+            {/* <Test /> */}
             <button
               className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
               onClick={() => setOpen(false)}

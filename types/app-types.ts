@@ -26,3 +26,17 @@ export type HuaUser = AppUser;
 export type AddExternalUserModalRef = {
   openDialog: () => void
 }
+
+export type IconProps = {
+  className?: string
+}
+
+export type CreateExternalUser = {
+  username?: string
+  password?: string
+  verifyPassword?: string
+  email?: string
+  firstName?: string
+  lastName?: string
+  role?: Role
+}

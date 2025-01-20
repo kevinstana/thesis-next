@@ -1,7 +1,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const validParams = ["size", "role", "enabled"];
+const validParams = ["size", "roles", "enabled"];
 const sharedButtonStyle =
   "px-3 py-1 rounded border disabled:opacity-50 disabled:cursor-not-allowed text-sm";
 

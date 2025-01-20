@@ -1,99 +1,152 @@
-import { Button } from "@/components/ui/button";
+"use client";
 
-export default function AddExternalUserForm() {
+import { createExternalUser } from "@/app/external-users/actions";
+import { Button } from "@/components/ui/button";
+import { useNotification } from "@/providers/NotificationProvider";
+import { CreateExternalUser } from "@/types/app-types";
+import { ChangeEvent, useCallback, useRef, useState } from "react";
+
+export default function AddExternalUserForm({
+  setOpen,
+}: {
+  setOpen: (value: boolean) => void;
+}) {
+  const { notify } = useNotification();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [user, setUser] = useState<CreateExternalUser>();
+
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+
+      setUser((prev) => ({ ...prev, [name]: value }));
+    },
+    [user]
+  );
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const res = await createExternalUser(user);
+
+    if (String(res.message).includes("created")) {
+      notify("success", "User Created.");
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+      // setOpen(false);
+    }
+  }
+
   return (
-    <form className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="username" className="ml-2">
+    <form
+      className="space-y-6 bg-white px-6 py-1"
+      ref={formRef}
+      onSubmit={handleSubmit}
+    >
+      <div className="space-y-1">
+        <label htmlFor="username" className="block font-medium text-gray-700">
           Username
         </label>
         <input
           name="username"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="Username"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Enter username"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="password" className="ml-2">
+      <div className="space-y-1">
+        <label htmlFor="password" className="block font-medium text-gray-700">
           Password
         </label>
         <input
           name="password"
           type="password"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="Password"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Enter password"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="verify-password" className="ml-2">
+      <div className="space-y-1">
+        <label
+          htmlFor="verifyPassword"
+          className="block font-medium text-gray-700"
+        >
           Verify Password
         </label>
         <input
-          name="verify-password"
+          name="verifyPassword"
           type="password"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="Verify Password"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Confirm password"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="email" className="ml-2">
+      <div className="space-y-1">
+        <label htmlFor="email" className="block font-medium text-gray-700">
           Email
         </label>
         <input
           name="email"
           type="email"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="Email"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Enter email"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="firstName" className="ml-2">
+      <div className="space-y-1">
+        <label htmlFor="firstName" className="block font-medium text-gray-700">
           First Name
         </label>
         <input
           name="firstName"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="First Name"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Enter first name"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="Last Name" className="ml-2">
+      <div className="space-y-1">
+        <label htmlFor="lastName" className="block font-medium text-gray-700">
           Last Name
         </label>
         <input
           name="lastName"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
-          placeholder="Last Name"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          placeholder="Enter last name"
           maxLength={256}
+          onChange={handleChange}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="role" className="ml-2">
+      <div className="space-y-1">
+        <label htmlFor="role" className="block font-medium text-gray-700">
           Role
         </label>
         <select
+          id="create-external-role-select"
           name="role"
-          className="w-full px-4 py-3 text-[17px] text-gray-900 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+          onChange={handleChange}
           required
+          defaultValue=""
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Select a role
           </option>
           <option value="ADMIN">Admin</option>
@@ -103,9 +156,7 @@ export default function AddExternalUserForm() {
         </select>
       </div>
 
-      <Button type="submit" onClick={() => alert("you clicked save")}>
-        Save
-      </Button>
+      <Button type="submit">Save</Button>
     </form>
   );
 }

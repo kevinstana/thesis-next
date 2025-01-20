@@ -10,7 +10,8 @@ export function cn(...inputs: ClassValue[]) {
 export async function authFetch(
   url: string,
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-  requestBody?: unknown
+  requestBody?: unknown,
+  tag?: string
 ) {
   const session = await getSession();
   const accessToken = session?.accessToken ?? "";
@@ -23,6 +24,7 @@ export async function authFetch(
       Authorization: `Bearer ${accessToken}`,
     },
     body,
+    next: { tags: [tag ?? ""]}
   });
 
   return await res.json();
