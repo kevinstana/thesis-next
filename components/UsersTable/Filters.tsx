@@ -5,10 +5,11 @@ import { Role, availableRoles } from "@/types/app-types";
 import { Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { clsx } from "clsx";
 
 const pageSizes: number[] = [5, 10, 15, 20];
 
-export default function UserTableFilters({ path }: Readonly<{ path: string }>) {
+export default function Filters({ path }: Readonly<{ path: string }>) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -66,7 +67,10 @@ export default function UserTableFilters({ path }: Readonly<{ path: string }>) {
   return (
     <div className="relative">
       <button
-        className="flex items-center justify-center border gap-2 p-2 rounded-lg hover:bg-neutral-100"
+        className={clsx(
+          "flex items-center justify-center border gap-2 p-2 rounded-lg hover:bg-neutral-100",
+          { "bg-neutral-200/60": open }
+        )}
         onClick={() => setOpen(!open)}
       >
         <Filter size={20} />

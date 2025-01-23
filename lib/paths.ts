@@ -1,7 +1,5 @@
-export const appPaths = ["/", "/users", "/external-users", "/hua-users"];
-
 export const appPathsMap: Record<string, string> = {
-  users: "Users",
+  "users": "Users",
   "external-users": "External Users",
   "hua-users": "Hua Users",
 };

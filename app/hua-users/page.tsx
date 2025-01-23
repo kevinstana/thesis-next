@@ -1,8 +1,9 @@
 import UsersTable from "@/components/UsersTable";
-import UserTableOptions from "@/components/UsersTable/UserTableOptions";
-import { authFetch, isValidRole } from "@/lib/utils";
+import UserTableOptions from "@/components/UsersTable/Options";
+import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { HuaUserPage } from "@/types/response-types";
+import { getHuaUsers } from "./actions";
 
 export default async function HuaUsersPage(
   props: Readonly<{
@@ -41,15 +42,13 @@ export default async function HuaUsersPage(
     urlSearchParams.append("enabled", "false");
   }
 
-  const usersPage: HuaUserPage = await authFetch(
-    `hua-users?${urlSearchParams}`,
-    "GET"
-  );
+  const res = await getHuaUsers(urlSearchParams.toString())
+  const data = res.data as HuaUserPage
 
   return (
     <div className="flex flex-col gap-2">
       <UserTableOptions path="hua-users" />
-      <UsersTable usersPage={usersPage} path="hua-users" />
+      <UsersTable usersPage={data} path="hua-users" />
     </div>
   );
 }

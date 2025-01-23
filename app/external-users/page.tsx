@@ -1,9 +1,9 @@
-import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
 import UsersTable from "@/components/UsersTable";
-import UserTableOptions from "@/components/UsersTable/UserTableOptions";
-import { authFetch, isValidRole } from "@/lib/utils";
+import UserTableOptions from "@/components/UsersTable/Options";
+import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { ExternalUserPage } from "@/types/response-types";
+import { getExternalUsers } from "./actions";
 
 export default async function ExternalUsersPage(
   props: Readonly<{
@@ -42,19 +42,13 @@ export default async function ExternalUsersPage(
     urlSearchParams.append("enabled", "false");
   }
 
-  const usersPage: ExternalUserPage = await authFetch(
-    `external-users?${urlSearchParams}`,
-    "GET",
-    null,
-    "external-users"
-  );
+  const res = await getExternalUsers(urlSearchParams.toString())
+  const data = res.data as ExternalUserPage
 
   return (
     <div className="flex flex-col gap-2">
-      <NotificationProviderWrapper>
         <UserTableOptions canAddExternal path="external-users" />
-        <UsersTable usersPage={usersPage} path="external-users" />
-      </NotificationProviderWrapper>
+        <UsersTable usersPage={data} path="external-users" />
     </div>
   );
 }

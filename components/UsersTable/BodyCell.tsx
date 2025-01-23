@@ -1,11 +1,13 @@
 import { AppUser } from "@/types/app-types";
 
-export default function UserTableBodyCell({
+export default function BodyCell({
   header,
   cellValue,
+  isEditing,
 }: Readonly<{
   header: string;
   cellValue: AppUser[keyof AppUser];
+  isEditing: boolean;
 }>) {
   if (header === "isEnabled") {
     return (

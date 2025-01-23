@@ -27,7 +27,11 @@ export async function authFetch(
     next: { tags: [tag ?? ""]}
   });
 
-  return await res.json();
+  const status = res.status
+  const data = await res.json()
+  const error = status !== (200 | 201 | 204) && String(data.message)
+
+  return {status, data, error};
 }
 
 export function formatFromCamelCase(header: string): string {

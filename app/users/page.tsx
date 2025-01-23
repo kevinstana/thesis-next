@@ -1,8 +1,9 @@
 import UsersTable from "@/components/UsersTable";
-import UserTableOptions from "@/components/UsersTable/UserTableOptions";
-import { authFetch, isValidRole } from "@/lib/utils";
+import UserTableOptions from "@/components/UsersTable/Options";
+import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { AppUserPage } from "@/types/response-types";
+import { getAllUsers } from "./actions";
 
 export default async function UsersPage(
   props: Readonly<{
@@ -41,15 +42,13 @@ export default async function UsersPage(
     urlSearchParams.append("enabled", "false");
   }
 
-  const usersPage: AppUserPage = await authFetch(
-    `users?${urlSearchParams}`,
-    "GET"
-  );
+  const res = await getAllUsers(urlSearchParams.toString());
+  const data = res.data as AppUserPage;
 
   return (
     <div className="flex flex-col gap-2">
       <UserTableOptions path="users" />
-      <UsersTable usersPage={usersPage} path="users" />
+      <UsersTable usersPage={data} path="users" />
     </div>
   );
 }

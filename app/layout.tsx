@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/SideBar";
 import Header from "@/components/Header";
-import { auth } from "@/auth";
+import getSession from "@/lib/getSession";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,7 +14,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+  const session = await getSession();
 
   return (
     <html lang="en" suppressHydrationWarning={true}>

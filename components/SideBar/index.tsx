@@ -10,6 +10,11 @@ import { roleSpecificMenuItems, sharedMenuItems } from "@/components/SideBar/men
 
 export default function Sidebar({ role }: Readonly<{ role: Role }>) {
   const pathname = usePathname();
+  const path = pathname.split("/")[1]
+
+  if (path === "login" || path === "logout") {
+    return null
+  }
 
   return (
     <aside className="border-r min-w-64 overflow-x-hidden hidden md:block">
@@ -41,7 +46,7 @@ export default function Sidebar({ role }: Readonly<{ role: Role }>) {
                 href={item.path}
                 className={clsx(
                   "block p-2 rounded hover:bg-gray-300",
-                  pathname === item.path && "bg-gray-200"
+                  path === item.simplePath && "bg-gray-200"
                 )}
               >
                 <div className="flex pl-2 gap-3 items-center">
