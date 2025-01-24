@@ -22,16 +22,17 @@ export default function Row({
   }, [isEditing]);
 
   return (
-    <tr key={user.username}>
+    <tr key={user.username}
+    className="hover:bg-neutral-100">
       {headers.map((header) => (
         <BodyCell
           isEditing={isEditing}
           key={header}
           header={header}
-          cellValue={user[header] ?? "-"}
+          cellValue={user[header]}
         />
       ))}
-      <td className="sticky right-0 z-50 flex items-center justify-center bg-neutral-100 px-4 py-4 h-[3.25rem]">
+      <td className="sticky right-0 z-50 flex items-center justify-center bg-neutral-100 px-4 py-4 h-[3.25rem] border-r">
         <div className="flex items-center justify-center gap-[0.5rem]">
           <button
             className="p-2 rounded-lg hover:bg-neutral-200"

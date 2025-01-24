@@ -9,7 +9,7 @@ export default function Options({
   path: string
 }>) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       {canAddExternal ? <AddExternalUserModalWrapper /> : null}
       <div className="gap-2">
         <UserTableFilters path={path} />

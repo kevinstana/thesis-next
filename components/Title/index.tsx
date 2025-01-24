@@ -4,7 +4,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { appPathsMap } from "@/lib/paths";
 
-const titleStyle = "pl-10 pr-4 py-2 text-xl md:text-2xl font-medium";
+const titleStyle = "text-lg/[1.5rem] text-[#050505] font-medium";
 
 export default function Title() {
   const pathname = usePathname();

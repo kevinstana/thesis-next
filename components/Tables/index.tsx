@@ -4,7 +4,7 @@ export default function Table({
     children: React.ReactNode;
   }>) {
     return (
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[70vh]">
         <table className="w-full divide-y">{children}</table>
       </div>
     );

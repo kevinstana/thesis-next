@@ -17,12 +17,12 @@ export default function Sidebar({ role }: Readonly<{ role: Role }>) {
   }
 
   return (
-    <aside className="border-r min-w-64 overflow-x-hidden hidden md:block">
+    <aside className="border-r min-w-64 overflow-x-hidden hidden md:block text-[0.95rem]">
       <div className="h-16 flex items-center justify-center px-4 border-b">
         <Image src={logo} height={42} alt="HUA Logo" priority />
       </div>
 
-      <nav className="p-1 space-y-2">
+      <nav className="py-1 px-2 space-y-2">
         <ul className="space-y-2 pt-6">
           {sharedMenuItems.map((item, index) => (
             <li key={index}>
@@ -33,7 +33,7 @@ export default function Sidebar({ role }: Readonly<{ role: Role }>) {
                   pathname === item.path && "bg-gray-200"
                 )}
               >
-                <div className="flex pl-2 gap-3 items-center">
+                <div className="flex pl-2 items-center">
                   {item.icon}
                   {item.name}
                 </div>
@@ -49,7 +49,7 @@ export default function Sidebar({ role }: Readonly<{ role: Role }>) {
                   path === item.simplePath && "bg-gray-200"
                 )}
               >
-                <div className="flex pl-2 gap-3 items-center">
+                <div className="flex pl-2 items-center">
                   {item.icon}
                   {item.name}
                 </div>

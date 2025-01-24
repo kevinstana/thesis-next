@@ -47,10 +47,10 @@ const ViewExternalUserModal = forwardRef<ViewExternalUserModalRef>((_, ref) => {
           className="flex flex-col flex-grow justify-between p-4 overflow-auto"
           tabIndex={-1}
         >
-          {/* Viewing Profile and navigation */}
+          {/* Profile and navigation */}
           <div className="flex flex-col px-6 py-2">
             <div className="flex w-full justify-between">
-              <h3 className="font-medium text-sm/[1.5rem]">Viewing Profile</h3>
+              <h3 className="font-medium text-sm/[1.5rem]">Profile</h3>
               <RecordNavigation list={list} value={value} setValue={setValue} />
             </div>
           </div>

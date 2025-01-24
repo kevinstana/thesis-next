@@ -16,7 +16,7 @@ export default function RecordNavigation({
 }>) {
   return (
     <div className="flex items-center gap-2">
-      <span className="font-normal text-xs text-neutral-600 w-[2.75rem]">
+      <span className="font-normal text-xs text-neutral-600">
         {list.indexOf(value) + 1} of {list.length}
       </span>
       <div className="flex gap-[0.125rem]">

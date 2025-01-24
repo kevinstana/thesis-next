@@ -1,4 +1,7 @@
 import { AppUser } from "@/types/app-types";
+import {clsx} from "clsx";
+
+const baseStyle = "px-6 py-4 whitespace-nowrap text-sm border-r"
 
 export default function BodyCell({
   header,
@@ -11,7 +14,7 @@ export default function BodyCell({
 }>) {
   if (header === "isEnabled") {
     return (
-      <td className="px-6 py-4 whitespace-nowrap text-sm">
+      <td className={baseStyle}>
         <span
           className={`rounded-full px-2 py-1  ${
             cellValue
@@ -40,11 +43,11 @@ export default function BodyCell({
     const formattedCreatedAt = formatter.format(createdAt);
 
     return (
-      <td className="px-6 py-4 whitespace-nowrap text-sm">
+      <td className={baseStyle}>
         {formattedCreatedAt}
       </td>
     );
   }
 
-  return <td className="px-6 py-4 whitespace-nowrap text-sm">{cellValue}</td>;
+  return <td className={clsx(baseStyle, {"text-center": !cellValue})}>{cellValue ?? "-"}</td>;
 }

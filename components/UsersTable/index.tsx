@@ -60,7 +60,7 @@ export default function UsersTable({
             {headers.map((header) => (
               <HeaderCell key={header} header={header} />
             ))}
-            <th className="sticky right-0 z-50 bg-neutral-200 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider whitespace-nowrap">
+            <th className="sticky top-0 right-0 z-[51] bg-neutral-200 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider whitespace-nowrap">
               ACTIONS
             </th>
           </tr>
