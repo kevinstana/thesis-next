@@ -4,6 +4,9 @@ import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { HuaUserPage } from "@/types/response-types";
 import { getHuaUsers } from "./actions";
+import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
+
+const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
 export default async function HuaUsersPage(
   props: Readonly<{
@@ -17,8 +20,9 @@ export default async function HuaUsersPage(
 ) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) >= 0 ? Number(searchParams?.page) : 0;
-  const size =
-    Number(searchParams?.size) >= 0 ? Number(searchParams?.size) : 10;
+  const size = pageSizes.includes(String(searchParams?.size))
+    ? String(searchParams?.size)
+    : "15";
 
   const rolesStr = String(searchParams?.roles);
   const roles: string[] =
@@ -42,13 +46,15 @@ export default async function HuaUsersPage(
     urlSearchParams.append("enabled", "false");
   }
 
-  const res = await getHuaUsers(urlSearchParams.toString())
-  const data = res.data as HuaUserPage
+  const res = await getHuaUsers(urlSearchParams.toString());
+  const data = res.data as HuaUserPage;
 
   return (
     <div className="flex flex-col gap-2">
-      <UserTableOptions path="hua-users" />
-      <UsersTable usersPage={data} path="hua-users" />
+      <NotificationProviderWrapper>
+        <UserTableOptions path="hua-users" />
+        <UsersTable usersPage={data} path="hua-users" />
+      </NotificationProviderWrapper>
     </div>
   );
 }

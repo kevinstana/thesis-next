@@ -4,6 +4,9 @@ import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { ExternalUserPage } from "@/types/response-types";
 import { getExternalUsers } from "./actions";
+import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
+
+const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
 export default async function ExternalUsersPage(
   props: Readonly<{
@@ -17,8 +20,9 @@ export default async function ExternalUsersPage(
 ) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) >= 0 ? Number(searchParams?.page) : 0;
-  const size =
-    Number(searchParams?.size) >= 0 ? Number(searchParams?.size) : 10;
+  const size = pageSizes.includes(String(searchParams?.size))
+    ? String(searchParams?.size)
+    : "15";
 
   const rolesStr = String(searchParams?.roles);
   const roles: string[] =
@@ -47,8 +51,10 @@ export default async function ExternalUsersPage(
 
   return (
     <div className="flex flex-col gap-2">
+      <NotificationProviderWrapper>
         <UserTableOptions canAddExternal path="external-users" />
         <UsersTable usersPage={data} path="external-users" />
+      </NotificationProviderWrapper>
     </div>
   );
 }

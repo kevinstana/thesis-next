@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { clsx } from "clsx";
 
-const pageSizes: number[] = [5, 10, 15, 20];
+const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
 export default function Filters({ path }: Readonly<{ path: string }>) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<string>("15");
   const [roles, setRoles] = useState<Role[]>([]);
   const [enabled, setEnabled] = useState<boolean | null>(null);
 
@@ -43,7 +43,7 @@ export default function Filters({ path }: Readonly<{ path: string }>) {
   }, [pageSize, roles, enabled, router, path]);
 
   const handleClearAll = useCallback(() => {
-    setPageSize(10);
+    setPageSize("15");
     setRoles([]);
     setEnabled(null);
   }, []);

@@ -4,7 +4,6 @@ import { AddExternalUserModalRef } from "@/types/app-types";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import AddExternalUserButton from "../Buttons/AddExternalUserButton";
 import AddExternalUserForm from "../Forms/AddExternalUserForm";
-import NotificationProviderWrapper from "../ClientWrappers/NotificationProviderWrapper";
 import BaseModal from "./BaseModal";
 import BaseModalContent from "./BaseModalContent";
 import BaseModalHeader from "./BaseModalHeader";
@@ -34,9 +33,9 @@ export default function AddExternalUserModalWrapper() {
   const addExternalUserModalRef = useRef<AddExternalUserModalRef>(null);
 
   return (
-    <NotificationProviderWrapper>
+    <>
       <AddExternalUserButton modalRef={addExternalUserModalRef} />
       <AddExternalUserModal ref={addExternalUserModalRef} />
-    </NotificationProviderWrapper>
+    </>
   );
 }

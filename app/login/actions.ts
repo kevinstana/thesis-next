@@ -22,7 +22,5 @@ export async function authenticate(formData: FormData) {
       }
     }
     throw error;
-  } finally {
-    redirect("/")
   }
 }

@@ -54,7 +54,8 @@ export default function LoginForm() {
         <LoginButton />
       </form>
 
-      <div className="pt-4 text-center">
+      <div className="h-[6.9375rem]" />
+      {/* <div className="pt-4 text-center">
         <a href="#" className="text-[15px] text-gray-900 hover:underline">
           Forgot password?
         </a>
@@ -64,7 +65,7 @@ export default function LoginForm() {
             support.
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

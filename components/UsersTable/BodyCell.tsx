@@ -1,53 +1,65 @@
+import { dateFormatter } from "@/lib/utils";
 import { AppUser } from "@/types/app-types";
-import {clsx} from "clsx";
+import { clsx } from "clsx";
+import { ChangeEvent } from "react";
 
-const baseStyle = "px-6 py-4 whitespace-nowrap text-sm border-r"
+const baseStyle = "px-6 py-4 whitespace-nowrap text-sm border-r";
 
 export default function BodyCell({
+  isLast,
   header,
   cellValue,
-  isEditing,
+  isEditing = false,
+  handleChange,
 }: Readonly<{
+  isLast?: boolean;
   header: string;
   cellValue: AppUser[keyof AppUser];
-  isEditing: boolean;
+  isEditing?: boolean;
+  handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }>) {
   if (header === "isEnabled") {
     return (
       <td className={baseStyle}>
-        <span
-          className={`rounded-full px-2 py-1  ${
-            cellValue
-              ? "bg-green-500/20 text-green-500"
-              : "bg-red-500/20 text-red-500"
-          }`}
-        >
-          {String(cellValue).toUpperCase()}
-        </span>
+        {isEditing ? (
+          <>
+            <select
+              id="isEnabled"
+              name="isEnabled"
+              className="w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+              defaultValue=""
+              onChange={handleChange}
+            >            <option value="" disabled>
+            Select an option
+          </option>
+              <option value="true">TRUE</option>
+              <option value="false">FALSE</option>
+            </select>
+          </>
+        ) : (
+          <span
+            className={`rounded-full px-2 py-1  ${
+              cellValue
+                ? "bg-green-500/20 text-green-500"
+                : "bg-red-500/20 text-red-500"
+            }`}
+          >
+            {String(cellValue).toUpperCase()}
+          </span>
+        )}
       </td>
     );
   }
 
-  if (header === "createdAt") {
-    const createdAt = new Date(String(cellValue));
+  if (header === "createdAt" || header === "lastModified") {
+    const formattedDate = dateFormatter(String(cellValue));
 
-    const formatter = new Intl.DateTimeFormat("el-GR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23",
-    });
-
-    const formattedCreatedAt = formatter.format(createdAt);
-
-    return (
-      <td className={baseStyle}>
-        {formattedCreatedAt}
-      </td>
-    );
+    return <td className={baseStyle}>{formattedDate}</td>;
   }
 
-  return <td className={clsx(baseStyle, {"text-center": !cellValue})}>{cellValue ?? "-"}</td>;
+  return (
+    <td className={clsx(baseStyle, { "text-center": !cellValue })}>
+      {cellValue ?? "-"}
+    </td>
+  );
 }

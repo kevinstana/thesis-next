@@ -1,37 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import getSession from "./getSession";
 import { availableRoles, Role } from "@/types/app-types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export async function authFetch(
-  url: string,
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-  requestBody?: unknown,
-  tag?: string
-) {
-  const session = await getSession();
-  const accessToken = session?.accessToken ?? "";
+export function dateFormatter(value: string): string {
+  const date = new Date(String(value));
 
-  const body = requestBody ? JSON.stringify(requestBody) : null;
-  const res = await fetch(`${process.env.API_URL}/${url}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body,
-    next: { tags: [tag ?? ""]}
+  const formatter = new Intl.DateTimeFormat("el-GR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
   });
 
-  const status = res.status
-  const data = await res.json()
-  const error = status !== (200 | 201 | 204) && String(data.message)
+  const formatterDate = formatter.format(date);
 
-  return {status, data, error};
+  return formatterDate;
 }
 
 export function formatFromCamelCase(header: string): string {

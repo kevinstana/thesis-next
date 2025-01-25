@@ -9,13 +9,14 @@ import {
 
 import { getKeys } from "@/lib/utils";
 import Pagination from "@/components/Pagination";
-import { ViewExternalUserModal } from "../Modals/ViewExternalUserModal";
-import { ViewExternalUserModalRef } from "@/types/app-types";
-import { useEffect, useRef } from "react";
+import { UserProfileModal } from "../Modals/UserProfileModal";
+import { UserProfileModalRef } from "@/types/app-types";
+import { useEffect, useRef, useState } from "react";
 import TableContainer from "../Tables/TableContainer";
 import Table from "../Tables";
 import TableBody from "../Tables/Body";
 import Row from "./Row";
+import { UserDetailsProvider } from "@/providers/UserIdentifiersProvider";
 
 export default function UsersTable({
   usersPage,
@@ -24,23 +25,12 @@ export default function UsersTable({
   usersPage: AppUserPage | ExternalUserPage | HuaUserPage;
   path: string;
 }>) {
-  const viewExternalUserModalRef = useRef<ViewExternalUserModalRef>(null);
+  const [identifiers, setIdentifiers] = useState<string[]>([]);
+  const userProfileModalRef = useRef<UserProfileModalRef>(null);
 
   useEffect(() => {
     if (usersPage.content.length > 0) {
-      switch (path) {
-        case "users":
-          const ids = usersPage.content.map((user) => user.id);
-          localStorage.setItem("ids", JSON.stringify(ids));
-          break;
-        case "external-users":
-          const usernames = usersPage.content.map((user) => user.username);
-          localStorage.setItem("external-usernames", JSON.stringify(usernames));
-          break;
-        case "hua-users":
-          const hua_ids = usersPage.content.map((user) => user.id);
-          localStorage.setItem("hua-ids", JSON.stringify(hua_ids));
-      }
+      setIdentifiers(usersPage.content.map((user) => user.username));
     }
   }, [path, usersPage.content]);
 
@@ -72,7 +62,7 @@ export default function UsersTable({
               user={user}
               headers={headers}
               path={path}
-              viewExternalUserModalRef={viewExternalUserModalRef}
+              userProfileModalRef={userProfileModalRef}
               key={user.username}
             />
           ))}
@@ -87,9 +77,9 @@ export default function UsersTable({
         path={path}
       />
 
-      {path === "external-users" ? (
-        <ViewExternalUserModal ref={viewExternalUserModalRef} />
-      ) : null}
+      <UserDetailsProvider identifiers={identifiers} path={path}>
+        <UserProfileModal ref={userProfileModalRef} />
+      </UserDetailsProvider>
     </TableContainer>
   );
 }

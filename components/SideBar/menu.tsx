@@ -9,19 +9,16 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   ADMIN: [
     {
       path: "/users",
-      simplePath: "users",
       name: "All Users",
       icon: <Users size={21} className="ml-1 mr-6" />,
     },
     {
       path: "/external-users",
-      simplePath: "external-users",
       name: "External Users",
       icon: <UserRound size={21} className="ml-1 mr-6" />,
     },
     {
       path: "/hua-users",
-      simplePath: "hua-users",
       name: "HUA Users",
       icon: <GraduationCap size={21} className="ml-1 mr-6" />,
     },
@@ -29,7 +26,6 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   STUDENT: [
     {
       path: "",
-      simplePath: "",
       name: "",
       icon: undefined,
     },
@@ -37,7 +33,6 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   PROFESSOR: [
     {
       path: "",
-      simplePath: "",
       name: "",
       icon: undefined,
     },
@@ -45,7 +40,6 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   SECRETARY: [
     {
       path: "",
-      simplePath: "",
       name: "",
       icon: undefined,
     },

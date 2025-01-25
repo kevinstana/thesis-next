@@ -3,7 +3,6 @@ export const availableRoles: Role[] = ["STUDENT", "PROFESSOR", "SECRETARY", "ADM
 
 export type SidebarMenuType = {
   path: string;
-  simplePath: string;
   name: string;
   icon?: JSX.Element;
 };
@@ -28,7 +27,7 @@ export type AddExternalUserModalRef = {
   openDialog: () => void
 }
 
-export type ViewExternalUserModalRef = {
+export type UserProfileModalRef = {
   openDialog: (username: string) => void
 }
 
