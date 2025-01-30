@@ -29,7 +29,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     signIn({ user }) {
       if (user.message) {
-        console.log(user.message)
         switch (user.message) {
           case "Invalid credentials":
             return "/login?error=invalid_credentials";

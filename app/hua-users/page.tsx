@@ -2,9 +2,10 @@ import UsersTable from "@/components/UsersTable";
 import UserTableOptions from "@/components/UsersTable/Options";
 import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
-import { HuaUserPage } from "@/types/response-types";
+import { UserPage } from "@/types/response-types";
 import { getHuaUsers } from "./actions";
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
+import UserPageTransformation from "@/transformations/UserPageTransformation";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -47,13 +48,14 @@ export default async function HuaUsersPage(
   }
 
   const res = await getHuaUsers(urlSearchParams.toString());
-  const data = res.data as HuaUserPage;
+  const data = res.data as UserPage;
+  const transformedUserPage = UserPageTransformation(data);
 
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
         <UserTableOptions path="hua-users" />
-        <UsersTable usersPage={data} path="hua-users" />
+        <UsersTable usersPage={transformedUserPage} path="hua-users" />
       </NotificationProviderWrapper>
     </div>
   );

@@ -1,4 +1,3 @@
-import { dateFormatter } from "@/lib/utils";
 import { AppUser } from "@/types/app-types";
 import { clsx } from "clsx";
 import { ChangeEvent } from "react";
@@ -6,16 +5,16 @@ import { ChangeEvent } from "react";
 const baseStyle = "px-6 py-4 whitespace-nowrap text-sm border-r";
 
 export default function BodyCell({
-  isLast,
   header,
   cellValue,
   isEditing = false,
+  isEnabled,
   handleChange,
 }: Readonly<{
-  isLast?: boolean;
   header: string;
   cellValue: AppUser[keyof AppUser];
   isEditing?: boolean;
+  isEnabled?: string;
   handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }>) {
   if (header === "isEnabled") {
@@ -26,12 +25,10 @@ export default function BodyCell({
             <select
               id="isEnabled"
               name="isEnabled"
-              className="w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-              defaultValue=""
+              className="w-full border px-1 border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+              value={isEnabled}
               onChange={handleChange}
-            >            <option value="" disabled>
-            Select an option
-          </option>
+            >
               <option value="true">TRUE</option>
               <option value="false">FALSE</option>
             </select>
@@ -49,12 +46,6 @@ export default function BodyCell({
         )}
       </td>
     );
-  }
-
-  if (header === "createdAt" || header === "lastModified") {
-    const formattedDate = dateFormatter(String(cellValue));
-
-    return <td className={baseStyle}>{formattedDate}</td>;
   }
 
   return (

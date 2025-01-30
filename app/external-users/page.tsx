@@ -2,9 +2,10 @@ import UsersTable from "@/components/UsersTable";
 import UserTableOptions from "@/components/UsersTable/Options";
 import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
-import { ExternalUserPage } from "@/types/response-types";
+import { UserPage } from "@/types/response-types";
 import { getExternalUsers } from "./actions";
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
+import UserPageTransformation from "@/transformations/UserPageTransformation";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -46,14 +47,15 @@ export default async function ExternalUsersPage(
     urlSearchParams.append("enabled", "false");
   }
 
-  const res = await getExternalUsers(urlSearchParams.toString())
-  const data = res.data as ExternalUserPage
+  const res = await getExternalUsers(urlSearchParams.toString());
+  const data = res.data as UserPage;
+  const transformedUserPage = UserPageTransformation(data);
 
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
         <UserTableOptions canAddExternal path="external-users" />
-        <UsersTable usersPage={data} path="external-users" />
+        <UsersTable usersPage={transformedUserPage} path="external-users" />
       </NotificationProviderWrapper>
     </div>
   );

@@ -2,7 +2,7 @@ export default function ActionButton({
   icon,
   handleClick,
 }: Readonly<{
-  icon: JSX.Element;
+  icon?: JSX.Element;
   handleClick: () => void;
 }>) {
   return (

@@ -2,9 +2,10 @@ import UsersTable from "@/components/UsersTable";
 import UserTableOptions from "@/components/UsersTable/Options";
 import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
-import { AppUserPage } from "@/types/response-types";
+import { UserPage } from "@/types/response-types";
 import { getAllUsers } from "./actions";
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
+import UserPageTransformation from "@/transformations/UserPageTransformation";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -47,13 +48,14 @@ export default async function UsersPage(
   }
 
   const res = await getAllUsers(urlSearchParams.toString());
-  const data = res.data as AppUserPage;
+  const data = res.data as UserPage;
+  const transformedUserPage = UserPageTransformation(data);
 
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
         <UserTableOptions path="users" />
-        <UsersTable usersPage={data} path="users" />
+        <UsersTable usersPage={transformedUserPage} path="users" />
       </NotificationProviderWrapper>
     </div>
   );

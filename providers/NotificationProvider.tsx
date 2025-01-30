@@ -38,7 +38,6 @@ function NotificationProvider({
   const notify = (variant: NotificationType, _message?: string): void => {
     const message = _message ?? genericMessages[variant].message
     const icon = genericMessages[variant].icon
-    console.log("notification", variant, message)
     toast({
       variant,
       description: (

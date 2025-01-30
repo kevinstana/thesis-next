@@ -20,8 +20,28 @@ export type AppUser = {
   isEnabled: boolean;
 };
 
-export type ExternalUser = AppUser;
-export type HuaUser = AppUser;
+export type TransformedUser = {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  createdAt: string;
+  lastModified?: string;
+  lastModifiedBy?: string;
+  role: Role;
+  isEnabled: boolean;
+}
+
+export type TransformedUserPage ={
+  content: TransformedUser[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+};
 
 export type AddExternalUserModalRef = {
   openDialog: () => void

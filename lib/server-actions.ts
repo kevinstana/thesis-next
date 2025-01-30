@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 import getSession from "./getSession";
+import { TransformedUser } from "@/types/app-types";
+import { dateFormatter } from "./utils";
 
 export async function authFetch(
   url: string,
@@ -31,17 +33,30 @@ export async function authFetch(
 }
 
 export async function getUserProfile(username: string, path: string) {
-  const res = await authFetch(`${path}/${username}`, "GET");
+  const res = await authFetch(
+    `${path === "external-users" ? path : "users"}/${username}`,
+    "GET"
+  );
 
-  return res;
+  const transformedUser: TransformedUser = {
+    ...res.data,
+    createdAt: dateFormatter(String(res.data.createdAt)),
+    lastModified: dateFormatter(String(res.data.lastModified)),
+  };
+
+  return { status: res.status, data: transformedUser, error: res.error };
 }
 
 export async function updateUser(id: number, isEnabled: string, tag: string) {
-  const {data, status, error} = await authFetch(`users/${id}`, "PUT", isEnabled)
+  const { data, status, error } = await authFetch(
+    `users/${id}`,
+    "PUT",
+    isEnabled
+  );
 
   if (status === 200) {
-    revalidateTag(tag)
+    revalidateTag(tag);
   }
 
-  return {data, status, error}
+  return { data, status, error };
 }

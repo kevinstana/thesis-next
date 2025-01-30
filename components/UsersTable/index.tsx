@@ -1,16 +1,11 @@
 "use client";
 
 import HeaderCell from "../Tables/HeaderCell";
-import {
-  AppUserPage,
-  ExternalUserPage,
-  HuaUserPage,
-} from "@/types/response-types";
 
 import { getKeys } from "@/lib/utils";
 import Pagination from "@/components/Pagination";
 import { UserProfileModal } from "../Modals/UserProfileModal";
-import { UserProfileModalRef } from "@/types/app-types";
+import { TransformedUserPage, UserProfileModalRef } from "@/types/app-types";
 import { useEffect, useRef, useState } from "react";
 import TableContainer from "../Tables/TableContainer";
 import Table from "../Tables";
@@ -22,7 +17,7 @@ export default function UsersTable({
   usersPage,
   path,
 }: Readonly<{
-  usersPage: AppUserPage | ExternalUserPage | HuaUserPage;
+  usersPage: TransformedUserPage;
   path: string;
 }>) {
   const [identifiers, setIdentifiers] = useState<string[]>([]);

@@ -1,4 +1,8 @@
-import { AppUser, UserProfileModalRef } from "@/types/app-types";
+import {
+  AppUser,
+  TransformedUser,
+  UserProfileModalRef,
+} from "@/types/app-types";
 import BodyCell from "./BodyCell";
 import Pencil from "@/iconography/Pencil";
 import { ChangeEvent, RefObject, useCallback, useState } from "react";
@@ -6,9 +10,9 @@ import View from "@/iconography/View";
 import { clsx } from "clsx";
 import CheckMark from "@/iconography/CheckMark";
 import Close from "@/iconography/Close";
-import ActionButton from "./ActionButton";
+import ActionButton from "../Buttons/ActionButton";
 import { useNotification } from "@/providers/NotificationProvider";
-import { authFetch, updateUser } from "@/lib/server-actions";
+import { updateUser } from "@/lib/server-actions";
 import { Loader2 } from "lucide-react";
 
 export default function Row({
@@ -17,7 +21,7 @@ export default function Row({
   path,
   userProfileModalRef,
 }: Readonly<{
-  user: AppUser;
+  user: TransformedUser;
   headers: (keyof AppUser)[];
   path: string;
   userProfileModalRef: RefObject<UserProfileModalRef>;
@@ -49,11 +53,7 @@ export default function Row({
     setIsEditing(false);
     setPending(true);
 
-    const { data, status, error } = await updateUser(
-      user["id"],
-      isEnabled,
-      path
-    );
+    const { status } = await updateUser(user["id"], isEnabled, path);
 
     setPending(false);
     if (status === 200) {
@@ -82,6 +82,7 @@ export default function Row({
     >
       {headers.map((header) => (
         <BodyCell
+          isEnabled={isEnabled}
           isEditing={isEditing}
           key={header}
           header={header}
@@ -89,11 +90,7 @@ export default function Row({
           handleChange={header === "isEnabled" ? handleChange : undefined}
         />
       ))}
-      <td
-        className={clsx(
-          "sticky right-0 z-50 flex items-center justify-center bg-neutral-100 px-4 py-4 h-[3.25rem] border-r"
-        )}
-      >
+      <td className="sticky right-0 z-50 flex items-center justify-center bg-neutral-100 px-4 py-4 h-[3.25rem] border-r">
         <div className="flex items-center justify-center gap-[0.5rem]">
           <ActionButton
             icon={isEditing ? <CheckMark /> : <Pencil />}
