@@ -1,5 +1,5 @@
 import { TransformedUser } from "@/types/app-types";
-import ShadcnActionButton from "./Buttons/ShadcnActionButton";
+import ShadcnActionButton from "../Buttons/ShadcnActionButton";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNotification } from "@/providers/NotificationProvider";
 import { updateUser } from "@/lib/server-actions";
@@ -220,7 +220,7 @@ export default function UserProfile({
                 id="isEnabled"
                 name="isEnabled"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-                value={String(user?.isEnabled).toUpperCase()}
+                value={isEnabled.toUpperCase() ?? String(user?.isEnabled).toUpperCase()}
               />
             )}
           </div>

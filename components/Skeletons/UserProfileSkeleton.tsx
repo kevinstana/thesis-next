@@ -35,6 +35,11 @@ export default function UserProfileSkeleton() {
         ))}
       </div>
 
+      <div className="space-y-1">
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="h-8 w-full" />
+        </div>
+
       <div className="flex pb-8 pt-2 gap-2 justify-end">
         <Skeleton className="h-10 w-24" />
         <Skeleton className="h-10 w-24" />

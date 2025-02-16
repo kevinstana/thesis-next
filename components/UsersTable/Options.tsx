@@ -1,7 +1,7 @@
 import AddExternalUserModalWrapper from "@/components/Modals/AddExtenalUserModal";
 import UserTableFilters from "./Filters";
 
-export default function Options({
+export default function UsersTableOptions({
   canAddExternal = false,
   path
 }: Readonly<{

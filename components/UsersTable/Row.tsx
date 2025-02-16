@@ -29,7 +29,7 @@ export default function Row({
   const { notify } = useNotification();
   const [pending, setPending] = useState<boolean>(false);
   const [isEnabled, setIsEnabled] = useState<string>(
-    user["isEnabled"].toString()
+    String(user.isEnabled)
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
 

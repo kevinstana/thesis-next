@@ -26,8 +26,8 @@ export default function BodyCell({
               id="isEnabled"
               name="isEnabled"
               className="w-full border px-1 border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-              value={isEnabled}
               onChange={handleChange}
+              value={isEnabled}
             >
               <option value="true">TRUE</option>
               <option value="false">FALSE</option>

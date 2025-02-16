@@ -1,5 +1,10 @@
 export type Role = "ADMIN" | "STUDENT" | "PROFESSOR" | "SECRETARY";
-export const availableRoles: Role[] = ["STUDENT", "PROFESSOR", "SECRETARY", "ADMIN"];
+export const availableRoles: Role[] = [
+  "STUDENT",
+  "PROFESSOR",
+  "SECRETARY",
+  "ADMIN",
+];
 
 export type SidebarMenuType = {
   path: string;
@@ -31,9 +36,9 @@ export type TransformedUser = {
   lastModifiedBy?: string;
   role: Role;
   isEnabled: boolean;
-}
+};
 
-export type TransformedUserPage ={
+export type TransformedUserPage = {
   content: TransformedUser[];
   page: {
     size: number;
@@ -44,29 +49,43 @@ export type TransformedUserPage ={
 };
 
 export type AddExternalUserModalRef = {
-  openDialog: () => void
-}
+  openDialog: () => void;
+};
+
+export type CreateThesisModalRef = {
+  openDialog: () => void;
+};
 
 export type UserProfileModalRef = {
-  openDialog: (username: string) => void
-}
+  openDialog: (username: string) => void;
+};
 
 export type IconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export type CreateExternalUser = {
-  username?: string
-  password?: string
-  verifyPassword?: string
-  email?: string
-  firstName?: string
-  lastName?: string
-  role?: Role
-}
+  username?: string;
+  password?: string;
+  verifyPassword?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  role?: Role;
+};
 
 export type CreateExternalUserErrors = {
-  username?: string
-  password?: string
-  email?: string
-}
+  username?: string;
+  password?: string;
+  email?: string;
+};
+
+export type CreateThesisErrors = {
+  title?: string;
+};
+
+export type Course = {
+  id: number;
+  name: string;
+  url: string;
+};

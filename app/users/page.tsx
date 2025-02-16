@@ -1,5 +1,5 @@
 import UsersTable from "@/components/UsersTable";
-import UserTableOptions from "@/components/UsersTable/Options";
+import UsersTableOptions from "@/components/UsersTable/Options";
 import { isValidRole } from "@/lib/utils";
 import { Role } from "@/types/app-types";
 import { UserPage } from "@/types/response-types";
@@ -54,7 +54,7 @@ export default async function UsersPage(
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
-        <UserTableOptions path="users" />
+        <UsersTableOptions path="users" />
         <UsersTable usersPage={transformedUserPage} path="users" />
       </NotificationProviderWrapper>
     </div>

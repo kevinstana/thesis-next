@@ -13,9 +13,9 @@ export function dateFormatter(value: string): string {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
+    // hour: "2-digit",
+    // minute: "2-digit",
+    // hourCycle: "h23",
   });
 
   const formatterDate = formatter.format(date);

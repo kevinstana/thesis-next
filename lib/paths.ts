@@ -9,7 +9,17 @@ export const appPathsMap: Record<string, string> = {
 };
 
 const adminPaths = new RegExp("^/(users|external-users|hua-users)(?:/.*)?$");
+const professorPaths = new RegExp("^/(my-theses|assigned-reviews)(?:/.*)?$");
+const studentPaths = new RegExp("^/(my-assignment)(?:/.*)?$");
 
 export function isAdminPath(pathname: string): boolean {
   return adminPaths.test(pathname);
+}
+
+export function isProfessorPath(pathname: string): boolean {
+  return professorPaths.test(pathname);
+}
+
+export function isStudentPath(pathname: string): boolean {
+  return studentPaths.test(pathname);
 }
