@@ -295,9 +295,11 @@ function Toolbar() {
 }
 
 export default function Textarea({
+  initDescription,
   handleDescription,
 }: {
-  handleDescription: (description: string) => void;
+  initDescription?: string,
+  handleDescription?: (description: string) => void;
 }) {
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
@@ -338,6 +340,15 @@ export default function Textarea({
     [editor]
   );
 
+  
+  let parsedInit: Descendant[] = []
+  try {
+    if (initDescription) {
+      parsedInit = JSON.parse(initDescription) as Descendant[]
+    } 
+  } catch (error) {
+  }
+
   return (
     <div className="space-y-1">
       <label
@@ -349,7 +360,7 @@ export default function Textarea({
       <div className="border border-gray-300 rounded-md  focus-within:ring-neutral-700">
         <Slate
           editor={editor}
-          initialValue={initialValue}
+          initialValue={parsedInit.length > 0 ? parsedInit : initialValue}
           onChange={() => handleDescription(JSON.stringify(editor.children))}
         >
           <Toolbar />

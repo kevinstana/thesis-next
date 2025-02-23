@@ -60,6 +60,10 @@ export type UserProfileModalRef = {
   openDialog: (username: string) => void;
 };
 
+export type ViewThesisModalRef = {
+  openDialog: (id: string) => void;
+};
+
 export type IconProps = {
   className?: string;
 };
@@ -88,4 +92,23 @@ export type Course = {
   id: number;
   name: string;
   url: string;
+};
+
+export type BasicThesis = {
+  id: string;
+  title: string;
+  createdAt: string;
+  lastModified: string;
+  professorFullName: string;
+  status: string;
+};
+
+export type DetailedThesis = {
+  id: string;
+  title: string;
+  description: string;
+  professorFullName: string;
+  reviewer1FullName: string,
+  reviewer2FullName: string,
+  status: string;
 };

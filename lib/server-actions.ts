@@ -60,3 +60,16 @@ export async function updateUser(id: number, isEnabled: string, tag: string) {
 
   return { data, status, error };
 }
+
+export async function getOneThesis(id: string) {
+  const res = await authFetch(`theses/${id}`, "GET");
+
+  return { status: res.status, data: res.data, error: res.error };
+}
+
+
+export async function getThesisCourses(thesisId: string) {
+  const res = await authFetch(`courses/${thesisId}`, "GET");
+
+  return { status: res.status, data: res.data, error: res.error };
+}

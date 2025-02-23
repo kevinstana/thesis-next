@@ -1,13 +1,13 @@
 import React, { createContext, useContext, ReactNode } from "react";
 
-interface UserDetailsContextType {
+interface UserIdentifiersContextType {
   identifiers: string[];
   path: string;
 }
 
-const UserDetailsContext = createContext<UserDetailsContextType | undefined>(undefined);
+const UserIdentifiersContext = createContext<UserIdentifiersContextType | undefined>(undefined);
 
-function UserDetailsProvider({
+function UserIdentifiersProvider({
   children,
   identifiers,
   path,
@@ -17,18 +17,18 @@ function UserDetailsProvider({
   path: string;
 }) {
   return (
-    <UserDetailsContext.Provider value={{ identifiers, path }}>
+    <UserIdentifiersContext.Provider value={{ identifiers, path }}>
       {children}
-    </UserDetailsContext.Provider>
+    </UserIdentifiersContext.Provider>
   );
 }
 
-const useUserDetails = (): UserDetailsContextType => {
-  const context = useContext(UserDetailsContext);
+const useUserIdentifiers = (): UserIdentifiersContextType => {
+  const context = useContext(UserIdentifiersContext);
   if (!context) {
-    throw new Error("useUserDetails must be used within a UserDetailsProvider");
+    throw new Error("useUserIdentifiers must be used within a UserIdentifiers");
   }
   return context;
 };
 
-export { UserDetailsProvider, useUserDetails };
+export { UserIdentifiersProvider, useUserIdentifiers };

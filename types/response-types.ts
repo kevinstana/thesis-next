@@ -1,4 +1,4 @@
-import { AppUser } from "./app-types";
+import { AppUser, BasicThesis } from "./app-types";
 
 export type UserPage = {
   content: AppUser[];
@@ -9,3 +9,13 @@ export type UserPage = {
     totalPages: number;
   };
 };
+
+export type BasicThesisPage = {
+  content: BasicThesis[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}

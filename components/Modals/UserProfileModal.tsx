@@ -8,9 +8,10 @@ import useSWR from "swr";
 import RecordNavigation from "../RecordNavigation";
 import BaseModalContent from "./BaseModalContent";
 import BaseModalHeader from "./BaseModalHeader";
-import { useUserDetails } from "@/providers/UserIdentifiersProvider";
-import UserProfileSkeleton from "../Skeletons/UserProfileSkeleton";
+// import UserProfileSkeleton from "../Skeletons/UserProfileSkeleton";
 import UserProfile from "../UserProfile";
+import { useUserIdentifiers } from "@/providers/UserIdentifiersProvider";
+import { Loader2 } from "lucide-react";
 
 const titles: Record<string, string> = {
   users: "Users",
@@ -23,7 +24,7 @@ const UserProfileModal = forwardRef<UserProfileModalRef>((_, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const { identifiers, path } = useUserDetails();
+  const { identifiers, path } = useUserIdentifiers();
 
   const { isLoading, isValidating, mutate } = useSWR(
     () => value,
@@ -50,7 +51,7 @@ const UserProfileModal = forwardRef<UserProfileModalRef>((_, ref) => {
 
   return (
     <BaseModal open={open}>
-      <BaseModalContent className="bg-white w-full max-w-[60%] max-h-[90%] rounded-md flex flex-col relative">
+      <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
         <BaseModalHeader
           title={`${titles[path]} / ${value}`}
           setOpen={setOpen}
@@ -74,7 +75,10 @@ const UserProfileModal = forwardRef<UserProfileModalRef>((_, ref) => {
 
           {/* form */}
           {!user || isLoading || isValidating ? (
-            <UserProfileSkeleton />
+            // <UserProfileSkeleton />
+            <div className="w-full h-full flex items-center justify-center">
+            <Loader2 className="mr-2 h-14 w-14 animate-spin" strokeWidth={0.5} />
+            </div>
           ) : (
             <UserProfile
               user={user}

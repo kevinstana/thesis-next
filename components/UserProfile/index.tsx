@@ -189,9 +189,8 @@ export default function UserProfile({
                 id="lastModifiedBy"
                 name="lastModifiedBy"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-                placeholder="Enter last name"
                 maxLength={256}
-                value={user?.lastModifiedBy}
+                value={user?.lastModifiedBy ?? "-"}
               />
             </div>
           </div>

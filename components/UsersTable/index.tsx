@@ -11,7 +11,7 @@ import TableContainer from "../Tables/TableContainer";
 import Table from "../Tables";
 import TableBody from "../Tables/Body";
 import Row from "./Row";
-import { UserDetailsProvider } from "@/providers/UserIdentifiersProvider";
+import { UserIdentifiersProvider } from "@/providers/UserIdentifiersProvider";
 
 export default function UsersTable({
   usersPage,
@@ -72,9 +72,9 @@ export default function UsersTable({
         path={path}
       />
 
-      <UserDetailsProvider identifiers={identifiers} path={path}>
+      <UserIdentifiersProvider identifiers={identifiers} path={path}>
         <UserProfileModal ref={userProfileModalRef} />
-      </UserDetailsProvider>
+      </UserIdentifiersProvider>
     </TableContainer>
   );
 }

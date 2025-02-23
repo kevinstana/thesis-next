@@ -264,7 +264,7 @@ export default function CreateThesisForm({
       return;
     }
 
-    const res = await createThesis(body);
+    const res = await createThesis(body, "theses");
     if (res.status === 200) {
       setPending(false)
       notify("success", "Thesis created!");
@@ -273,8 +273,15 @@ export default function CreateThesisForm({
       setSelectedCourses([])
       setSelectedReviewer1(null)
       setSelectedReviewer2(null)
+      setBody(initialBody)
+      setExcludedIds([])
       document.dispatchEvent(new Event('ClearEditor'));
       return;
+    }
+
+    if (res.error === "A thesis with this title already exists.") {
+      setPending(false)
+      setErrors({title: String(res.error), secondReviewerId: "", thirdReviewerId: ""})
     }
 
   }
