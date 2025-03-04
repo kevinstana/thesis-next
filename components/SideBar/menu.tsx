@@ -46,19 +46,19 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
   ],
   STUDENT: [
     {
-      path: "my-assignment",
+      path: "/my-assignment",
       name: "My assignment",
       icon: <ClipboardCheck size={iconSize} className={baseStyle} />,
     },
   ],
   PROFESSOR: [
     {
-      path: "my-theses",
+      path: "/my-theses",
       name: "My Theses",
       icon: <ClipboardPen size={iconSize} className={baseStyle} />,
     },
     {
-      path: "assigned-reviews",
+      path: "/assigned-reviews",
       name: "Assigned Reviews",
       icon: <ClipboardList size={iconSize} className={baseStyle} />,
     },

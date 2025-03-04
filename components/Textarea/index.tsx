@@ -297,25 +297,32 @@ function Toolbar() {
 export default function Textarea({
   initDescription,
   handleDescription,
+  readonly = false,
+  clear,
 }: {
-  initDescription?: string,
+  initDescription?: string;
   handleDescription?: (description: string) => void;
+  readonly?: boolean;
+  clear?: boolean
 }) {
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
   useEffect(() => {
-    const resetHandler = () => {
-      Transforms.select(editor, []);
-      Transforms.removeNodes(editor, { at: [0] });
-      Transforms.insertNodes(editor, initialValue, { at: [0] });
-    };
+    if (clear) {
 
-    document.addEventListener("ClearEditor", resetHandler);
+      // const resetHandler = () => {
+      // };
+        Transforms.select(editor, []);
+        Transforms.removeNodes(editor, { at: [0] });
+        Transforms.insertNodes(editor, initialValue, { at: [0] });
+    }
 
-    return () => {
-      document.removeEventListener("ClearEditor", resetHandler);
-    };
-  }, [editor]);
+    // document.addEventListener("ClearThesisForm", resetHandler);
+
+    // return () => {
+    //   document.removeEventListener("ClearThesisForm", resetHandler);
+    // };
+  }, [clear, editor]);
 
   const renderElement = useCallback(
     (props: RenderElementProps) => <Element {...props} />,
@@ -340,32 +347,28 @@ export default function Textarea({
     [editor]
   );
 
-  
-  let parsedInit: Descendant[] = []
+  let parsedInit: Descendant[] = [];
   try {
     if (initDescription) {
-      parsedInit = JSON.parse(initDescription) as Descendant[]
-    } 
+      parsedInit = JSON.parse(initDescription) as Descendant[];
+    }
   } catch (error) {
+    console.log(error);
   }
 
   return (
     <div className="space-y-1">
-      <label
-        htmlFor="description"
-        className="flex gap-3 font-medium text-gray-700"
-      >
-        Description
-      </label>
+      <div className="flex gap-3 font-medium text-gray-700">Description</div>
       <div className="border border-gray-300 rounded-md  focus-within:ring-neutral-700">
         <Slate
           editor={editor}
           initialValue={parsedInit.length > 0 ? parsedInit : initialValue}
-          onChange={() => handleDescription(JSON.stringify(editor.children))}
+          onChange={() => handleDescription?.(JSON.stringify(editor.children))}
         >
-          <Toolbar />
+          {!readonly && <Toolbar />}
           <div className="px-4 py-2 min-h-[120px]">
             <Editable
+              readOnly={readonly}
               renderElement={renderElement}
               renderLeaf={renderLeaf}
               placeholder="Enter Description"

@@ -9,7 +9,7 @@ export default function ThesesTableOptions({path}: {path: string}) {
 
   return (
     <div className="flex items-center gap-1">
-      {role === "PROFESSOR" ? <CreateThesisModalModalWrapper /> : null}
+      {role === "PROFESSOR" && path === "my-theses" ? <CreateThesisModalModalWrapper /> : null}
       <Filters path={path} />
     </div>
   );

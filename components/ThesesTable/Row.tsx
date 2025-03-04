@@ -1,4 +1,4 @@
-import { BasicThesis, ViewThesisModalRef } from "@/types/app-types";
+import { BasicThesis, GeneralViewThesisModalRef, ViewThesisModalRef } from "@/types/app-types";
 import BodyCell from "./BodyCell";
 import View from "@/iconography/View";
 import ActionButton from "../Buttons/ActionButton";
@@ -11,7 +11,7 @@ export default function Row({
 }: Readonly<{
   thesis: BasicThesis;
   headers: (keyof BasicThesis)[];
-  viewThesisModalRef: RefObject<ViewThesisModalRef>;
+  viewThesisModalRef: RefObject<ViewThesisModalRef | GeneralViewThesisModalRef>;
 }>) {
   return (
     <tr key={thesis.id} className="hover:bg-neutral-100">

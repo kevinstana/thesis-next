@@ -4,15 +4,20 @@ import HeaderCell from "../Tables/HeaderCell";
 
 import { getKeys } from "@/lib/utils";
 import Pagination from "@/components/Pagination";
-import { BasicThesis, ViewThesisModalRef } from "@/types/app-types";
+import {
+  BasicThesis,
+  GeneralViewThesisModalRef,
+  ViewThesisModalRef,
+} from "@/types/app-types";
 import { useEffect, useRef, useState } from "react";
 import TableContainer from "../Tables/TableContainer";
 import Table from "../Tables";
 import TableBody from "../Tables/Body";
 import { BasicThesisPage } from "@/types/response-types";
 import Row from "./Row";
-import { ViewThesisModal } from "../Modals/ViewThesisModal";
 import { ThesisIdentifiersProvider } from "@/providers/ThesisIdentifiersProvider";
+import { GeneralViewThesisModal } from "../Modals/ViewThesis/General";
+import { ViewThesisModal } from "../Modals/ViewThesis/AsProfessor";
 
 export default function ThesesTable({
   thesisPage,
@@ -22,6 +27,7 @@ export default function ThesesTable({
   path: string;
 }>) {
   const [identifiers, setIdentifiers] = useState<string[]>([]);
+  const generalViewThesisModalRef = useRef<GeneralViewThesisModalRef>(null);
   const viewThesisModalRef = useRef<ViewThesisModalRef>(null);
 
   useEffect(() => {
@@ -37,7 +43,14 @@ export default function ThesesTable({
   const theses = thesisPage.content;
   const { size, number, totalElements, totalPages } = thesisPage.page;
 
-  const customHeadersOrder: (keyof BasicThesis)[] = ["id", "title", "professorFullName", "createdAt", "lastModified", "status"];
+  const customHeadersOrder: (keyof BasicThesis)[] = [
+    "id",
+    "title",
+    "professorFullName",
+    "createdAt",
+    "lastModified",
+    "status",
+  ];
   const thesisKeys = getKeys(theses[0]);
 
   const headers = [
@@ -65,7 +78,11 @@ export default function ThesesTable({
               thesis={thesis}
               headers={headers}
               key={thesis.id}
-              viewThesisModalRef={viewThesisModalRef}
+              viewThesisModalRef={
+                path === "theses"
+                  ? generalViewThesisModalRef
+                  : viewThesisModalRef
+              }
             />
           ))}
         </TableBody>
@@ -80,7 +97,13 @@ export default function ThesesTable({
       />
 
       <ThesisIdentifiersProvider identifiers={identifiers}>
-        <ViewThesisModal ref={viewThesisModalRef} />
+        {path === "theses" ? (
+          <GeneralViewThesisModal ref={generalViewThesisModalRef} />
+        ) : null}
+
+        {path === "my-theses" ? (
+          <ViewThesisModal ref={viewThesisModalRef} />
+        ) : null}
       </ThesisIdentifiersProvider>
     </TableContainer>
   );
