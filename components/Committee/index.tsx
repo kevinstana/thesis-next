@@ -29,7 +29,7 @@ export default function CommitteMember({
     if (clear) {
       setSelectedMember(null);
     }
-  }, [clear]);
+  }, [clear, initMember]);
 
   const [memberQuery, setMemberQuery] = useState("");
   const [selectedMember, setSelectedMember] =

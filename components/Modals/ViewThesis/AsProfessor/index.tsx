@@ -2,7 +2,8 @@
 
 import {
   CommitteeMember,
-  DetailedThesis,
+  Course,
+  DetailedThesisResponse,
   ViewThesisModalRef,
 } from "@/types/app-types";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
@@ -13,33 +14,34 @@ import useSWR from "swr";
 import RecordNavigation from "../../../RecordNavigation";
 import { Loader2 } from "lucide-react";
 import { useThesisIdentifiers } from "@/providers/ThesisIdentifiersProvider";
-import { getOneThesis } from "@/lib/server-actions";
+import { authFetch, getOneThesis } from "@/lib/server-actions";
 import Textarea from "../../../Textarea";
-import RecommendedCourses from "../../../RecommendedCourses";
 import { clsx } from "clsx";
 import { Skeleton } from "../../../ui/skeleton";
 import ShadcnActionButton from "@/components/Buttons/ShadcnActionButton";
 import CommitteMember from "@/components/Committee";
-import { CreateThesisBody } from "@/components/Forms/CreateThesisForm";
+import EditingRecommendedCourses from "@/components/RecommendedCourses/Editing";
+import { useNotification } from "@/providers/NotificationProvider";
 
-const initThesis: DetailedThesis = {
-  id: "",
-  title: "",
-  description: "",
-  professorFullName: "",
-  reviewer1FullName: "",
-  reviewer2FullName: "",
-  professorId: "",
-  reviewer1Id: "",
-  reviewer2Id: "",
-  status: "",
-};
+const currentThesis: DetailedThesisResponse = {
+  thesis: {
+    id: "",
+    title: "",
+    description: "",
 
-const initialBody = {
-  title: "",
-  description: "",
-  secondReviewerId: 0,
-  thirdReviewerId: 0,
+    professorId: 0,
+    professorFirstName: "",
+    professorLastName: "",
+
+    reviewer1Id: 0,
+    reviewer1FirstName: "",
+    reviewer1LastName: "",
+
+    reviewer2Id: 0,
+    reviewer2FirstName: "",
+    reviewer2LastName: "",
+    status: "",
+  },
   recommendedCourses: [],
 };
 
@@ -51,45 +53,49 @@ const committee = [
 const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
-  const [thesis, setThesis] = useState<DetailedThesis>(initThesis);
+
+  const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
   const [thesisId, setThesisId] = useState<string>("");
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [initCommittee, setInitCommittee] = useState<CommitteeMember[]>([]);
-  const { identifiers } = useThesisIdentifiers();
 
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
-  const [body, setBody] = useState<CreateThesisBody>(initialBody);
+  const { identifiers } = useThesisIdentifiers();
 
-  const { data, isLoading, isValidating, mutate } = useSWR(
+  const {notify} = useNotification()
+
+  const { isLoading, isValidating, mutate } = useSWR(
     thesisId ? `thesis-${thesisId}` : null,
     () => getOneThesis(thesisId),
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
       onSuccess: (res) => {
-        const data = res.data as DetailedThesis;
+        const data = res.data as DetailedThesisResponse;
         setThesis(data);
         setInitCommittee([
           {
-            id: Number(data.reviewer1Id),
-            firstName: data.reviewer1FullName.split(" ")[0],
-            lastName: data.reviewer1FullName.split(" ")[1],
+            id: data.thesis.reviewer1Id,
+            firstName: data.thesis.reviewer1FirstName,
+            lastName: data.thesis.reviewer1LastName,
             username: "",
           },
           {
-            id: Number(data.reviewer2Id),
-            firstName: data.reviewer2FullName.split(" ")[0],
-            lastName: data.reviewer2FullName.split(" ")[1],
+            id: data.thesis.reviewer2Id,
+            firstName: data.thesis.reviewer2FirstName,
+            lastName: data.thesis.reviewer2LastName,
             username: "",
           },
         ]);
-        setExcludedIds([Number(data.reviewer1Id), Number(data.reviewer2Id)]);
+        setExcludedIds([
+          Number(data.thesis.reviewer1Id),
+          Number(data.thesis.reviewer2Id),
+        ]);
       },
     }
   );
 
   useEffect(() => {
-    setThesis(initThesis);
+    setThesis(currentThesis);
     if (thesisId) {
       mutate();
     }
@@ -112,15 +118,21 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
 
       switch (label) {
         case "Reviewer 1":
-          setBody((prev) => ({
+          setThesis((prev) => ({
             ...prev,
-            secondReviewerId: id,
+            thesis: {
+              ...prev.thesis,
+              reviewer1Id: id,
+            },
           }));
           return;
         case "Reviewer 2":
-          setBody((prev) => ({
+          setThesis((prev) => ({
             ...prev,
-            thirdReviewerId: id,
+            thesis: {
+              ...prev.thesis,
+              reviewer2Id: id,
+            },
           }));
           return;
         default:
@@ -131,15 +143,21 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     setExcludedIds(excludedIds.filter((tmp) => tmp !== id));
     switch (label) {
       case "Reviewer 1":
-        setBody((prev) => ({
+        setThesis((prev) => ({
           ...prev,
-          secondReviewerId: 0,
+          thesis: {
+            ...prev.thesis,
+            reviewer1d: 0,
+          },
         }));
         return;
       case "Reviewer 2":
-        setBody((prev) => ({
+        setThesis((prev) => ({
           ...prev,
-          thirdReviewerId: 0,
+          thesis: {
+            ...prev.thesis,
+            reviewer2d: 0,
+          },
         }));
         return;
       default:
@@ -147,10 +165,44 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     }
   }
 
+  function handleCourseChange(trigger: "add" | "remove", course: Course) {
+    if (trigger === "add") {
+      setThesis((prev) => ({
+        ...prev,
+        recommendedCourses: [...prev.recommendedCourses, course],
+      }));
+      return;
+    }
+
+    setThesis((prev) => ({
+      ...prev,
+      recommendedCourses: prev.recommendedCourses.filter((c) => c !== course),
+    }));
+  }
+
+  async function handleSubmit() {
+    const body = {
+      title: thesis.thesis.title,
+      description: thesis.thesis.description,
+      secondReviewerId: String(thesis.thesis.reviewer1Id),
+      thirdReviewerId: String(thesis.thesis.reviewer2Id),
+      recommendedCourses: thesis.recommendedCourses.map((course) => (course.id))
+    }
+
+    const {data, error, status} = await authFetch(`theses/${thesisId}`, "PUT", body)
+
+    if (status === 200) {
+      notify("success", "Thesis updated!")
+      mutate()
+    } else {
+      notify("error", data.message)
+    }
+  }
+
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <BaseModalHeader title={`Theses / ${thesisId}`} setOpen={setOpen} />
+        <BaseModalHeader title={`My Theses / ${thesisId}`} setOpen={setOpen} />
 
         <div
           className="flex flex-col flex-grow justify-between px-4 pt-4 overflow-hidden"
@@ -165,11 +217,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                     "font-medium text-sm/[1.5rem] rounded-full px-2 py-1 w-fit",
                     {
                       "bg-green-500/20 text-green-500":
-                        thesis.status === "AVAILABLE",
+                        thesis.thesis.status === "AVAILABLE",
                     }
                   )}
                 >
-                  {thesis.status}
+                  {thesis.thesis.status}
                 </div>
               ) : (
                 <Skeleton className="rounded-full px-2 py-1 w-24 h-8" />
@@ -211,20 +263,26 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
                     maxLength={256}
                     required
-                    value={thesis.title}
+                    value={thesis.thesis.title}
+                    onChange={(e) => {
+                      setThesis((prev) => ({
+                        ...prev,
+                        thesis: { ...prev.thesis, title: e.target.value },
+                      }));
+                    }}
                   />
                 </div>
 
                 <Textarea
-                  initDescription={thesis.description}
+                  initDescription={thesis.thesis.description}
                   handleDescription={(description: string) => {
-                    setThesis((prev) => ({ ...prev, description }));
+                    setThesis((prev) => ({ ...prev, thesis: {...prev.thesis, description} }));
                   }}
                 />
 
-                <RecommendedCourses
-                  thesisId={thesisId}
-                  type={"editing"}
+                <EditingRecommendedCourses
+                  courses={thesis.recommendedCourses}
+                  handleCourseChange={handleCourseChange}
                 />
 
                 <div className="flex flex-col gap-4">
@@ -240,6 +298,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                       initMember={initCommittee[index]}
                       excludedIds={excludedIds}
                       handleCommitteeChange={handleCommitteeChange}
+                      clear={false}
                     />
                   ))}
                 </div>
@@ -252,7 +311,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           <ShadcnActionButton
             type={"submit"}
             text={pending ? "Saving..." : "Save"}
-            handleClick={() => {}}
+            handleClick={() => handleSubmit()}
             disabled={pending}
           />
 

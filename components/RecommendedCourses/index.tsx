@@ -10,14 +10,21 @@ import EditingRecommendedCourses from "./Editing";
 export default function RecommendedCourses({
   thesisId,
   type,
+  handleCourseChange,
+  setInitCourses,
 }: {
   thesisId: string;
   type: "viewing" | "editing";
+  handleCourseChange?: (trigger: "add" | "remove", course: Course) => void,
+  setInitCourses: (courses: Course[]) => void
 }) {
   const { data, isLoading } = useSWR(
     () => (thesisId ? ["thesis-courses", thesisId] : null),
     () => getThesisCourses(thesisId),
     {
+      onSuccess: (res) => {
+        setInitCourses(res.data as Course[])
+      },
       revalidateOnFocus: false,
       shouldRetryOnError: false,
     }
@@ -33,5 +40,5 @@ export default function RecommendedCourses({
     return <ViewingRecommendedCourses courses={courses} />;
   }
 
-  return <EditingRecommendedCourses handleCourseChange={() => {}} courses={courses} />;
+  return <EditingRecommendedCourses handleCourseChange={handleCourseChange} courses={courses} />;
 }

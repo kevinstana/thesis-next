@@ -1,6 +1,6 @@
 "use client";
 
-import { DetailedThesis, GeneralViewThesisModalRef } from "@/types/app-types";
+import { DetailedThesisResponse, GeneralViewThesisModalRef } from "@/types/app-types";
 import { forwardRef, useImperativeHandle, useState, useEffect } from "react";
 import BaseModal from "../../BaseModal";
 import BaseModalContent from "../../BaseModalContent";
@@ -11,21 +11,30 @@ import { Loader2 } from "lucide-react";
 import { useThesisIdentifiers } from "@/providers/ThesisIdentifiersProvider";
 import { getOneThesis } from "@/lib/server-actions";
 import Textarea from "../../../Textarea";
-import RecommendedCourses from "../../../RecommendedCourses";
 import { clsx } from "clsx";
 import { Skeleton } from "../../../ui/skeleton";
+import ViewingRecommendedCourses from "@/components/RecommendedCourses/Viewing";
 
-const initThesis: DetailedThesis = {
-  id: "",
-  title: "",
-  description: "",
-  professorFullName: "",
-  reviewer1FullName: "",
-  reviewer2FullName: "",
-  professorId: "",
-  reviewer1Id: "",
-  reviewer2Id: "",
-  status: "",
+const currentThesis: DetailedThesisResponse = {
+  thesis: {
+    id: "",
+    title: "",
+    description: "",
+
+    professorId: 0,
+    professorFirstName: "",
+    professorLastName: "",
+
+    reviewer1Id: 0,
+    reviewer1FirstName: "",
+    reviewer1LastName: "",
+
+    reviewer2Id: 0,
+    reviewer2FirstName: "",
+    reviewer2LastName: "",
+    status: "",
+  },
+  recommendedCourses: [],
 };
 
 const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
@@ -33,25 +42,24 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
     const [open, setOpen] = useState<boolean>(false);
     const [thesisId, setThesisId] = useState<string>("");
     const { identifiers } = useThesisIdentifiers();
-    const [thesis, setThesis] = useState<DetailedThesis>(initThesis);
+    const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
 
-    const { data, isLoading, isValidating, mutate } = useSWR(
+    const { isLoading, isValidating, mutate } = useSWR(
       thesisId ? `thesis-${thesisId}` : null,
       () => getOneThesis(thesisId),
       {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
         onSuccess: (res) => {
-          setThesis(res.data);
+          setThesis(res.data as DetailedThesisResponse);
         },
       }
     );
 
-    // Reset thesis state when thesisId changes
     useEffect(() => {
-      setThesis(initThesis);
+      setThesis(currentThesis);
       if (thesisId) {
-        mutate(); // Fetch fresh data
+        mutate();
       }
     }, [thesisId, mutate]);
 
@@ -80,11 +88,11 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                       "font-medium text-sm/[1.5rem] rounded-full px-2 py-1 w-fit",
                       {
                         "bg-green-500/20 text-green-500":
-                          thesis.status === "AVAILABLE",
+                          thesis.thesis.status === "AVAILABLE",
                       }
                     )}
                   >
-                    {thesis.status}
+                    {thesis.thesis.status}
                   </div>
                 ) : (
                   <Skeleton className="rounded-full px-2 py-1 w-24 h-8" />
@@ -126,13 +134,14 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                       name="title"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
                       maxLength={256}
-                      value={thesis.title}
+                      value={thesis.thesis.title}
                     />
                   </div>
 
-                  <Textarea initDescription={thesis.description} readonly />
+                  <Textarea initDescription={thesis.thesis.description} readonly />
 
-                  <RecommendedCourses thesisId={thesisId} type="viewing" />
+                  {/* <RecommendedCourses thesisId={thesisId} type="viewing" /> */}
+                  <ViewingRecommendedCourses courses={thesis.recommendedCourses} />
 
                   <div className="flex flex-col gap-4">
                     <div className="font-medium text-gray-700">
@@ -145,7 +154,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                           Professor
                         </div>
                         <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                          {thesis.professorFullName}
+                          {`${thesis.thesis.professorFirstName} ${thesis.thesis.professorLastName}`}
                         </div>
                       </div>
 
@@ -155,7 +164,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                           Reviewer 1
                         </div>
                         <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                          {thesis.reviewer1FullName}
+                        {`${thesis.thesis.reviewer1FirstName} ${thesis.thesis.reviewer1LastName}`}
                         </div>
                       </div>
 
@@ -165,7 +174,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                           Reviewer 2
                         </div>
                         <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                          {thesis.reviewer2FullName}
+                        {`${thesis.thesis.reviewer2FirstName} ${thesis.thesis.reviewer2LastName}`}
                         </div>
                       </div>
                     </div>

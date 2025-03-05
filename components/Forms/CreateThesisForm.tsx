@@ -95,6 +95,16 @@ export default function CreateThesisForm({
         thirdReviewerId: "",
       });
     }
+
+    if (res.status !== 200) {
+      setPending(false);
+      setErrors({
+        title: "",
+        secondReviewerId: "",
+        thirdReviewerId: "",
+      });
+      notify("error", res.data.message)
+    }
   }
 
   function handleCommitteeChange(

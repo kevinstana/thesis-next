@@ -111,14 +111,26 @@ export type DetailedThesis = {
   id: string;
   title: string;
   description: string;
-  professorFullName: string;
-  reviewer1FullName: string;
-  reviewer2FullName: string;
-  professorId: string;
-  reviewer1Id: string;
-  reviewer2Id: string;
+
+  professorId: number;
+  professorFirstName: string;
+  professorLastName: string;
+
+  reviewer1Id: number;
+  reviewer1FirstName: string;
+  reviewer1LastName: string;
+
+  reviewer2Id: number;
+  reviewer2FirstName: string;
+  reviewer2LastName: string;
+  
   status: string;
 };
+
+export type DetailedThesisResponse = {
+  thesis: DetailedThesis,
+  recommendedCourses: Course[]
+}
 
 export type CommitteeMember = {
   id: number;
