@@ -68,6 +68,10 @@ export type GeneralViewThesisModalRef = {
   openDialog: (id: string) => void;
 };
 
+export type ApplyForThesisModalRef = {
+  openDialog: (id: string, title: string, professorName: string) => void;
+};
+
 export type IconProps = {
   className?: string;
 };
@@ -123,14 +127,14 @@ export type DetailedThesis = {
   reviewer2Id: number;
   reviewer2FirstName: string;
   reviewer2LastName: string;
-  
+
   status: string;
 };
 
 export type DetailedThesisResponse = {
-  thesis: DetailedThesis,
-  recommendedCourses: Course[]
-}
+  thesis: DetailedThesis;
+  recommendedCourses: Course[];
+};
 
 export type CommitteeMember = {
   id: number;

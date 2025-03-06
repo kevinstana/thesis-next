@@ -22,6 +22,7 @@ import ShadcnActionButton from "@/components/Buttons/ShadcnActionButton";
 import CommitteMember from "@/components/Committee";
 import EditingRecommendedCourses from "@/components/RecommendedCourses/Editing";
 import { useNotification } from "@/providers/NotificationProvider";
+import Required from "@/components/Required";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -61,7 +62,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
   const { identifiers } = useThesisIdentifiers();
 
-  const {notify} = useNotification()
+  const { notify } = useNotification();
 
   const { isLoading, isValidating, mutate } = useSWR(
     thesisId ? `thesis-${thesisId}` : null,
@@ -186,16 +187,20 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       description: thesis.thesis.description,
       secondReviewerId: String(thesis.thesis.reviewer1Id),
       thirdReviewerId: String(thesis.thesis.reviewer2Id),
-      recommendedCourses: thesis.recommendedCourses.map((course) => (course.id))
-    }
+      recommendedCourses: thesis.recommendedCourses.map((course) => course.id),
+    };
 
-    const {data, error, status} = await authFetch(`theses/${thesisId}`, "PUT", body)
+    const { data, error, status } = await authFetch(
+      `theses/${thesisId}`,
+      "PUT",
+      body
+    );
 
     if (status === 200) {
-      notify("success", "Thesis updated!")
-      mutate()
+      notify("success", "Thesis updated!");
+      mutate();
     } else {
-      notify("error", data.message)
+      notify("error", data.message);
     }
   }
 
@@ -255,7 +260,8 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                     htmlFor="title"
                     className="flex gap-[2px] font-medium text-gray-700"
                   >
-                    Title<span className="text-red-300">*</span>
+                    Title
+                    <Required />
                   </label>
                   <input
                     id="title"
@@ -276,7 +282,10 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                 <Textarea
                   initDescription={thesis.thesis.description}
                   handleDescription={(description: string) => {
-                    setThesis((prev) => ({ ...prev, thesis: {...prev.thesis, description} }));
+                    setThesis((prev) => ({
+                      ...prev,
+                      thesis: { ...prev.thesis, description },
+                    }));
                   }}
                 />
 

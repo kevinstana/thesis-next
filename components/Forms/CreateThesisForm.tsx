@@ -9,6 +9,7 @@ import Textarea from "../Textarea";
 import { createThesis } from "@/app/theses/actions";
 import EditingRecommendedCourses from "../RecommendedCourses/Editing";
 import CommitteMember from "../Committee";
+import Required from "../Required";
 
 export type CreateThesisBody = {
   title: string;
@@ -188,7 +189,7 @@ export default function CreateThesisForm({
             htmlFor="title"
             className="flex gap-1 font-medium text-gray-700"
           >
-            Title<span className="text-red-300">*</span>
+            Title<Required />
             {errors?.title && (
               <span className="flex items-center gap-1 text-sm text-red-500">
                 <CircleAlert size={13} /> {errors.title}

@@ -2,6 +2,7 @@ import { authFetch } from "@/lib/server-actions";
 import { AppUser, CommitteeMember } from "@/types/app-types";
 import { CircleAlert, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import Required from "../Required";
 
 export default function CommitteMember({
   elementId,
@@ -98,7 +99,7 @@ export default function CommitteMember({
     <div className="space-y-1">
       <label className="flex gap-1 font-medium text-gray-700">
         {label}
-        <span className="text-red-300">*</span>
+        <Required />
         <>
           {errors?.secondReviewerId ? (
             <span className="flex items-center gap-1 text-sm text-red-500">

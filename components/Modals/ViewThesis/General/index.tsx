@@ -1,7 +1,17 @@
 "use client";
 
-import { DetailedThesisResponse, GeneralViewThesisModalRef } from "@/types/app-types";
-import { forwardRef, useImperativeHandle, useState, useEffect } from "react";
+import {
+  ApplyForThesisModalRef,
+  DetailedThesisResponse,
+  GeneralViewThesisModalRef,
+} from "@/types/app-types";
+import {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import BaseModal from "../../BaseModal";
 import BaseModalContent from "../../BaseModalContent";
 import BaseModalHeader from "../../BaseModalHeader";
@@ -14,6 +24,8 @@ import Textarea from "../../../Textarea";
 import { clsx } from "clsx";
 import { Skeleton } from "../../../ui/skeleton";
 import ViewingRecommendedCourses from "@/components/RecommendedCourses/Viewing";
+import { Button } from "@/components/ui/button";
+import { ApplyForThesisModal } from "../../ApplyForThesisModal";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -43,6 +55,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
     const [thesisId, setThesisId] = useState<string>("");
     const { identifiers } = useThesisIdentifiers();
     const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
+    const applyForThesisModalRef = useRef<ApplyForThesisModalRef>(null);
 
     const { isLoading, isValidating, mutate } = useSWR(
       thesisId ? `thesis-${thesisId}` : null,
@@ -76,11 +89,11 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
           <BaseModalHeader title={`Theses / ${thesisId}`} setOpen={setOpen} />
 
           <div
-            className="flex flex-col flex-grow justify-between px-4 py-4 overflow-hidden"
+            className="flex flex-col flex-grow justify-between overflow-hidden"
             tabIndex={-1}
           >
             {/* navigation */}
-            <div className="flex flex-col px-6 py-2">
+            <div className="flex flex-col px-8 py-4">
               <div className="flex w-full justify-between">
                 {!isLoading && !isValidating ? (
                   <div
@@ -138,10 +151,14 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                     />
                   </div>
 
-                  <Textarea initDescription={thesis.thesis.description} readonly />
+                  <Textarea
+                    initDescription={thesis.thesis.description}
+                    readonly
+                  />
 
-                  {/* <RecommendedCourses thesisId={thesisId} type="viewing" /> */}
-                  <ViewingRecommendedCourses courses={thesis.recommendedCourses} />
+                  <ViewingRecommendedCourses
+                    courses={thesis.recommendedCourses}
+                  />
 
                   <div className="flex flex-col gap-4">
                     <div className="font-medium text-gray-700">
@@ -164,7 +181,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                           Reviewer 1
                         </div>
                         <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                        {`${thesis.thesis.reviewer1FirstName} ${thesis.thesis.reviewer1LastName}`}
+                          {`${thesis.thesis.reviewer1FirstName} ${thesis.thesis.reviewer1LastName}`}
                         </div>
                       </div>
 
@@ -174,7 +191,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                           Reviewer 2
                         </div>
                         <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                        {`${thesis.thesis.reviewer2FirstName} ${thesis.thesis.reviewer2LastName}`}
+                          {`${thesis.thesis.reviewer2FirstName} ${thesis.thesis.reviewer2LastName}`}
                         </div>
                       </div>
                     </div>
@@ -182,7 +199,23 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                 </form>
               </div>
             )}
+            <div className="flex justify-end border-t p-6 border-t-neutral-300">
+              <div className="pr-2">
+                <Button
+                  onClick={() => {
+                    applyForThesisModalRef.current?.openDialog(
+                      thesisId,
+                      thesis.thesis.title,
+                      `${thesis.thesis.professorFirstName} ${thesis.thesis.professorLastName}`
+                    );
+                  }}
+                >
+                  Make Request
+                </Button>
+              </div>
+            </div>
           </div>
+          <ApplyForThesisModal ref={applyForThesisModalRef} />
         </BaseModalContent>
       </BaseModal>
     );

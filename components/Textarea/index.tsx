@@ -303,18 +303,17 @@ export default function Textarea({
   initDescription?: string;
   handleDescription?: (description: string) => void;
   readonly?: boolean;
-  clear?: boolean
+  clear?: boolean;
 }) {
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
   useEffect(() => {
     if (clear) {
-
       // const resetHandler = () => {
       // };
-        Transforms.select(editor, []);
-        Transforms.removeNodes(editor, { at: [0] });
-        Transforms.insertNodes(editor, initialValue, { at: [0] });
+      Transforms.select(editor, []);
+      Transforms.removeNodes(editor, { at: [0], match: () => true });
+      Transforms.insertNodes(editor, initialValue);
     }
 
     // document.addEventListener("ClearThesisForm", resetHandler);
@@ -336,12 +335,30 @@ export default function Textarea({
   const handleEditorKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!event.ctrlKey && !event.metaKey) return;
-      if (event.key === "b") {
-        event.preventDefault();
-        toggleMark(editor, "bold");
-      } else if (event.key === "i") {
-        event.preventDefault();
-        toggleMark(editor, "italic");
+
+      switch (event.key) {
+        case "b":
+          event.preventDefault();
+          toggleMark(editor, "bold");
+          break;
+        case "i":
+          event.preventDefault();
+          toggleMark(editor, "italic");
+          break;
+        case "l":
+          event.preventDefault();
+          insertLink(editor);
+          break;
+        case "u":
+          event.preventDefault();
+          toggleBlock(editor, "bulleted-list");
+          break;
+        case "o":
+          event.preventDefault();
+          toggleBlock(editor, "numbered-list");
+          break;
+        default:
+          break;
       }
     },
     [editor]
@@ -358,7 +375,6 @@ export default function Textarea({
 
   return (
     <div className="space-y-1">
-      <div className="flex gap-3 font-medium text-gray-700">Description</div>
       <div className="border border-gray-300 rounded-md  focus-within:ring-neutral-700">
         <Slate
           editor={editor}
