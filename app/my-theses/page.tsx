@@ -1,10 +1,10 @@
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
-import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsProviderWrapper";
 import ThesesTableOptions from "@/components/ThesesTable/Options";
 import getSession from "@/lib/getSession";
 import { getTheses } from "./actions";
 import { BasicThesisPage } from "@/types/response-types";
 import ThesesTable from "@/components/ThesesTable";
+import { Role } from "@/types/app-types";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -18,8 +18,7 @@ export default async function ThesesPage(
   }>
 ) {
   const session = await getSession();
-  const userId = session?.user?.id;
-  const role = session?.user?.role;
+  const role = session?.user?.role as Role;
 
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) >= 0 ? Number(searchParams?.page) : 0;
@@ -37,10 +36,8 @@ export default async function ThesesPage(
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
-        <UserDetailsProviderWrapper userId={userId} role={role}>
-          <ThesesTableOptions path="my-theses" />
+          <ThesesTableOptions path="my-theses" role={role} />
           <ThesesTable thesisPage={data} path="my-theses" />
-        </UserDetailsProviderWrapper>
       </NotificationProviderWrapper>
     </div>
   );

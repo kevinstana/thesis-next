@@ -9,16 +9,21 @@ export async function authFetch(
   url: string,
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
   requestBody?: unknown,
+  formData?: FormData | null,
   tag?: string
 ) {
   const session = await getSession();
   const accessToken = session?.accessToken ?? "";
-
-  const body = requestBody ? JSON.stringify(requestBody) : null;
+  
+  let body = null;
+  if (method !== "GET") {
+    body = formData ? formData : JSON.stringify(requestBody)
+  }
+  
   const res = await fetch(`${process.env.API_URL}/${url}`, {
     method,
     headers: {
-      "Content-Type": "application/json",
+      ...(formData ? {} : { "Content-Type": "application/json" }),
       Authorization: `Bearer ${accessToken}`,
     },
     body,

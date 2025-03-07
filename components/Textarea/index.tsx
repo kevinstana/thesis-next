@@ -309,18 +309,13 @@ export default function Textarea({
 
   useEffect(() => {
     if (clear) {
-      // const resetHandler = () => {
-      // };
-      Transforms.select(editor, []);
-      Transforms.removeNodes(editor, { at: [0], match: () => true });
-      Transforms.insertNodes(editor, initialValue);
+      Transforms.delete(editor, {
+        at: {
+          anchor: Editor.start(editor, []),
+          focus: Editor.end(editor, []),
+        },
+      });
     }
-
-    // document.addEventListener("ClearThesisForm", resetHandler);
-
-    // return () => {
-    //   document.removeEventListener("ClearThesisForm", resetHandler);
-    // };
   }, [clear, editor]);
 
   const renderElement = useCallback(

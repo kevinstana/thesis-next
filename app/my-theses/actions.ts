@@ -5,6 +5,7 @@ export async function getTheses(urlSearchParams: string) {
     `theses/me?${urlSearchParams}`,
     "GET",
     null,
+    null,
     "my-theses"
   );
 

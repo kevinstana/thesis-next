@@ -44,6 +44,8 @@ const currentThesis: DetailedThesisResponse = {
     status: "",
   },
   recommendedCourses: [],
+  canMakeRequest: false,
+  hasMadeRequest: false,
 };
 
 const committee = [
@@ -190,7 +192,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       recommendedCourses: thesis.recommendedCourses.map((course) => course.id),
     };
 
-    const { data, error, status } = await authFetch(
+    const { data, status } = await authFetch(
       `theses/${thesisId}`,
       "PUT",
       body
@@ -279,15 +281,20 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                   />
                 </div>
 
-                <Textarea
-                  initDescription={thesis.thesis.description}
-                  handleDescription={(description: string) => {
-                    setThesis((prev) => ({
-                      ...prev,
-                      thesis: { ...prev.thesis, description },
-                    }));
-                  }}
-                />
+                <div className="flex flex-col gap-1">
+                  <div className="flex font-medium text-gray-700">
+                    Description
+                  </div>
+                  <Textarea
+                    initDescription={thesis.thesis.description}
+                    handleDescription={(description: string) => {
+                      setThesis((prev) => ({
+                        ...prev,
+                        thesis: { ...prev.thesis, description },
+                      }));
+                    }}
+                  />
+                </div>
 
                 <EditingRecommendedCourses
                   courses={thesis.recommendedCourses}
@@ -328,7 +335,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             type="button"
             text={"Close"}
             className="bg-white border border-neutral-700 hover:bg-neutral-100 text-black py-2 px-4 rounded"
-            handleClick={() => setOpen(false)}
+            handleClick={() => {setThesisId(""); setOpen(false)}}
             disabled={pending}
           />
         </div>

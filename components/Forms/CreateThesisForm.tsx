@@ -83,8 +83,7 @@ export default function CreateThesisForm({
       setSelectedCourses([]);
       setBody(initialBody);
       setExcludedIds([]);
-      document.dispatchEvent(new Event("ClearThesisForm"));
-      setClear(true)
+      setClear(true);
       return;
     }
 
@@ -104,7 +103,7 @@ export default function CreateThesisForm({
         secondReviewerId: "",
         thirdReviewerId: "",
       });
-      notify("error", res.data.message)
+      notify("error", res.data.message);
     }
   }
 
@@ -155,14 +154,14 @@ export default function CreateThesisForm({
 
   function handleCourseChange(trigger: "add" | "remove", course: Course) {
     if (trigger === "add") {
-      setSelectedCourses(([...prev]) => ([...prev, course]));
+      setSelectedCourses(([...prev]) => [...prev, course]);
       setBody((prev) => ({
         ...prev,
         recommendedCourses: [...selectedCourses, course].map(
           (course) => course.id
         ),
       }));
-      return
+      return;
     }
 
     setSelectedCourses(selectedCourses.filter((c) => c !== course));
@@ -189,7 +188,8 @@ export default function CreateThesisForm({
             htmlFor="title"
             className="flex gap-1 font-medium text-gray-700"
           >
-            Title<Required />
+            Title
+            <Required />
             {errors?.title && (
               <span className="flex items-center gap-1 text-sm text-red-500">
                 <CircleAlert size={13} /> {errors.title}
@@ -209,7 +209,12 @@ export default function CreateThesisForm({
           />
         </div>
 
-        <Textarea handleDescription={handleDescription} clear={clear} />
+        <div className="flex flex-col gap-1">
+          <div className="flex gap-[2px] font-medium text-gray-700">
+            Description
+          </div>
+          <Textarea handleDescription={handleDescription} clear={clear} />
+        </div>
 
         <EditingRecommendedCourses
           courses={selectedCourses}
@@ -244,7 +249,7 @@ export default function CreateThesisForm({
             className="bg-white border border-neutral-700 hover:bg-neutral-100 text-black py-2 px-4 rounded"
             onClick={() => setOpen(false)}
           >
-            Cancel
+            Close
           </Button>
         </div>
       </form>

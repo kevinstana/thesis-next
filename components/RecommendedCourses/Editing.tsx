@@ -100,7 +100,7 @@ export default function EditingRecommendedCourses({
             >
               {queryCourses.map((course, index) => (
                 <li
-                  key={course.id}
+                  key={course.id + course.name}
                   tabIndex={-1}
                   onKeyDown={handleKeyDown}
                   onClick={() => handleAddCourse(course)}

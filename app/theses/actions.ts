@@ -19,6 +19,7 @@ export async function getTheses(urlSearchParams: string) {
     `theses?${urlSearchParams}`,
     "GET",
     null,
+    null,
     "theses"
   );
 

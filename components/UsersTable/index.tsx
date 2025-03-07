@@ -56,7 +56,6 @@ export default function UsersTable({
             <Row
               user={user}
               headers={headers}
-              path={path}
               userProfileModalRef={userProfileModalRef}
               key={user.username}
             />

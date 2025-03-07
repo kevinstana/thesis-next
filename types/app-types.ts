@@ -134,6 +134,8 @@ export type DetailedThesis = {
 export type DetailedThesisResponse = {
   thesis: DetailedThesis;
   recommendedCourses: Course[];
+  canMakeRequest: boolean;
+  hasMadeRequest: boolean;
 };
 
 export type CommitteeMember = {

@@ -15,8 +15,6 @@ export default function Sidebar({ role }: Readonly<{ role: Role }>) {
     return null
   }
 
-  console.log(pathname)
-
   return (
     <aside className="border-r min-w-64 overflow-x-hidden hidden md:block text-[0.95rem]">
       <div className="h-16 flex items-center justify-center px-4 border-b">

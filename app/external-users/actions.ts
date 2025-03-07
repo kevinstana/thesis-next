@@ -9,6 +9,7 @@ export async function getExternalUsers(urlSearchParams: string) {
     `external-users?${urlSearchParams}`,
     "GET",
     null,
+    null,
     "external-users"
   );
 

@@ -47,6 +47,8 @@ const currentThesis: DetailedThesisResponse = {
     status: "",
   },
   recommendedCourses: [],
+  canMakeRequest: false,
+  hasMadeRequest: false,
 };
 
 const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
@@ -151,10 +153,15 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                     />
                   </div>
 
-                  <Textarea
-                    initDescription={thesis.thesis.description}
-                    readonly
-                  />
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-[2px] font-medium text-gray-700">
+                      Description
+                    </div>
+                    <Textarea
+                      initDescription={thesis.thesis.description}
+                      readonly
+                    />
+                  </div>
 
                   <ViewingRecommendedCourses
                     courses={thesis.recommendedCourses}
@@ -199,23 +206,33 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                 </form>
               </div>
             )}
-            <div className="flex justify-end border-t p-6 border-t-neutral-300">
-              <div className="pr-2">
-                <Button
-                  onClick={() => {
-                    applyForThesisModalRef.current?.openDialog(
-                      thesisId,
-                      thesis.thesis.title,
-                      `${thesis.thesis.professorFirstName} ${thesis.thesis.professorLastName}`
-                    );
-                  }}
-                >
-                  Make Request
-                </Button>
+            {thesis.canMakeRequest ? (
+              <div className="flex justify-end border-t p-6 border-t-neutral-300">
+                <div className="pr-2">
+                  <Button
+                    onClick={() => {
+                      applyForThesisModalRef.current?.openDialog(
+                        thesisId,
+                        thesis.thesis.title,
+                        `${thesis.thesis.professorFirstName} ${thesis.thesis.professorLastName}`
+                      );
+                    }}
+                  >
+                    Make Request
+                  </Button>
+                </div>
               </div>
-            </div>
+            ) : null}
+
+            {thesis.hasMadeRequest ? (
+              <div className="flex justify-end border-t p-6 border-t-neutral-300">
+                <div className="pr-2">
+                  <Button disabled>Request Made</Button>
+                </div>
+              </div>
+            ) : null}
           </div>
-          <ApplyForThesisModal ref={applyForThesisModalRef} />
+          <ApplyForThesisModal ref={applyForThesisModalRef} mutate={mutate} />
         </BaseModalContent>
       </BaseModal>
     );
