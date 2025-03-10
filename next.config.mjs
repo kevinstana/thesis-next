@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "standalone",
-    env: {
+  output: "standalone",
+  env: {
+    development: {
       API_URL: process.env.API_URL,
     },
-  };
-  
-  export default nextConfig;
-  
+    production: {
+      API_URL: process.env.API_URL,
+    },
+  },
+};
+
+export default nextConfig;
