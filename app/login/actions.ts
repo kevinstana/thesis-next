@@ -10,7 +10,7 @@ export async function authenticate(formData: FormData) {
       username: formData.get("username"),
       password: formData.get("password"),
       isExternal: formData.get("isExternal"),
-      redirectTo: "/",
+      redirectTo: "/theses",
     });
   } catch (error) {
     if (error instanceof AuthError) {

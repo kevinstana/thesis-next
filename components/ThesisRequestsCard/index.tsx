@@ -12,7 +12,6 @@ import { authFetch, customRevalidateTag, getToken } from "@/lib/server-actions";
 import Textarea from "../Textarea";
 import { useState } from "react";
 import { useNotification } from "@/providers/NotificationProvider";
-import CustomActions from "../Popovers";
 
 export default function ThesisRequestCard({
   request,
@@ -53,7 +52,7 @@ export default function ThesisRequestCard({
   }
 
   async function handleApproval() {
-    const { data, error, status } = await authFetch(
+    const { data, status } = await authFetch(
       `theses/${request.thesisId}/assign-student`,
       "PUT",
       {
@@ -76,7 +75,8 @@ export default function ThesisRequestCard({
   }
 
   async function handleRejection() {
-    const { data, error, status } = await authFetch(
+    console.log(request.id);
+    const { data, status } = await authFetch(
       `theses/${request.thesisId}/assign-student`,
       "PUT",
       {
@@ -98,7 +98,7 @@ export default function ThesisRequestCard({
   }
 
   async function handleUndo() {
-    const { data, error, status } = await authFetch(
+    const { data, status } = await authFetch(
       `theses/${request.thesisId}/assign-student`,
       "PUT",
       {
@@ -154,8 +154,7 @@ export default function ThesisRequestCard({
         </div>
       </CardHeader>
       <CardContent>
-        {/* <p className="text-sm text-muted-foreground">{request.description}</p> */}
-        <Textarea initDescription={request.description} readonly inRequest />
+        <Textarea initDescription={request.description} readonly pretty />
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         {request.status === "PENDING" ? (
@@ -168,25 +167,32 @@ export default function ThesisRequestCard({
               Reject
             </Button>
             <Button onClick={handleApproval}>Approve</Button>{" "}
-            {/* <CustomActions actions={[{name: "Reject", action: ()=>(alert("hello"))}]} /> */}
           </>
         ) : (
           <div className="flex gap-2">
             <div
-              className={clsx("p-2 text-sm rounded-full px-2 py-1", {
-                "bg-green-500/20 text-green-500": request.status === "APPROVED",
-                "bg-red-500/20 text-red-500": request.status === "REJECTED",
-              })}
+              className={clsx(
+                "flex items-center p-2 text-sm rounded-full px-2 py-1",
+                {
+                  "bg-green-500/20 text-green-500":
+                    request.status === "APPROVED",
+                  "bg-red-500/20 text-red-500": request.status === "REJECTED",
+                  "bg-orange-500/20 text-orange-500":
+                    request.status === "INVALID",
+                }
+              )}
             >
               {request.status}
             </div>
 
-            <Button
-              className="bg-white shadow-none text-black border hover:bg-neutral-100 border-neutral-300 rounded-md h-8"
-              onClick={handleUndo}
-            >
-              Undo
-            </Button>
+            {request.status !== "INVALID" && (
+              <Button
+                className="bg-white shadow-none text-black border hover:bg-neutral-100 border-neutral-300 rounded-md h-8"
+                onClick={handleUndo}
+              >
+                Undo
+              </Button>
+            )}
           </div>
         )}
       </CardFooter>

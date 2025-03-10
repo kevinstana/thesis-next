@@ -47,7 +47,6 @@ export default function CreateThesisForm({
   const { notify } = useNotification();
   const [pending, setPending] = useState(false);
   const [errors, setErrors] = useState(initialErrors);
-  const [clear, setClear] = useState<boolean>(false);
 
   const [body, setBody] = useState<CreateThesisBody>(initialBody);
   const handleDescription = useCallback((description: string) => {
@@ -83,7 +82,6 @@ export default function CreateThesisForm({
       setSelectedCourses([]);
       setBody(initialBody);
       setExcludedIds([]);
-      setClear(true);
       return;
     }
 
@@ -213,7 +211,7 @@ export default function CreateThesisForm({
           <div className="flex gap-[2px] font-medium text-gray-700">
             Description
           </div>
-          <Textarea handleDescription={handleDescription} clear={clear} />
+          <Textarea handleDescription={handleDescription} />
         </div>
 
         <EditingRecommendedCourses
@@ -229,7 +227,6 @@ export default function CreateThesisForm({
             excludedIds={excludedIds}
             handleCommitteeChange={handleCommitteeChange}
             errors={errors}
-            clear={clear}
             initMember={null}
           />
         ))}

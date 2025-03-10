@@ -2,12 +2,12 @@ import { AppUser, BasicThesis } from "./app-types";
 
 export type UserPage = {
   content: AppUser[];
-  page: Page
+  page: Page;
 };
 
 export type BasicThesisPage = {
   content: BasicThesis[];
-  page: Page
+  page: Page;
 };
 
 export type ThesisRequest = {
@@ -26,7 +26,7 @@ export type ThesisRequest = {
 
 export type ThesisRequestsPage = {
   content: ThesisRequest[];
-  page: Page
+  page: Page;
 };
 
 export type Page = {
@@ -34,4 +34,19 @@ export type Page = {
   number: number;
   totalElements: number;
   totalPages: number;
+};
+
+export type Task = {
+  id: number;
+  title: string;
+  description: string;
+  thesisId: number;
+  createdAt: string;
+  priority: string;
+  status: string;
+};
+
+export type TaskPage = {
+  content: Task[];
+  page: Page;
 };

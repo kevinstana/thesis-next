@@ -4,9 +4,16 @@ import {
   CommitteeMember,
   Course,
   DetailedThesisResponse,
+  TasksModalRef,
   ViewThesisModalRef,
 } from "@/types/app-types";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import BaseModal from "../../BaseModal";
 import BaseModalContent from "../../BaseModalContent";
 import BaseModalHeader from "../../BaseModalHeader";
@@ -24,6 +31,7 @@ import EditingRecommendedCourses from "@/components/RecommendedCourses/Editing";
 import { useNotification } from "@/providers/NotificationProvider";
 import Required from "@/components/Required";
 import CustomActions from "@/components/Popovers";
+import { TasksModal } from "../../Tasks";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -42,6 +50,11 @@ const currentThesis: DetailedThesisResponse = {
     reviewer2Id: 0,
     reviewer2FirstName: "",
     reviewer2LastName: "",
+
+    studentId: 0,
+    studentFirstName: "",
+    studentLastName: "",
+
     status: "",
   },
   recommendedCourses: [],
@@ -61,6 +74,8 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
   const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
   const [thesisId, setThesisId] = useState<string>("");
   const [initCommittee, setInitCommittee] = useState<CommitteeMember[]>([]);
+
+  const tasksModalRef = useRef<TasksModalRef>(null);
 
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
   const { identifiers } = useThesisIdentifiers();
@@ -155,7 +170,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           ...prev,
           thesis: {
             ...prev.thesis,
-            reviewer1d: 0,
+            reviewer1Id: 0,
           },
         }));
         return;
@@ -164,7 +179,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           ...prev,
           thesis: {
             ...prev.thesis,
-            reviewer2d: 0,
+            reviewer2Id: 0,
           },
         }));
         return;
@@ -197,6 +212,21 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       recommendedCourses: thesis.recommendedCourses.map((course) => course.id),
     };
 
+    if (!body.title) {
+      notify("error", "Title Required")
+      return;
+    }
+
+    if (body.secondReviewerId === "0") {
+      notify("error", "Reviewer 1 Required")
+      return;
+    }
+
+    if (body.thirdReviewerId === "0") {
+      notify("error", "Reviewer 2 Required")
+      return;
+    }
+
     const { data, status } = await authFetch(`theses/${thesisId}`, "PUT", body);
 
     if (status === 200) {
@@ -226,6 +256,10 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                     {
                       "bg-green-500/20 text-green-500":
                         thesis.thesis.status === "AVAILABLE",
+                    },
+                    {
+                      "bg-blue-500/20 text-blue-500":
+                        thesis.thesis.status === "IN_PROGRESS",
                     }
                   )}
                 >
@@ -302,6 +336,17 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                   handleCourseChange={handleCourseChange}
                 />
 
+                {thesis.thesis.studentId && (
+                  <div className="flex flex-col gap-4">
+                    <div className="font-medium text-gray-700">Student</div>
+
+                    <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
+                      {thesis.thesis.studentFirstName}{" "}
+                      {thesis.thesis.studentLastName}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-4">
                   <div className="font-medium text-gray-700">
                     Three-member committee
@@ -315,7 +360,6 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                       initMember={initCommittee[index]}
                       excludedIds={excludedIds}
                       handleCommitteeChange={handleCommitteeChange}
-                      clear={false}
                     />
                   ))}
                 </div>
@@ -341,10 +385,15 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             disabled={pending}
           />
 
-
-          <CustomActions />
-
-
+          <CustomActions
+            actions={thesis.thesis.status === "AVAILABLE" ? [{name: "Delete", action: () => alert("you clicked delete")}] : [
+              {
+                name: "Tasks",
+                action: () => tasksModalRef.current?.openDialog(thesisId),
+              },
+            ]}
+          />
+          <TasksModal ref={tasksModalRef} />
         </div>
       </BaseModalContent>
     </BaseModal>

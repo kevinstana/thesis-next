@@ -28,6 +28,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
   const [errors, setErros] = useState<{ description: string; file: string }>(
     initErrors
   );
+  const [pending, setPending] = useState<boolean>(false);
 
   const { notify } = useNotification();
 
@@ -63,10 +64,12 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
   };
 
   async function handleSubmit() {
+    setPending(true)
     setErros(initErrors)
 
     if (!pdf) {
       setErros((prev) => ({ ...prev, file: "Grades File Required" }));
+      setPending(false)
       return;
     }
 
@@ -75,6 +78,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
       !description
     ) {
       setErros((prev) => ({ ...prev, description: "Description Required" }));
+      setPending(false)
       return;
     }
 
@@ -90,10 +94,12 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
     );
 
     if (status !== 200) {
+      setPending(false)
       notify("error", error ? error : "Something went wrong");
       return;
     }
 
+    setPending(false)
     notify("success", data.message as string);
 
     setOpen(false)
@@ -103,7 +109,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
   return (
     <BaseModal open={open} className="bg-transparent">
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <ModalHeaderWithArrow setOpen={setOpen} />
+        <ModalHeaderWithArrow setOpen={setOpen}  title="Make Request"/>
 
         <div
           className="flex flex-col flex-grow justify-between overflow-hidden pt-4"
@@ -202,8 +208,8 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
           </div>
           <div className="flex justify-end border-t p-6 border-t-neutral-300">
             <div className="pr-2">
-              <Button type="button" onClick={() => handleSubmit()}>
-                Save
+              <Button type="button" onClick={() => handleSubmit()} disabled={pending}>
+                {pending ? "Saving..." : "Save"}
               </Button>
             </div>
           </div>

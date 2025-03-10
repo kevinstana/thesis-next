@@ -60,6 +60,10 @@ export type UserProfileModalRef = {
   openDialog: (username: string) => void;
 };
 
+export type TasksModalRef = {
+  openDialog: (id: string) => void;
+};
+
 export type ViewThesisModalRef = {
   openDialog: (id: string) => void;
 };
@@ -132,6 +136,10 @@ export type DetailedThesis = {
   reviewer2FirstName: string;
   reviewer2LastName: string;
 
+  studentId: number | null;
+  studentFirstName: string | null;
+  studentLastName: string | null;
+
   status: string;
 };
 
@@ -151,5 +159,5 @@ export type CommitteeMember = {
 
 export type CustomAction = {
   name: string;
-  action: (...args: any[]) => any;
+  action: (...args: unknown[]) => unknown;
 };

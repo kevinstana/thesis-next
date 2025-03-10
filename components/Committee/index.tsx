@@ -10,7 +10,6 @@ export default function CommitteMember({
   excludedIds,
   handleCommitteeChange,
   errors,
-  clear,
   initMember,
 }: {
   elementId: string;
@@ -22,15 +21,23 @@ export default function CommitteMember({
     memberLabel: string
   ) => void;
   errors?: { title: string; secondReviewerId: string; thirdReviewerId: string };
-  clear: boolean;
   initMember: CommitteeMember | null;
 }) {
   useEffect(() => {
-    setSelectedMember(initMember);
-    if (clear) {
+    const handleClearForm = () => {
       setSelectedMember(null);
-    }
-  }, [clear, initMember]);
+    };
+
+    window.addEventListener("ClearForm", handleClearForm);
+
+    return () => {
+      window.removeEventListener("ClearForm", handleClearForm);
+    };
+  }, []);
+
+  useEffect(() => {
+    setSelectedMember(initMember);
+  }, [initMember]);
 
   const [memberQuery, setMemberQuery] = useState("");
   const [selectedMember, setSelectedMember] =
@@ -101,9 +108,14 @@ export default function CommitteMember({
         {label}
         <Required />
         <>
-          {errors?.secondReviewerId ? (
+          {errors?.secondReviewerId && label === "Reviewer 1" ? (
             <span className="flex items-center gap-1 text-sm text-red-500">
               <CircleAlert size={13} /> {errors.secondReviewerId}
+            </span>
+          ) : null}
+          {errors?.secondReviewerId && label === "Reviewer 2" ? (
+            <span className="flex items-center gap-1 text-sm text-red-500">
+              <CircleAlert size={13} /> {errors.thirdReviewerId}
             </span>
           ) : null}
         </>

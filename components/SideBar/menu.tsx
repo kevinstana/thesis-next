@@ -1,6 +1,6 @@
 import { Role, SidebarMenuType } from "@/types/app-types";
 import {
-  Home,
+  // Home,
   Users,
   UserRound,
   GraduationCap,

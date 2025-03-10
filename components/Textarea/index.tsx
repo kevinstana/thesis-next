@@ -295,27 +295,31 @@ export default function Textarea({
   initDescription,
   handleDescription,
   readonly = false,
-  clear,
-  inRequest,
+  pretty,
 }: {
   initDescription?: string;
   handleDescription?: (description: string) => void;
   readonly?: boolean;
-  clear?: boolean;
-  inRequest?: boolean;
+  pretty?: boolean;
 }) {
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
   useEffect(() => {
-    if (clear) {
+    const handleClearForm = () => {
       Transforms.delete(editor, {
         at: {
           anchor: Editor.start(editor, []),
           focus: Editor.end(editor, []),
         },
       });
-    }
-  }, [clear, editor]);
+    };
+
+    window.addEventListener("ClearForm", handleClearForm);
+
+    return () => {
+      window.removeEventListener("ClearForm", handleClearForm);
+    };
+  }, [editor]);
 
   const renderElement = useCallback(
     (props: RenderElementProps) => <Element {...props} />,
@@ -371,7 +375,7 @@ export default function Textarea({
     <div className="space-y-1">
       <div
         className={clsx("rounded-md focus-within:ring-neutral-700", {
-          "border border-gray-300": !inRequest,
+          "border border-gray-300": !pretty,
         })}
       >
         <Slate
@@ -383,9 +387,9 @@ export default function Textarea({
           <div
             className={clsx(
               "min-h-[120px]",
-              { "text-sm text-muted-foreground": inRequest },
-              { "px-4 py-2": !inRequest },
-              { "!min-h-[20px]": inRequest }
+              { "text-sm text-muted-foreground": pretty },
+              { "px-4 py-2": !pretty },
+              { "!min-h-[20px]": pretty }
             )}
           >
             <Editable

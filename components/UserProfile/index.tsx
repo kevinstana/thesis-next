@@ -29,8 +29,7 @@ export default function UserProfile({
     seIsEnabled(value);
   }, []);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit() {
     setPending(true);
     const { status } = await updateUser(user["id"], isEnabled, path);
 
@@ -50,8 +49,9 @@ export default function UserProfile({
         className="flex flex-col flex-grow justify-between pt-1 overflow-auto text-sm/[1.5rem]"
         tabIndex={-1}
       >
-        <form className="space-y-6 bg-white px-6 py-1" onSubmit={handleSubmit}>
-          <div className="space-y-1">
+        <form className="space-y-6 bg-white px-6 py-4">
+            <div className="flex flex-row space-x-6">
+          <div className="space-y-1 w-full">
             <label
               htmlFor="username"
               className="flex gap-3 font-medium text-gray-700"
@@ -69,7 +69,7 @@ export default function UserProfile({
             />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1 w-full">
             <label
               htmlFor="email"
               className="flex gap-3 font-medium text-gray-700"
@@ -86,6 +86,8 @@ export default function UserProfile({
               maxLength={256}
               value={user?.email}
             />
+          </div>
+
           </div>
 
           <div className="flex flex-row space-x-6">
@@ -126,23 +128,26 @@ export default function UserProfile({
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label
-              htmlFor="create-external-role-select"
-              className="block font-medium text-gray-700"
-            >
-              Role
-            </label>
-            <input
-              id="create-external-role-select"
-              name="role"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-              disabled
-              defaultValue={user?.role.toString()}
-            />
-          </div>
 
-          <div className="space-y-1">
+          <div className="flex flex-row space-x-6">
+
+          <div className="space-y-1 w-full">
+              <label
+                htmlFor="create-external-role-select"
+                className="block font-medium text-gray-700"
+              >
+                Role
+              </label>
+              <input
+                id="create-external-role-select"
+                name="role"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+                disabled
+                defaultValue={user?.role.toString()}
+              />
+            </div>
+
+          <div className="space-y-1 w-full">
             <label
               htmlFor="createdAt"
               className="block font-medium text-gray-700"
@@ -157,6 +162,7 @@ export default function UserProfile({
               maxLength={256}
               value={user?.createdAt}
             />
+          </div>
           </div>
 
           <div className="flex flex-row space-x-6">
@@ -195,42 +201,30 @@ export default function UserProfile({
             </div>
           </div>
 
-          <div className="space-y-1 w-full">
+          <div className="space-y-1 w-fit">
             <label
               htmlFor="isEnabled"
               className="block font-medium text-gray-700"
             >
               Is Enabled
             </label>
-            {isEditing ? (
-              <select
-                id="isEnabled"
-                name="isEnabled"
-                className="w-full border  px-4 py-3 border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-                onChange={handleChange}
-                value={isEnabled}
-              >
-                <option value="true">TRUE</option>
-                <option value="false">FALSE</option>
-              </select>
-            ) : (
-              <input
-                disabled={!isEditing}
-                id="isEnabled"
-                name="isEnabled"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
-                value={isEnabled.toUpperCase() ?? String(user?.isEnabled).toUpperCase()}
-              />
-            )}
+            <select
+              id="isEnabled"
+              name="isEnabled"
+              className="w-full border  px-4 py-3 border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
+              onChange={handleChange}
+              value={isEnabled}
+            >
+              <option value="true">TRUE</option>
+              <option value="false">FALSE</option>
+            </select>
           </div>
 
           <div className="flex pb-8 pt-2 gap-2 justify-end">
             <ShadcnActionButton
-              type={isEditing ? "button" : "submit"}
-              text={pending ? "Saving..." : isEditing ? "Save" : "Edit"}
-              handleClick={
-                isEditing ? () => setIsEditing(false) : () => setIsEditing(true)
-              }
+              type="button"
+              text={pending ? "Saving..." : "Save"}
+              handleClick={handleSubmit}
               disabled={pending}
             />
 
@@ -238,9 +232,7 @@ export default function UserProfile({
               type="button"
               text={isEditing ? "Cancel" : "Close"}
               className="bg-white border border-neutral-700 hover:bg-neutral-100 text-black py-2 px-4 rounded"
-              handleClick={
-                isEditing ? () => setIsEditing(false) : () => setOpen(false)
-              }
+              handleClick={() => setOpen(false)}
               disabled={pending}
             />
           </div>

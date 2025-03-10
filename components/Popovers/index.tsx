@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -9,21 +8,21 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { CustomAction } from "@/types/app-types";
+import { useState } from "react";
 
 export default function CustomActions({
   actions,
 }: {
   actions?: CustomAction[];
 }) {
-  // const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // const handlePopoverClose = () => {
-  //   setOpen(false);
-  // };
+  const handlePopoverClose = () => {
+    setIsOpen(false);
+  };
 
   return (
-    // <Popover open={open} onOpenChange={setOpen} modal>
-    <Popover modal>
+    <Popover modal open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger className="bg-white shadow-none rounded-md p-2 hover:bg-neutral-200">
         <EllipsisVertical color="black" />
       </PopoverTrigger>
@@ -38,7 +37,10 @@ export default function CustomActions({
           {actions?.map((item) => (
             <Button
               key={item.name}
-              onClick={item.action}
+              onClick={() => {
+                item.action();
+                handlePopoverClose(); // Close popover after button click
+              }}
               className="bg-transparent shadow-none hover:bg-neutral-200 text-black"
             >
               {item.name}

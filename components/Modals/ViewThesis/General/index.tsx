@@ -44,6 +44,11 @@ const currentThesis: DetailedThesisResponse = {
     reviewer2Id: 0,
     reviewer2FirstName: "",
     reviewer2LastName: "",
+
+    studentId: 0,
+    studentFirstName: "",
+    studentLastName: "",
+
     status: "",
   },
   recommendedCourses: [],
@@ -66,6 +71,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
         revalidateOnFocus: false,
         shouldRetryOnError: false,
         onSuccess: (res) => {
+          console.log(res)
           setThesis(res.data as DetailedThesisResponse);
         },
       }
@@ -104,6 +110,10 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                       {
                         "bg-green-500/20 text-green-500":
                           thesis.thesis.status === "AVAILABLE",
+                      },
+                      {
+                        "bg-blue-500/20 text-blue-500":
+                          thesis.thesis.status === "IN_PROGRESS",
                       }
                     )}
                   >
@@ -206,7 +216,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                 </form>
               </div>
             )}
-            {thesis.canMakeRequest && thesis.hasMadeRequest ? (
+            {!thesis.canMakeRequest && thesis.hasMadeRequest && thesis.thesis.status === "AVAILABLE" ? (
               <div className="flex justify-end border-t p-6 border-t-neutral-300">
                 <div className="pr-2">
                   <Button disabled>Request Made</Button>

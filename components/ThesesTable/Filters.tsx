@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { clsx } from "clsx";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];

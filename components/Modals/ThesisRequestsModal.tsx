@@ -1,7 +1,7 @@
 "use client";
 
 import { ThesisRequestsModalRef } from "@/types/app-types";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import BaseModal from "./BaseModal";
 import BaseModalContent from "./BaseModalContent";
 import BaseModalHeader from "./BaseModalHeader";
@@ -82,13 +82,20 @@ const ThesisRequestsModal = forwardRef<ThesisRequestsModalRef>((_, ref) => {
               {data?.content.length === 0 ? (
                 <div>No requests found</div>
               ) : (
-                data?.content.map((request) => (
-                  <ThesisRequestCard
-                    key={request.id}
-                    request={request}
-                    mutate={mutate}
-                  />
-                ))
+                data?.content
+                  .slice() // Create a shallow copy to avoid mutating the original array
+                  .sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                  ) // Convert Date to timestamp
+                  .map((request) => (
+                    <ThesisRequestCard
+                      key={request.id}
+                      request={request}
+                      mutate={mutate}
+                    />
+                  ))
               )}
             </div>
           )}
