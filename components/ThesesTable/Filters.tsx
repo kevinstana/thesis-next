@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Role, availableRoles } from "@/types/app-types";
 import { Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
@@ -42,6 +41,25 @@ export default function Filters({ path }: Readonly<{ path: string }>) {
     };
   }, [open]);
 
+  // const filterMenuRef = useRef<HTMLDivElement | null>(null);
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (filterMenuRef.current && !filterMenuRef.current.contains(event.target as Node)) {
+  //       setOpen(false);
+  //     }
+  //   };
+
+  //   if (open) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   }
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [open]);
+
   return (
     <div className="relative">
       <button
@@ -56,7 +74,10 @@ export default function Filters({ path }: Readonly<{ path: string }>) {
       </button>
 
       {open ? (
-        <div className="flex flex-col absolute mt-2 text-nowrap bg-white shadow-md rounded-md border border-gray-200 gap-8 p-6 z-[90]">
+        <div
+          // ref={filterMenuRef}
+          className="flex flex-col absolute mt-2 text-nowrap bg-white shadow-md rounded-md border border-gray-200 gap-8 p-6 z-[90]"
+        >
           {/* Page, Role, and Enabled container */}
           <div className="flex flex-col sm:flex-row gap-14 sm:gap-8">
             {/* Page Size */}

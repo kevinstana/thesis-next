@@ -13,15 +13,15 @@ export default function BodyCell({
   if (header === "status") {
     return (
       <td className={baseStyle}>
-          <span
-            className={`rounded-full px-2 py-1  ${
-              cellValue === "AVAILABLE"
-                ? "bg-green-500/20 text-green-500"
-                : "bg-red-500/20 text-red-500"
-            }`}
-          >
-            {cellValue}
-          </span>
+        <span
+          className={clsx("rounded-full px-2 py-1", 
+          {"bg-green-500/20 text-green-500": cellValue === "AVAILABLE"},
+          // {"bg-red-500/20 text-red-500": cellValue === ?}
+          {"bg-blue-500/20 text-blue-500": cellValue === "IN_PROGRESS"},
+        )}
+        >
+          {cellValue}
+        </span>
       </td>
     );
   }

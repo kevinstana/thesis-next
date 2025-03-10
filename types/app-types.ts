@@ -64,6 +64,10 @@ export type ViewThesisModalRef = {
   openDialog: (id: string) => void;
 };
 
+export type ThesisRequestsModalRef = {
+  openDialog: (id: string, title: string) => void;
+};
+
 export type GeneralViewThesisModalRef = {
   openDialog: (id: string) => void;
 };
@@ -143,4 +147,9 @@ export type CommitteeMember = {
   username: string;
   firstName: string;
   lastName: string;
+};
+
+export type CustomAction = {
+  name: string;
+  action: (...args: any[]) => any;
 };

@@ -23,6 +23,7 @@ import CommitteMember from "@/components/Committee";
 import EditingRecommendedCourses from "@/components/RecommendedCourses/Editing";
 import { useNotification } from "@/providers/NotificationProvider";
 import Required from "@/components/Required";
+import CustomActions from "@/components/Popovers";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -73,6 +74,9 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
       onSuccess: (res) => {
+        // to avoid build error, remove it later
+        setPending(false);
+
         const data = res.data as DetailedThesisResponse;
         setThesis(data);
         setInitCommittee([
@@ -108,6 +112,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     openDialog: (id) => {
       setOpen(true);
       setThesisId(id);
+      mutate();
     },
   }));
 
@@ -192,11 +197,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       recommendedCourses: thesis.recommendedCourses.map((course) => course.id),
     };
 
-    const { data, status } = await authFetch(
-      `theses/${thesisId}`,
-      "PUT",
-      body
-    );
+    const { data, status } = await authFetch(`theses/${thesisId}`, "PUT", body);
 
     if (status === 200) {
       notify("success", "Thesis updated!");
@@ -335,9 +336,15 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             type="button"
             text={"Close"}
             className="bg-white border border-neutral-700 hover:bg-neutral-100 text-black py-2 px-4 rounded"
-            handleClick={() => {setThesisId(""); setOpen(false)}}
+            // handleClick={() => {setThesisId(""); setOpen(false)}}
+            handleClick={() => setOpen(false)}
             disabled={pending}
           />
+
+
+          <CustomActions />
+
+
         </div>
       </BaseModalContent>
     </BaseModal>

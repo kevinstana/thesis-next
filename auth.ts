@@ -135,20 +135,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const role = auth?.user?.role;
         const url = request.nextUrl.pathname;
 
+        if (url === "/") {
+          return NextResponse.redirect(new URL("/theses", request.url));
+        }
+
         if (role !== "ADMIN" && isAdminPath(url)) {
-          return NextResponse.redirect(new URL("/", request.url));
+          return NextResponse.redirect(new URL("/theses", request.url));
         }
 
         if (role !== "PROFESSOR" && isProfessorPath(url)) {
-          return NextResponse.redirect(new URL("/", request.url));
+          return NextResponse.redirect(new URL("/theses", request.url));
         }
 
         if (role !== "STUDENT" && isStudentPath(url)) {
-          return NextResponse.redirect(new URL("/", request.url));
+          return NextResponse.redirect(new URL("/theses", request.url));
         }
 
         if (url === "/login") {
-          return NextResponse.redirect(new URL("/", request.url));
+          return NextResponse.redirect(new URL("/theses", request.url));
         }
       }
 

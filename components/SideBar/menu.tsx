@@ -14,11 +14,11 @@ const baseStyle = "ml-1 mr-6";
 const iconSize = 21;
 
 export const sharedMenuItems = [
-  {
-    path: "/",
-    name: "Home",
-    icon: <Home size={iconSize} className={baseStyle} />,
-  },
+  // {
+  //   path: "/",
+  //   name: "Home",
+  //   icon: <Home size={iconSize} className={baseStyle} />,
+  // },
   {
     path: "/theses",
     name: "Theses",

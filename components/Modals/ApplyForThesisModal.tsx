@@ -41,6 +41,8 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
   }));
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setErros((prev) => ({...prev, file: ""}))
+
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
       setPdf(file);
@@ -82,7 +84,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
 
     const { data, error, status } = await authFetch(
       `theses/${thesisId}/requests`,
-      "POST",
+      "PUT",
       null,
       formData
     );

@@ -70,7 +70,7 @@ export default function Pagination({
   );
 }
 
-function getPaginationText(
+export function getPaginationText(
   size: number,
   number: number,
   totalElements: number,

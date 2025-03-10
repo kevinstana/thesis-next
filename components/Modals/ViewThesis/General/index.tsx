@@ -206,6 +206,13 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                 </form>
               </div>
             )}
+            {thesis.canMakeRequest && thesis.hasMadeRequest ? (
+              <div className="flex justify-end border-t p-6 border-t-neutral-300">
+                <div className="pr-2">
+                  <Button disabled>Request Made</Button>
+                </div>
+              </div>
+            ) : null}
             {thesis.canMakeRequest ? (
               <div className="flex justify-end border-t p-6 border-t-neutral-300">
                 <div className="pr-2">
@@ -220,14 +227,6 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                   >
                     Make Request
                   </Button>
-                </div>
-              </div>
-            ) : null}
-
-            {thesis.hasMadeRequest ? (
-              <div className="flex justify-end border-t p-6 border-t-neutral-300">
-                <div className="pr-2">
-                  <Button disabled>Request Made</Button>
                 </div>
               </div>
             ) : null}

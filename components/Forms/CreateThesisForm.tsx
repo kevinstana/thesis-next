@@ -74,7 +74,7 @@ export default function CreateThesisForm({
       return;
     }
 
-    const res = await createThesis(body, "theses");
+    const res = await createThesis(body, "my-theses");
     if (res.status === 200) {
       setPending(false);
       notify("success", "Thesis created!");

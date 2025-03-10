@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import {
   BasicThesis,
   GeneralViewThesisModalRef,
+  ThesisRequestsModalRef,
   ViewThesisModalRef,
 } from "@/types/app-types";
 import { useEffect, useRef, useState } from "react";
@@ -18,6 +19,7 @@ import Row from "./Row";
 import { ThesisIdentifiersProvider } from "@/providers/ThesisIdentifiersProvider";
 import { GeneralViewThesisModal } from "../Modals/ViewThesis/General";
 import { ViewThesisModal } from "../Modals/ViewThesis/AsProfessor";
+import { ThesisRequestsModal } from "../Modals/ThesisRequestsModal";
 
 export default function ThesesTable({
   thesisPage,
@@ -29,6 +31,7 @@ export default function ThesesTable({
   const [identifiers, setIdentifiers] = useState<string[]>([]);
   const generalViewThesisModalRef = useRef<GeneralViewThesisModalRef>(null);
   const viewThesisModalRef = useRef<ViewThesisModalRef>(null);
+  const thesisRequestsModalRef = useRef<ThesisRequestsModalRef>(null);
 
   useEffect(() => {
     if (thesisPage.content.length > 0) {
@@ -83,6 +86,9 @@ export default function ThesesTable({
                   ? generalViewThesisModalRef
                   : viewThesisModalRef
               }
+              thesisRequestsModalRef={
+                path === "my-theses" ? thesisRequestsModalRef : null
+              }
             />
           ))}
         </TableBody>
@@ -102,7 +108,10 @@ export default function ThesesTable({
         ) : null}
 
         {path === "my-theses" ? (
-          <ViewThesisModal ref={viewThesisModalRef} />
+          <>
+            <ViewThesisModal ref={viewThesisModalRef} />
+            <ThesisRequestsModal ref={thesisRequestsModalRef} />
+          </>
         ) : null}
       </ThesisIdentifiersProvider>
     </TableContainer>

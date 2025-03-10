@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import {
   Bold,
   Italic,
@@ -62,10 +63,6 @@ const initialValue: Descendant[] = [
     children: [{ text: "" }],
   },
 ];
-
-//   JSON.parse(
-//     '[{"type":"paragraph","children":[{"text":"balls"},{"text":"balls","bold":true},{"text":"balls","italic":true}]},{"type":"bulleted-list","children":[{"type":"list-item","children":[{"text":"hello"}]}]},{"type":"numbered-list","children":[{"type":"list-item","children":[{"text":"sadfdfs"}]},{"type":"list-item","children":[{"text":""}]},{"type":"list-item","children":[{"text":"adsfasffsdsfdfdsafsaasfdfsad"}]},{"type":"list-item","children":[{"text":""},{"type":"link","url":"google.com","children":[{"text":"dsffadssdf"}]},{"text":""}]},{"type":"list-item","children":[{"text":"dfsdfsfdsa"}]}]}]'
-//   );
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"] as const;
 
@@ -299,11 +296,13 @@ export default function Textarea({
   handleDescription,
   readonly = false,
   clear,
+  inRequest,
 }: {
   initDescription?: string;
   handleDescription?: (description: string) => void;
   readonly?: boolean;
   clear?: boolean;
+  inRequest?: boolean;
 }) {
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
@@ -370,14 +369,25 @@ export default function Textarea({
 
   return (
     <div className="space-y-1">
-      <div className="border border-gray-300 rounded-md  focus-within:ring-neutral-700">
+      <div
+        className={clsx("rounded-md focus-within:ring-neutral-700", {
+          "border border-gray-300": !inRequest,
+        })}
+      >
         <Slate
           editor={editor}
           initialValue={parsedInit.length > 0 ? parsedInit : initialValue}
           onChange={() => handleDescription?.(JSON.stringify(editor.children))}
         >
           {!readonly && <Toolbar />}
-          <div className="px-4 py-2 min-h-[120px]">
+          <div
+            className={clsx(
+              "min-h-[120px]",
+              { "text-sm text-muted-foreground": inRequest },
+              { "px-4 py-2": !inRequest },
+              { "!min-h-[20px]": inRequest }
+            )}
+          >
             <Editable
               readOnly={readonly}
               renderElement={renderElement}

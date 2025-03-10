@@ -2,20 +2,36 @@ import { AppUser, BasicThesis } from "./app-types";
 
 export type UserPage = {
   content: AppUser[];
-  page: {
-    size: number;
-    number: number;
-    totalElements: number;
-    totalPages: number;
-  };
+  page: Page
 };
 
 export type BasicThesisPage = {
   content: BasicThesis[];
-  page: {
-    size: number;
-    number: number;
-    totalElements: number;
-    totalPages: number;
-  };
-}
+  page: Page
+};
+
+export type ThesisRequest = {
+  id: number;
+  thesisId: number;
+  studentId: number;
+  studentUsername: number;
+  studentFirstName: string;
+  studentLastName: string;
+  description: string;
+  pdf: string;
+  pdfSize: number;
+  status: string;
+  createdAt: string;
+};
+
+export type ThesisRequestsPage = {
+  content: ThesisRequest[];
+  page: Page
+};
+
+export type Page = {
+  size: number;
+  number: number;
+  totalElements: number;
+  totalPages: number;
+};

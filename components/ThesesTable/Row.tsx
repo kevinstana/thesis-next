@@ -1,17 +1,25 @@
-import { BasicThesis, GeneralViewThesisModalRef, ViewThesisModalRef } from "@/types/app-types";
+import {
+  BasicThesis,
+  GeneralViewThesisModalRef,
+  ThesisRequestsModalRef,
+  ViewThesisModalRef,
+} from "@/types/app-types";
 import BodyCell from "./BodyCell";
 import View from "@/iconography/View";
 import ActionButton from "../Buttons/ActionButton";
 import { RefObject } from "react";
+import { Bell } from "lucide-react";
 
 export default function Row({
   thesis,
   headers,
   viewThesisModalRef,
+  thesisRequestsModalRef,
 }: Readonly<{
   thesis: BasicThesis;
   headers: (keyof BasicThesis)[];
   viewThesisModalRef: RefObject<ViewThesisModalRef | GeneralViewThesisModalRef>;
+  thesisRequestsModalRef?: RefObject<ThesisRequestsModalRef> | null;
 }>) {
   return (
     <tr key={thesis.id} className="hover:bg-neutral-100">
@@ -26,6 +34,15 @@ export default function Row({
               viewThesisModalRef.current?.openDialog(thesis.id)
             }
           />
+
+          {thesisRequestsModalRef && thesis.status === "AVAILABLE" ? (
+            <ActionButton
+              icon={<Bell size={16} color="#2B555F" />}
+              handleClick={() => {
+                thesisRequestsModalRef?.current?.openDialog(thesis.id, thesis.title);
+              }}
+            />
+          ) : null}
         </div>
       </td>
     </tr>
