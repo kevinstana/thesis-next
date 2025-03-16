@@ -212,10 +212,28 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                       </div>
                     </div>
                   </div>
+
+                  {thesis.thesis.studentId ? (
+                    <>
+                      <div className="flex flex-row gap-8">
+                        {/* student */}
+                        <div className="space-y-1">
+                          <div className="flex gap-3 text-sm text-gray-700">
+                            Student
+                          </div>
+                          <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
+                            {`${thesis.thesis.studentFirstName} ${thesis.thesis.studentLastName}`}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
                 </form>
               </div>
             )}
-            {!thesis.canMakeRequest && thesis.hasMadeRequest && thesis.thesis.status === "AVAILABLE" ? (
+            {!thesis.canMakeRequest &&
+            thesis.hasMadeRequest &&
+            thesis.thesis.status === "AVAILABLE" ? (
               <div className="flex justify-end border-t p-6 border-t-neutral-300">
                 <div className="pr-2">
                   <Button disabled>Request Made</Button>
@@ -240,7 +258,11 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
               </div>
             ) : null}
           </div>
-          <ApplyForThesisModal ref={applyForThesisModalRef} mutate={mutate} closeParent={() => setOpen(false)} />
+          <ApplyForThesisModal
+            ref={applyForThesisModalRef}
+            mutate={mutate}
+            closeParent={() => setOpen(false)}
+          />
         </BaseModalContent>
       </BaseModal>
     );

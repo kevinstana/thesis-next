@@ -11,6 +11,7 @@ import { useNotification } from "@/providers/NotificationProvider";
 import CustomActions from "../Popovers";
 import { authFetch } from "@/lib/server-actions";
 import TaskStatusDropdown from "../StatusDropdown";
+import { useUserDetails } from "@/providers/UserDetailsProvier";
 
 const MAX_SIZE_MB = 50 * 1024 * 1024;
 
@@ -50,6 +51,7 @@ export default function TaskCard({
   const [body, setBody] = useState<UpdatableTask>({ ...task, newFiles: [] });
   const [files, setFiles] = useState<File[] | null>(null);
   const { notify } = useNotification();
+  const { role } = useUserDetails();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -226,13 +228,14 @@ export default function TaskCard({
           <div className="flex gap-2 items-center">
             <label htmlFor="title">
               Title:
-              <Required />
+              {role === "PROFESSOR" ? <Required /> : null}
             </label>
             <Input
               id="title"
               name="title"
               className="font-semibold text-base"
               value={body.title}
+              disabled={role !== "PROFESSOR"}
               onChange={handleChange}
             />
           </div>
@@ -240,7 +243,7 @@ export default function TaskCard({
           <div className="flex gap-2 items-center">
             <h4 className="font-normal text-md">
               Priority:
-              <Required />
+              {role === "PROFESSOR" ? <Required /> : null}
             </h4>
             <div
               className="relative w-56 mx-auto"
@@ -248,6 +251,7 @@ export default function TaskCard({
               onKeyDown={handleKeyDown}
             >
               <button
+                disabled={role !== "PROFESSOR"}
                 onClick={() => setIsOpen(!isOpen)}
                 className={
                   "w-full px-4 py-2.5 rounded-lg flex items-center justify-between transition-all duration-200 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -262,11 +266,13 @@ export default function TaskCard({
                 >
                   {selectedOption?.priority ?? "Select priority"}
                 </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    isOpen && "transform rotate-180"
-                  }`}
-                />
+                {role === "PROFESSOR" ? (
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isOpen && "transform rotate-180"
+                    }`}
+                  />
+                ) : null}
               </button>
 
               {isOpen && (
@@ -306,6 +312,8 @@ export default function TaskCard({
               key={reset + ""}
               initDescription={body.description}
               handleDescription={handleDescription}
+              readonly={role !== "PROFESSOR"}
+              pretty={role !== "PROFESSOR"}
             />
           </div>
 
@@ -314,37 +322,46 @@ export default function TaskCard({
               <div className="flex flex-row">
                 <label htmlFor="gradesFile" className="flex gap-[2px]">
                   <div className="flex items-center gap-[0.375rem]">
-                    Attach Files
-                    <Paperclip size={17} strokeWidth={1} />
+                    {role === "PROFESSOR" ? (
+                      <>
+                        {" "}
+                        Attach Files
+                        <Paperclip size={17} strokeWidth={1} />
+                      </>
+                    ) : (
+                      "Attachments"
+                    )}
                   </div>
                 </label>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <input
-                    id="file-input"
-                    type="file"
-                    accept=".png, .jpeg, .jpg, .pdf, .doc, .docx, .xlsx"
-                    multiple
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  <div className="flex flex-col items-center gap-2">
-                    <label
-                      tabIndex={0}
-                      htmlFor="file-input"
-                      className="custom-file-button bg-white text-black border border-neutral-400 h-8 items-center flex px-4 rounded cursor-pointer hover:bg-neutral-100"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          document.getElementById("file-input")?.click();
-                        }
-                      }}
-                    >
-                      Choose a file
-                    </label>
+                {role === "PROFESSOR" ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      id="file-input"
+                      type="file"
+                      accept=".png, .jpeg, .jpg, .pdf, .doc, .docx, .xlsx"
+                      multiple
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <label
+                        tabIndex={0}
+                        htmlFor="file-input"
+                        className="custom-file-button bg-white text-black border border-neutral-400 h-8 items-center flex px-4 rounded cursor-pointer hover:bg-neutral-100"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            document.getElementById("file-input")?.click();
+                          }
+                        }}
+                      >
+                        Choose a file
+                      </label>
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
 
               {/* file list */}
@@ -365,16 +382,22 @@ export default function TaskCard({
                       <div className="flex gap-1">
                         <SquareArrowOutUpRight
                           size={16}
-                          className="ml-2 cursor-pointer text-blue-600"
+                          className={clsx("ml-2 cursor-pointer text-blue-600", {
+                            "mr-2": role !== "PROFESSOR",
+                          })}
                           onClick={() => handleExistingPreview(file.fileName)}
                         />
-                        <X
-                          size={16}
-                          className="ml-2 cursor-pointer text-red-500"
-                          onClick={() =>
-                            handleRemoveExistingFile(file.fileName)
-                          }
-                        />{" "}
+                        {role === "PROFESSOR" ? (
+                          <>
+                            <X
+                              size={16}
+                              className="ml-2 cursor-pointer text-red-500"
+                              onClick={() =>
+                                handleRemoveExistingFile(file.fileName)
+                              }
+                            />{" "}
+                          </>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -436,18 +459,20 @@ export default function TaskCard({
           >
             Cancel
           </Button>
-          <CustomActions
-            actions={[
-              {
-                name: "Delete",
-                action: () => {
-                  if (window.confirm("Delete task?")) {
-                    handleDelete();
-                  }
+          {role === "PROFESSOR" ? (
+            <CustomActions
+              actions={[
+                {
+                  name: "Delete",
+                  action: () => {
+                    if (window.confirm("Delete task?")) {
+                      handleDelete();
+                    }
+                  },
                 },
-              },
-            ]}
-          />
+              ]}
+            />
+          ) : null}
         </div>
       </CardFooter>
     </Card>

@@ -5,6 +5,7 @@ import { getTheses } from "./actions";
 import { BasicThesisPage } from "@/types/response-types";
 import ThesesTable from "@/components/ThesesTable";
 import { Role } from "@/types/app-types";
+import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsProviderWrapper";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -30,14 +31,16 @@ export default async function ThesesPage(
   urlSearchParams.append("page", String(page));
   urlSearchParams.append("size", String(size));
 
-    const res = await getTheses(urlSearchParams.toString());
-    const data = res.data as BasicThesisPage;
+  const res = await getTheses(urlSearchParams.toString());
+  const data = res.data as BasicThesisPage;
 
   return (
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
+        <UserDetailsProviderWrapper role={role} userId={session?.user?.id}>
           <ThesesTableOptions path="my-theses" role={role} />
           <ThesesTable thesisPage={data} path="my-theses" />
+        </UserDetailsProviderWrapper>
       </NotificationProviderWrapper>
     </div>
   );

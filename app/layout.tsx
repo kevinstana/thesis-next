@@ -23,7 +23,7 @@ export default async function RootLayout({
           {session?.user ? <Sidebar role={session.user?.role} /> : null}
           <div className="flex flex-1 flex-col min-w-0">
             {session?.user ? <Header /> : null}
-            <main className="flex-1 overflow-auto py-10 px-10">
+            <main className="flex-1 overflow-hidden py-10 px-10">
               <div className="w-full">{children}</div>
             </main>
           </div>
