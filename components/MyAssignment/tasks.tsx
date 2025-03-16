@@ -1,5 +1,4 @@
 import { authFetch } from "@/lib/server-actions";
-import { useNotification } from "@/providers/NotificationProvider";
 import { TaskPage } from "@/types/response-types";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -13,8 +12,6 @@ const sharedNavigationButtonStyle =
 export default function MyAssignmentTasks({ thesisId }: { thesisId: string }) {
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [data, setData] = useState<TaskPage>();
-
-  const { notify } = useNotification();
 
   const { isLoading, isValidating, mutate } = useSWR(
     thesisId ? `my-assignment-tasks` : null,
@@ -68,8 +65,8 @@ export default function MyAssignmentTasks({ thesisId }: { thesisId: string }) {
         )}
       </div>
 
-{/* pagination */}
-<div className="flex flex-wrap items-center justify-between p-6 rounded-b-md border-t border-t-neutral-300">
+      {/* pagination */}
+      <div className="flex flex-wrap items-center justify-between p-6 rounded-b-md border-t border-t-neutral-300">
         {isLoading || isValidating || data?.content.length === 0 ? null : (
           <>
             <div className="flex text-sm">
@@ -108,7 +105,6 @@ export default function MyAssignmentTasks({ thesisId }: { thesisId: string }) {
           </>
         )}
       </div>
-      
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Textarea from "../Textarea";
 import ViewingRecommendedCourses from "../RecommendedCourses/Viewing";
 import { clsx } from "clsx";
 import MyAssignmentTasks from "./tasks";
+import { Button } from "../ui/button";
 
 export default function MyAssignment({
   data,
@@ -52,6 +53,12 @@ export default function MyAssignment({
             {data.thesis.status.replace("_", " ")}
           </div>
         </div>
+
+        {data.thesis.status === "REVIEWED" ? (
+          <div className="flex flex-col gap-1">
+            <Button className="w-fit">Publish</Button>
+          </div>
+        ) : null}
       </div>
 
       <MyAssignmentTasks thesisId={data.thesis.id} />

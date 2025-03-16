@@ -45,6 +45,7 @@ export default function TaskCard({
   mutate: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [reset, setReset] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -222,7 +223,7 @@ export default function TaskCard({
   };
 
   return (
-    <Card className={clsx("w-full")}>
+    <Card className={clsx("w-full", {"border-black": focused})} onFocus={() => {setFocused(true)}} onBlur={() => {setFocused(false)}}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex gap-2 items-center">
