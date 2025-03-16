@@ -15,8 +15,8 @@ export default function MyAssignment({
     <div className="flex gap-4">
       <div className="flex flex-col gap-8 max-w-[600px] h-[87vh] overflow-auto">
         <div className="flex flex-col gap-1">
-          <h1 className="text-black font-bold">Title:</h1>
-          <div className="w-[500px]">{data.thesis.title}</div>
+          <h1 className="text-black text-wrap font-bold">Title:</h1>
+          <div className="w-[500px] break-words">{data.thesis.title}</div>
         </div>
 
         <div className="flex flex-col">

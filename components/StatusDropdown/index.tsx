@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { UpdatableTask } from "../TaskCards";
 import { ChevronDown } from "lucide-react";
+import CheckMark from "@/iconography/CheckMark";
 
-export default function TaskStatusDropdown({ body, handleStatusChange }: { body: UpdatableTask, handleStatusChange: (status: string) => void }) {
+export default function TaskStatusDropdown({
+  body,
+  handleStatusChange,
+}: {
+  body: UpdatableTask;
+  handleStatusChange: (status: string) => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -42,7 +49,7 @@ export default function TaskStatusDropdown({ body, handleStatusChange }: { body:
 
     if (e.key === "Enter" && highlightedIndex !== null) {
       const selectedOption = options[highlightedIndex];
-      handleStatusChange(selectedOption.status)
+      handleStatusChange(selectedOption.status);
       setIsOpen(false);
     }
 
@@ -59,7 +66,18 @@ export default function TaskStatusDropdown({ body, handleStatusChange }: { body:
           onClick={() => setIsOpen(!isOpen)}
           className="w-full px-4 py-2.5 rounded-lg flex items-center justify-between border border-gray-200 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-700"
         >
-          <span>{selectedStatus?.status ?? "Select status"}</span>
+          <span>
+            {selectedStatus?.status ? (
+              <div className="flex items-center gap-2">
+                {selectedStatus?.status}{" "}
+                {selectedStatus?.status === "DONE" && (
+                  <CheckMark className="text-green-500" />
+                )}
+              </div>
+            ) : (
+              "Select status"
+            )}
+          </span>
           <ChevronDown
             className={`w-4 h-4 transition-transform ${
               isOpen ? "rotate-180" : ""
@@ -73,7 +91,7 @@ export default function TaskStatusDropdown({ body, handleStatusChange }: { body:
               <button
                 key={option.status}
                 onClick={() => {
-                  handleStatusChange(option.status)
+                  handleStatusChange(option.status);
                   setIsOpen(false);
                 }}
                 className="w-full px-4 py-2 text-left hover:bg-gray-100"
