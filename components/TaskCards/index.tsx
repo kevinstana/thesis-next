@@ -10,6 +10,7 @@ import Required from "../Required";
 import { useNotification } from "@/providers/NotificationProvider";
 import CustomActions from "../Popovers";
 import { authFetch } from "@/lib/server-actions";
+import TaskStatusDropdown from "../StatusDropdown";
 
 const MAX_SIZE_MB = 50 * 1024 * 1024;
 
@@ -31,7 +32,7 @@ const options = [
   },
 ];
 
-type UpdatableTask = DetailedTask & { newFiles: File[] };
+export type UpdatableTask = DetailedTask & { newFiles: File[] };
 
 export default function TaskCard({
   task,
@@ -66,9 +67,7 @@ export default function TaskCard({
 
   const selectedOption = options.find((opt) => opt.priority === body.priority);
 
-  function handleTitleChange(
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) {
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
 
     setBody((prev) => ({ ...prev, [name]: value }));
@@ -192,7 +191,7 @@ export default function TaskCard({
       formData.append("newFiles", newFile);
     });
 
-    const { data, status } = await authFetch(
+    const { status } = await authFetch(
       `theses/${thesisId}/tasks/${task.id}`,
       "PUT",
       null,
@@ -203,8 +202,21 @@ export default function TaskCard({
       notify("success", "Task updated");
       mutate();
     }
+  };
 
-    console.log(data.message);
+  const handleStatusChange = (status: string) => {
+    setBody((prev) => ({ ...prev, status: status }));
+  };
+
+  const handleRemoveNewFile = (fileName: string) => {
+    setBody((prev) => ({
+      ...prev,
+      newFiles: prev.newFiles.filter((file) => file.name !== fileName),
+    }));
+
+    setFiles(
+      (prevFiles) => prevFiles?.filter((file) => file.name !== fileName) || []
+    );
   };
 
   return (
@@ -221,7 +233,7 @@ export default function TaskCard({
               name="title"
               className="font-semibold text-base"
               value={body.title}
-              onChange={handleTitleChange}
+              onChange={handleChange}
             />
           </div>
 
@@ -390,7 +402,7 @@ export default function TaskCard({
                         <X
                           size={16}
                           className="ml-2 cursor-pointer text-red-500"
-                          // onClick={() => handleRemoveFile(file.name)}
+                          onClick={() => handleRemoveNewFile(file.name)}
                         />{" "}
                       </div>
                     </div>
@@ -399,9 +411,10 @@ export default function TaskCard({
               </div>
             </div>
 
-            <div className="font-medium text-sm/[1.5rem] rounded-full px-2 py-1 w-fit text-black bg-gray-500/20 h-fit text-nowrap">
-              {body.status.replace("_", " ")}
-            </div>
+            <TaskStatusDropdown
+              body={body}
+              handleStatusChange={handleStatusChange}
+            />
           </div>
         </div>
       </CardContent>

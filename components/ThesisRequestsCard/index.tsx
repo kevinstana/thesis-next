@@ -20,7 +20,7 @@ export default function ThesisRequestCard({
 }: {
   mutate: () => void;
   request: ThesisRequest;
-  close?: () => void
+  close?: () => void;
 }) {
   const [loadingPdf, setLoadingPdf] = useState<boolean>(false);
   const studentFullName = `${request.studentFirstName} ${request.studentLastName}`;
@@ -30,39 +30,20 @@ export default function ThesisRequestCard({
   async function handleFilePreview() {
     setLoadingPdf(true);
 
-    const {data, status} = await authFetch(`theses/${request.thesisId}/requests/${request.pdf}`, "GET", null, null)
+    const { data, status } = await authFetch(
+      `theses/${request.thesisId}/requests/${request.pdf}`,
+      "GET",
+      null,
+      null
+    );
 
     if (status === 200) {
       window.open(data.url, "_blank");
     } else {
-      notify("error", "Something went wrong")
+      notify("error", "Something went wrong");
     }
 
-    setLoadingPdf(false)
-
-
-    // try {
-    //   const token = await getToken();
-    //   const res = await fetch(
-    //     `${process.env.API_URL}/theses/${request.thesisId}/requests/${request.pdf}`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/pdf",
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
-
-    //   if (res.ok) {
-    //     const pdfBlob = await res.blob();
-    //     const pdfUrl = URL.createObjectURL(pdfBlob);
-    //     window.open(pdfUrl, "_blank");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-    // setLoadingPdf(false);
+    setLoadingPdf(false);
   }
 
   async function handleApproval() {
@@ -82,7 +63,7 @@ export default function ThesisRequestCard({
       notify("success", data.message);
       await customRevalidateTag("my-theses");
       mutate();
-      close?.()
+      close?.();
       return;
     }
 
