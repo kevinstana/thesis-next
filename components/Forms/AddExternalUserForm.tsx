@@ -48,6 +48,7 @@ export default function AddExternalUserForm({
       notify("success", "User Created.");
       setErrors(initialErrors);
       formRef.current?.reset();
+      setOpen(false)
       return;
     }
 

@@ -82,20 +82,24 @@ const ThesisRequestsModal = forwardRef<ThesisRequestsModalRef>((_, ref) => {
               {data?.content.length === 0 ? (
                 <div>No requests found</div>
               ) : (
-                data?.content
-                  .slice() // Create a shallow copy to avoid mutating the original array
-                  .sort(
-                    (a, b) =>
-                      new Date(b.createdAt).getTime() -
-                      new Date(a.createdAt).getTime()
-                  ) // Convert Date to timestamp
-                  .map((request) => (
-                    <ThesisRequestCard
-                      key={request.id}
-                      request={request}
-                      mutate={mutate}
-                    />
-                  ))
+                <div className="flex flex-col gap-4">
+                  <div>Assign Student</div>
+                  {data?.content
+                    .slice()
+                    .sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((request) => (
+                      <ThesisRequestCard
+                        key={request.id}
+                        request={request}
+                        mutate={mutate}
+                        close={() => setOpen(false)}
+                      />
+                    ))}
+                </div>
               )}
             </div>
           )}

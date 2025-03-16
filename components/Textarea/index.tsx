@@ -78,6 +78,7 @@ function ToolbarButton({
 }) {
   return (
     <button
+    tabIndex={-1}
       type="button"
       onClick={onClick}
       className={`p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 ${

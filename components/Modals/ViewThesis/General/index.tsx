@@ -71,7 +71,6 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
         revalidateOnFocus: false,
         shouldRetryOnError: false,
         onSuccess: (res) => {
-          console.log(res)
           setThesis(res.data as DetailedThesisResponse);
         },
       }
@@ -241,7 +240,7 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
               </div>
             ) : null}
           </div>
-          <ApplyForThesisModal ref={applyForThesisModalRef} mutate={mutate} />
+          <ApplyForThesisModal ref={applyForThesisModalRef} mutate={mutate} closeParent={() => setOpen(false)} />
         </BaseModalContent>
       </BaseModal>
     );

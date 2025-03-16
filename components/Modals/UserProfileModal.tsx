@@ -81,8 +81,9 @@ const UserProfileModal = forwardRef<UserProfileModalRef>((_, ref) => {
     setIsEditing(false);
     setPending(false);
     if (status === 200) {
-      mutate();
+      // mutate();
       notify("success", "Changes saved!");
+      setOpen(false)
     } else {
       notify("error", "Something went wrong.");
     }

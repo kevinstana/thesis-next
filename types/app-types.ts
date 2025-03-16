@@ -61,7 +61,7 @@ export type UserProfileModalRef = {
 };
 
 export type TasksModalRef = {
-  openDialog: (id: string) => void;
+  openDialog: (id: string, title: string) => void;
 };
 
 export type ViewThesisModalRef = {

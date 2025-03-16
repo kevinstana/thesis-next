@@ -46,7 +46,22 @@ export type Task = {
   status: string;
 };
 
+export type TaskFile = {
+  fileName: string,
+  fileSize: number
+}
+
+export type DetailedTask = {
+  id: number;
+  title: string;
+  description: string;
+  priority: string;
+  status: string;
+  createdAt: string;
+  files: TaskFile[]
+}
+
 export type TaskPage = {
-  content: Task[];
+  content: DetailedTask[];
   page: Page;
 };

@@ -21,7 +21,7 @@ import useSWR from "swr";
 import RecordNavigation from "../../../RecordNavigation";
 import { Loader2 } from "lucide-react";
 import { useThesisIdentifiers } from "@/providers/ThesisIdentifiersProvider";
-import { authFetch, getOneThesis } from "@/lib/server-actions";
+import { authFetch, customRevalidateTag, getOneThesis } from "@/lib/server-actions";
 import Textarea from "../../../Textarea";
 import { clsx } from "clsx";
 import { Skeleton } from "../../../ui/skeleton";
@@ -231,6 +231,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
 
     if (status === 200) {
       notify("success", "Thesis updated!");
+      customRevalidateTag("my-theses")
       mutate();
     } else {
       notify("error", data.message);
@@ -337,7 +338,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                 />
 
                 {thesis.thesis.studentId && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
                     <div className="font-medium text-gray-700">Student</div>
 
                     <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
@@ -389,7 +390,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             actions={thesis.thesis.status === "AVAILABLE" ? [{name: "Delete", action: () => alert("you clicked delete")}] : [
               {
                 name: "Tasks",
-                action: () => tasksModalRef.current?.openDialog(thesisId),
+                action: () => tasksModalRef.current?.openDialog(thesisId, thesis.thesis.title),
               },
             ]}
           />

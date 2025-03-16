@@ -1,6 +1,6 @@
 import { authFetch } from "@/lib/server-actions";
 import { Course } from "@/types/app-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 
 export default function EditingRecommendedCourses({
@@ -8,12 +8,14 @@ export default function EditingRecommendedCourses({
   handleCourseChange,
 }: {
   courses: Course[];
-  handleCourseChange: (trigger: "add" | "remove", course: Course) => void 
+  handleCourseChange: (trigger: "add" | "remove", course: Course) => void;
 }) {
   const [showCourseSearch, setShowCourseSearch] = useState(false);
   const [courseQuery, setCourseQuery] = useState("");
   const [queryCourses, setQueryCourses] = useState<Course[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const addCourseButtonRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   async function handleQuery(query: string) {
     setCourseQuery(query);
@@ -28,16 +30,17 @@ export default function EditingRecommendedCourses({
   }
 
   function handleAddCourse(course: Course) {
-
-    handleCourseChange("add", course)
+    handleCourseChange("add", course);
     setQueryCourses([]);
     setShowCourseSearch(false);
     setCourseQuery("");
     setHighlightedIndex(0);
+
+    addCourseButtonRef.current?.focus();
   }
 
   function handleRemoveCourse(course: Course) {
-    handleCourseChange("remove", course)
+    handleCourseChange("remove", course);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
@@ -74,9 +77,13 @@ export default function EditingRecommendedCourses({
       </label>
       <div className="flex flex-row pt-1">
         <button
+          ref={addCourseButtonRef}
           type="button"
           className="flex items-center px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-100"
-          onClick={() => setShowCourseSearch(!showCourseSearch)}
+          onClick={() => {
+            setShowCourseSearch(!showCourseSearch);
+            setTimeout(() => searchInputRef.current?.focus(), 0);
+          }}
         >
           <Plus size={16} /> Add Course
         </button>
@@ -85,6 +92,7 @@ export default function EditingRecommendedCourses({
       {showCourseSearch && (
         <div className="relative mt-2">
           <input
+            ref={searchInputRef}
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
             placeholder="Search courses..."

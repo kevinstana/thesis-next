@@ -70,7 +70,7 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
     if (!body.title) {
       setPending(false);
       setErrors({ ...errors, title: "Title required" });
-      return;      
+      return;
     }
 
     if (!body.secondReviewerId) {
@@ -95,6 +95,7 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
       setBody(initialBody);
       setExcludedIds([]);
       window.dispatchEvent(new Event("ClearForm"));
+      setOpen(false)
       return;
     }
 
@@ -123,6 +124,8 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
     id: number,
     label?: string
   ) {
+    const committeeInput = document.getElementsByName("committee-member");
+
     if (trigger === "add") {
       setExcludedIds((prev) => [...prev, id]);
 
@@ -132,12 +135,19 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
             ...prev,
             secondReviewerId: id,
           }));
+          if (committeeInput.length > 0) {
+            committeeInput[committeeInput.length - 1].focus();
+          }
           return;
         case "Reviewer 2":
           setBody((prev) => ({
             ...prev,
             thirdReviewerId: id,
           }));
+          if (committeeInput.length > 0) {
+            committeeInput[0].focus();
+          }
+
           return;
         default:
           return;
@@ -151,15 +161,15 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
           ...prev,
           secondReviewerId: 0,
         }));
-        return;
+        break;
       case "Reviewer 2":
         setBody((prev) => ({
           ...prev,
           thirdReviewerId: 0,
         }));
-        return;
+        break;
       default:
-        return;
+        break;
     }
   }
 
@@ -238,7 +248,7 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
               />
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1" tabIndex={-1}>
               <div className="flex gap-[2px] font-medium text-gray-700">
                 Description
               </div>

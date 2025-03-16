@@ -53,8 +53,6 @@ export async function authFetchPdf(url: string) {
     },
   });
 
-  console.log(response)
-
   const blob = await response.blob();
   const ab = await blob.arrayBuffer();
 

@@ -139,6 +139,7 @@ export default function CommitteMember({
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neutral-700 focus:outline-none"
             placeholder="Search professors..."
             value={memberQuery}
+            name="committee-member"
             onChange={(e) => handleMemberQuery(e.target.value)}
             onKeyDown={handleMemberKeyDown}
           />

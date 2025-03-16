@@ -8,7 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { clsx } from "clsx";
-import { authFetch, customRevalidateTag, getToken } from "@/lib/server-actions";
+import { authFetch, customRevalidateTag } from "@/lib/server-actions";
 import Textarea from "../Textarea";
 import { useState } from "react";
 import { useNotification } from "@/providers/NotificationProvider";
@@ -16,9 +16,11 @@ import { useNotification } from "@/providers/NotificationProvider";
 export default function ThesisRequestCard({
   request,
   mutate,
+  close,
 }: {
   mutate: () => void;
   request: ThesisRequest;
+  close?: () => void
 }) {
   const [loadingPdf, setLoadingPdf] = useState<boolean>(false);
   const studentFullName = `${request.studentFirstName} ${request.studentLastName}`;
@@ -27,28 +29,40 @@ export default function ThesisRequestCard({
 
   async function handleFilePreview() {
     setLoadingPdf(true);
-    try {
-      const token = await getToken();
-      const res = await fetch(
-        `${process.env.API_URL}/theses/${request.thesisId}/requests/${request.pdf}`,
-        {
-          headers: {
-            "Content-Type": "application/pdf",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
 
-      if (res.ok) {
-        const pdfBlob = await res.blob();
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        window.open(pdfUrl, "_blank");
-      }
-    } catch (error) {
-      console.log(error);
+    const {data, status} = await authFetch(`theses/${request.thesisId}/requests/${request.pdf}`, "GET", null, null)
+
+    if (status === 200) {
+      window.open(data.url, "_blank");
+    } else {
+      notify("error", "Something went wrong")
     }
 
-    setLoadingPdf(false);
+    setLoadingPdf(false)
+
+
+    // try {
+    //   const token = await getToken();
+    //   const res = await fetch(
+    //     `${process.env.API_URL}/theses/${request.thesisId}/requests/${request.pdf}`,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/pdf",
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
+
+    //   if (res.ok) {
+    //     const pdfBlob = await res.blob();
+    //     const pdfUrl = URL.createObjectURL(pdfBlob);
+    //     window.open(pdfUrl, "_blank");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    // setLoadingPdf(false);
   }
 
   async function handleApproval() {
@@ -68,6 +82,7 @@ export default function ThesisRequestCard({
       notify("success", data.message);
       await customRevalidateTag("my-theses");
       mutate();
+      close?.()
       return;
     }
 
@@ -75,7 +90,6 @@ export default function ThesisRequestCard({
   }
 
   async function handleRejection() {
-    console.log(request.id);
     const { data, status } = await authFetch(
       `theses/${request.thesisId}/assign-student`,
       "PUT",

@@ -17,7 +17,7 @@ const initErrors = {
   file: "",
 };
 
-const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => void }>(({ mutate }, ref) => {
+const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => void; closeParent:() => void }>(({ mutate, closeParent }, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [thesisId, setThesisId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
@@ -45,6 +45,8 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
     setErros((prev) => ({...prev, file: ""}))
 
     const file = event.target.files?.[0];
+    if (!file) return;
+    
     if (file && file.type === "application/pdf") {
       setPdf(file);
     }
@@ -102,6 +104,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
     setPending(false)
     notify("success", data.message as string);
 
+    closeParent()
     setOpen(false)
     mutate()
   }
@@ -109,7 +112,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
   return (
     <BaseModal open={open} className="bg-transparent">
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <ModalHeaderWithArrow setOpen={setOpen}  title="Make Request"/>
+        <ModalHeaderWithArrow setOpen={setOpen} title="Make Request" />
 
         <div
           className="flex flex-col flex-grow justify-between overflow-hidden pt-4"
@@ -148,6 +151,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
                     </span>
                   ) : null}
                 </div>
+                <div tabIndex={0} />
                 <Textarea handleDescription={handleDescriptionChange} />
               </div>
 
@@ -176,8 +180,14 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
                     />
                     <div className="flex flex-col items-center gap-2">
                       <label
+                        tabIndex={0}
                         htmlFor="file-input"
                         className="custom-file-button bg-white text-black border border-neutral-400 h-8 items-center flex px-4 rounded cursor-pointer hover:bg-neutral-100"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            document.getElementById("file-input")?.click();
+                          }
+                        }}
                       >
                         Choose a PDF
                       </label>
@@ -208,7 +218,11 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
           </div>
           <div className="flex justify-end border-t p-6 border-t-neutral-300">
             <div className="pr-2">
-              <Button type="button" onClick={() => handleSubmit()} disabled={pending}>
+              <Button
+                type="button"
+                onClick={() => handleSubmit()}
+                disabled={pending}
+              >
                 {pending ? "Saving..." : "Save"}
               </Button>
             </div>
