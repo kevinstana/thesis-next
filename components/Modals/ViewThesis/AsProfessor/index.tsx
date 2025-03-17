@@ -3,6 +3,7 @@
 import {
   CommitteeMember,
   Course,
+  CustomAction,
   DetailedThesisResponse,
   TasksModalRef,
   ViewThesisModalRef,
@@ -242,17 +243,51 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     }
   }
 
-  const handleDelete = async() => {
-    const {status} = await authFetch(`theses/${thesisId}`, "DELETE")
+  const handleDelete = async () => {
+    const { status } = await authFetch(`theses/${thesisId}`, "DELETE");
 
     if (status === 200) {
-      notify("success", "Thesis deleted")
+      notify("success", "Thesis deleted");
     } else {
-      notify("error", "Something went wrong")
+      notify("error", "Something went wrong");
     }
 
-    await customRevalidateTag("my-theses")
-    setOpen(false)
+    await customRevalidateTag("my-theses");
+    setOpen(false);
+  };
+
+  function getCustomActions(status: string): CustomAction[] {
+    let customActions: CustomAction[] = [];
+
+    if (status === "AVAILABLE") {
+      customActions = [
+        ...customActions,
+        {
+          name: "Delete",
+          action: () => {
+            if (
+              window.confirm("Are you sure you want to delete this thesis?")
+            ) {
+              handleDelete();
+            }
+          },
+        },
+      ];
+    }
+
+    if (status !== "PUBLISHED") {
+      customActions = [
+        ...customActions,
+        {
+          name: "Tasks",
+          action: () => {
+            tasksModalRef.current?.openDialog(thesisId, thesis.thesis.title);
+          },
+        },
+      ];
+    }
+
+    return customActions;
   }
 
   return (
@@ -404,31 +439,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           />
 
           <CustomActions
-            actions={
-              thesis.thesis.status === "AVAILABLE"
-                ? [
-                    {
-                      name: "Delete",
-                      action: () => {
-                        if (
-                          window.confirm("Are you sure you want to delete thesis?")
-                        ) {
-                          handleDelete();
-                        }
-                      },
-                    },
-                  ]
-                : [
-                    {
-                      name: "Tasks",
-                      action: () =>
-                        tasksModalRef.current?.openDialog(
-                          thesisId,
-                          thesis.thesis.title
-                        ),
-                    },
-                  ]
-            }
+            actions={getCustomActions(thesis.thesis.status)}
           />
           <TasksModal ref={tasksModalRef} />
         </div>
