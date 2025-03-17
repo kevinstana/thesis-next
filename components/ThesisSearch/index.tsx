@@ -2,13 +2,12 @@
 
 import { authFetch } from "@/lib/server-actions";
 import { Search } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function ThesisSearch() {
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const path = usePathname()
   const searchParams = useSearchParams();
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [searchResults, setSearchResults] = useState<string[]>([]);
@@ -19,7 +18,7 @@ export default function ThesisSearch() {
       return;
     }
 
-    const { data } = await authFetch(`theses/search?query=${query}`, "GET");
+    const { data } = await authFetch(`theses/search?query=${encodeURIComponent(query)}`, "GET");
     setSearchResults(data);
   }
 
@@ -76,7 +75,7 @@ export default function ThesisSearch() {
 
     const urlSearchParams = new URLSearchParams(searchParams);
     urlSearchParams.delete("query")
-    urlSearchParams.append("query", `${result}`);
+    urlSearchParams.append("query", `${encodeURIComponent(result)}`);
 
     router.push(`/theses?${urlSearchParams}`);
 

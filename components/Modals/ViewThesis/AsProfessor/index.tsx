@@ -21,7 +21,11 @@ import useSWR from "swr";
 import RecordNavigation from "../../../RecordNavigation";
 import { Loader2 } from "lucide-react";
 import { useThesisIdentifiers } from "@/providers/ThesisIdentifiersProvider";
-import { authFetch, customRevalidateTag, getOneThesis } from "@/lib/server-actions";
+import {
+  authFetch,
+  customRevalidateTag,
+  getOneThesis,
+} from "@/lib/server-actions";
 import Textarea from "../../../Textarea";
 import { clsx } from "clsx";
 import { Skeleton } from "../../../ui/skeleton";
@@ -213,17 +217,17 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     };
 
     if (!body.title) {
-      notify("error", "Title Required")
+      notify("error", "Title Required");
       return;
     }
 
     if (body.secondReviewerId === "0") {
-      notify("error", "Reviewer 1 Required")
+      notify("error", "Reviewer 1 Required");
       return;
     }
 
     if (body.thirdReviewerId === "0") {
-      notify("error", "Reviewer 2 Required")
+      notify("error", "Reviewer 2 Required");
       return;
     }
 
@@ -231,11 +235,24 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
 
     if (status === 200) {
       notify("success", "Thesis updated!");
-      customRevalidateTag("my-theses")
+      customRevalidateTag("my-theses");
       mutate();
     } else {
       notify("error", data.message);
     }
+  }
+
+  const handleDelete = async() => {
+    const {status} = await authFetch(`theses/${thesisId}`, "DELETE")
+
+    if (status === 200) {
+      notify("success", "Thesis deleted")
+    } else {
+      notify("error", "Something went wrong")
+    }
+
+    await customRevalidateTag("my-theses")
+    setOpen(false)
   }
 
   return (
@@ -387,12 +404,31 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           />
 
           <CustomActions
-            actions={thesis.thesis.status === "AVAILABLE" ? [{name: "Delete", action: () => alert("you clicked delete")}] : [
-              {
-                name: "Tasks",
-                action: () => tasksModalRef.current?.openDialog(thesisId, thesis.thesis.title),
-              },
-            ]}
+            actions={
+              thesis.thesis.status === "AVAILABLE"
+                ? [
+                    {
+                      name: "Delete",
+                      action: () => {
+                        if (
+                          window.confirm("Are you sure you want to delete thesis?")
+                        ) {
+                          handleDelete();
+                        }
+                      },
+                    },
+                  ]
+                : [
+                    {
+                      name: "Tasks",
+                      action: () =>
+                        tasksModalRef.current?.openDialog(
+                          thesisId,
+                          thesis.thesis.title
+                        ),
+                    },
+                  ]
+            }
           />
           <TasksModal ref={tasksModalRef} />
         </div>

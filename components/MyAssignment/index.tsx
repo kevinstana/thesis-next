@@ -14,7 +14,7 @@ export default function MyAssignment({
 }) {
   return (
     <div className="flex gap-4">
-      <div className="flex flex-col gap-8 max-w-[600px] h-[87vh] overflow-auto">
+      <div className="hidden lg:block flex-col gap-8 max-w-[600px] h-[87vh] overflow-y-auto overflow-x-hidden">
         <div className="flex flex-col gap-1">
           <h1 className="text-black text-wrap font-bold">Title:</h1>
           <div className="w-[500px] break-words">{data.thesis.title}</div>
