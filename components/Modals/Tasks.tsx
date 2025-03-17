@@ -28,35 +28,35 @@ const TasksModal = forwardRef<TasksModalRef>((_, ref) => {
 
   const { notify } = useNotification();
 
-    const { isLoading, isValidating, mutate } = useSWR(
-      thesisId ? `thesis-${thesisId}-tasks` : null,
-      () =>
-        authFetch(
-          `theses/${thesisId}/tasks?pageNumbr=${pageNumber}&pageSiz=${5}`,
-          "GET",
-          null
-        ),
-      {
-        revalidateOnFocus: false,
-        shouldRetryOnError: false,
-        onSuccess: (res) => {
-          setData(res.data);
-        },
-      }
-    );
+  const { isLoading, isValidating, mutate } = useSWR(
+    thesisId ? `thesis-${thesisId}-tasks` : null,
+    () =>
+      authFetch(
+        `theses/${thesisId}/tasks?pageNumbr=${pageNumber}&pageSiz=${5}`,
+        "GET",
+        null
+      ),
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+      onSuccess: (res) => {
+        setData(res.data);
+      },
+    }
+  );
 
   useImperativeHandle(ref, () => ({
     openDialog: (id, title) => {
       setOpen(true);
-        mutate();
+      mutate();
       setThesisId(id);
-      setThesisTitle(title)
+      setThesisTitle(title);
     },
   }));
 
   useEffect(() => {
     if (thesisId) {
-        mutate();
+      mutate();
     }
   }, [pageNumber, mutate, thesisId]);
 
@@ -64,6 +64,25 @@ const TasksModal = forwardRef<TasksModalRef>((_, ref) => {
   async function handleSave(type: "SAVE" | "CANCEL", body: any) {
     switch (type) {
       case "SAVE":
+        if (!body.title) {
+          notify("error", "Title required");
+          return;
+        }
+
+        if (
+          body.description ===
+            '[{"type":"paragraph","children":[{"text":""}]}]' ||
+          !body.description
+        ) {
+          notify("error", "Description required");
+          return;
+        }
+
+        if (!body.priority) {
+          notify("error", "Priority required");
+          return;
+        }
+
         const formData = new FormData();
         formData.append("title", body.title);
         formData.append("description", body.description);
@@ -82,12 +101,12 @@ const TasksModal = forwardRef<TasksModalRef>((_, ref) => {
 
         if (status === 200) {
           notify("success", data.message);
-          setIsAdding(false)
-          mutate()
-          return
+          setIsAdding(false);
+          mutate();
+          return;
         }
 
-        notify("error", data.message)
+        notify("error", data.message);
         return;
       case "CANCEL":
         setIsAdding(false);
@@ -100,7 +119,10 @@ const TasksModal = forwardRef<TasksModalRef>((_, ref) => {
   return (
     <BaseModal open={open} className="bg-transparent">
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <ModalHeaderWithArrow title={`${thesisTitle} / Tasks`} setOpen={setOpen} />
+        <ModalHeaderWithArrow
+          title={`${thesisTitle} / Tasks`}
+          setOpen={setOpen}
+        />
 
         <div
           className="flex flex-col flex-grow justify-between pt-4 overflow-auto"
@@ -127,15 +149,17 @@ const TasksModal = forwardRef<TasksModalRef>((_, ref) => {
                 <Plus size={16} /> Add Task
               </button>
               {isAdding && <AddTask handleSave={handleSave} />}
-              {/* <TaskCard /> */}
               {data?.content.map((task) => (
-                <TaskCard key={task.title} task={task} thesisId={thesisId} mutate={mutate} />
+                <TaskCard
+                  key={task.title}
+                  task={task}
+                  thesisId={thesisId}
+                  mutate={mutate}
+                />
               ))}
             </div>
           )}
         </div>
-
-
 
         {/* pagination */}
         <div className="flex flex-wrap items-center justify-between p-6 rounded-b-md border-t border-t-neutral-300">

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { availableRoles, Role } from "@/types/app-types";
+import { availableRoles, availableStatuses, Role } from "@/types/app-types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,4 +36,8 @@ export function getKeys<T extends object>(obj: T): (keyof T)[] {
 
 export function isValidRole(role: string): role is Role {
   return availableRoles.includes(role as Role);
+}
+
+export function isValidStatus(status: string) {
+  return availableStatuses.includes(status);
 }

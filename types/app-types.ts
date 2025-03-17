@@ -6,6 +6,14 @@ export const availableRoles: Role[] = [
   "ADMIN",
 ];
 
+export const availableStatuses: string[] = [
+  "AVAILABLE",
+  "IN_PROGRESS",
+  "PENDING_REVIEW",
+  "REVIEWED",
+  // "PUBLISHED",
+];
+
 export type SidebarMenuType = {
   path: string;
   name: string;

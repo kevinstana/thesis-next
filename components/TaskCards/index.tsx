@@ -180,6 +180,24 @@ export default function TaskCard({
   };
 
   const handleUpdate = async () => {
+    if (!body.title) {
+      notify("error", "Title required");
+      return;
+    }
+
+    if (
+      body.description === '[{"type":"paragraph","children":[{"text":""}]}]' ||
+      !body.description
+    ) {
+      notify("error", "Description required");
+      return;
+    }
+
+    if (!body.priority) {
+      notify("error", "Priority required");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", body.title);
     formData.append("description", body.description);
@@ -223,7 +241,15 @@ export default function TaskCard({
   };
 
   return (
-    <Card className={clsx("w-full", {"border-black": focused})} onFocus={() => {setFocused(true)}} onBlur={() => {setFocused(false)}}>
+    <Card
+      className={clsx("w-full", { "border-black": focused })}
+      onFocus={() => {
+        setFocused(true);
+      }}
+      onBlur={() => {
+        setFocused(false);
+      }}
+    >
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex gap-2 items-center">

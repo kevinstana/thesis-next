@@ -20,6 +20,7 @@ import { ThesisIdentifiersProvider } from "@/providers/ThesisIdentifiersProvider
 import { GeneralViewThesisModal } from "../Modals/ViewThesis/General";
 import { ViewThesisModal } from "../Modals/ViewThesis/AsProfessor";
 import { ThesisRequestsModal } from "../Modals/ThesisRequestsModal";
+import { useUserDetails } from "@/providers/UserDetailsProvier";
 
 export default function ThesesTable({
   thesisPage,
@@ -32,6 +33,7 @@ export default function ThesesTable({
   const generalViewThesisModalRef = useRef<GeneralViewThesisModalRef>(null);
   const viewThesisModalRef = useRef<ViewThesisModalRef>(null);
   const thesisRequestsModalRef = useRef<ThesisRequestsModalRef>(null);
+  const { role } = useUserDetails();
 
   useEffect(() => {
     if (thesisPage.content.length > 0) {
@@ -82,7 +84,9 @@ export default function ThesesTable({
               headers={headers}
               key={thesis.id}
               viewThesisModalRef={
-                path === "theses"
+                path === "theses" && role === "SECRETARY"
+                  ? generalViewThesisModalRef // replace with secretary modal
+                  : path === "theses"
                   ? generalViewThesisModalRef
                   : viewThesisModalRef
               }
@@ -103,9 +107,7 @@ export default function ThesesTable({
       />
 
       <ThesisIdentifiersProvider identifiers={identifiers}>
-        {path === "theses" ? (
-          <GeneralViewThesisModal ref={generalViewThesisModalRef} />
-        ) : null}
+        <GeneralViewThesisModal ref={generalViewThesisModalRef} />
 
         {path === "my-theses" ? (
           <>

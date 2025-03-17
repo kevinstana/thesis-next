@@ -41,6 +41,7 @@ export default function AddTask({
   handleSave?: (type: "SAVE" | "CANCEL", body: unknown) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const selectRef = useRef<HTMLDivElement>(null);
   const [body, setBody] = useState<AddTask>({
@@ -154,7 +155,15 @@ export default function AddTask({
   };
 
   return (
-    <Card className={clsx("w-full")}>
+    <Card
+      className={clsx("w-full", { "border-black": focused })}
+      onFocus={() => {
+        setFocused(true);
+      }}
+      onBlur={() => {
+        setFocused(false);
+      }}
+    >
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex gap-2 items-center">
@@ -278,35 +287,35 @@ export default function AddTask({
 
             {/* file list */}
             <div className="flex flex-wrap max-w-[700px] gap-1 pt-1">
-            <div className="flex flex-wrap gap-1 pt-1">
-              {files?.map((file, index) => (
-                <div key={file.name}>
-                  <div className="flex border p-1 items-center">
-                    <div className="flex flex-col items-center w-36">
-                      <span className="text-sm font-medium text-gray-600 max-w-32 truncate">
-                        {file.name}
-                      </span>
-                      <p className="text-xs text-gray-500 max-w-32 truncate">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
+              <div className="flex flex-wrap gap-1 pt-1">
+                {files?.map((file, index) => (
+                  <div key={file.name}>
+                    <div className="flex border p-1 items-center">
+                      <div className="flex flex-col items-center w-36">
+                        <span className="text-sm font-medium text-gray-600 max-w-32 truncate">
+                          {file.name}
+                        </span>
+                        <p className="text-xs text-gray-500 max-w-32 truncate">
+                          {(file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
 
-                    <div className="flex gap-1">
-                      <SquareArrowOutUpRight
-                        size={16}
-                        className="ml-2 cursor-pointer text-blue-600"
-                        onClick={() => handlePreview(index)}
-                      />
-                      <X
-                        size={16}
-                        className="ml-2 cursor-pointer text-red-500"
-                        onClick={() => handleRemoveFile(file.name)}
-                      />{" "}
+                      <div className="flex gap-1">
+                        <SquareArrowOutUpRight
+                          size={16}
+                          className="ml-2 cursor-pointer text-blue-600"
+                          onClick={() => handlePreview(index)}
+                        />
+                        <X
+                          size={16}
+                          className="ml-2 cursor-pointer text-red-500"
+                          onClick={() => handleRemoveFile(file.name)}
+                        />{" "}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

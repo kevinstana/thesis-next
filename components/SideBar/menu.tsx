@@ -64,10 +64,10 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
     },
   ],
   SECRETARY: [
-    {
-      path: "",
-      name: "",
-      icon: undefined,
-    },
+    // {
+    //   path: "",
+    //   name: "",
+    //   icon: undefined,
+    // },
   ],
 };
