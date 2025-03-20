@@ -8,6 +8,7 @@ import {
   ClipboardCheck,
   ClipboardList,
   ClipboardPen,
+  MonitorCog,
 } from "lucide-react";
 
 const baseStyle = "ml-1 mr-6";
@@ -64,10 +65,10 @@ export const roleSpecificMenuItems: Record<Role, SidebarMenuType[]> = {
     },
   ],
   SECRETARY: [
-    // {
-    //   path: "",
-    //   name: "",
-    //   icon: undefined,
-    // },
+    {
+      path: "/actions",
+      name: "Actions",
+      icon: <MonitorCog size={iconSize} className={baseStyle} />,
+    },
   ],
 };

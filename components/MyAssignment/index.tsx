@@ -45,10 +45,29 @@ export default function MyAssignment({
         <div className="flex flex-col gap-1">
           <h1 className="text-black font-bold">Status:</h1>
           <div
-            className={clsx("rounded-full px-2 py-1 w-fit", {
-              "bg-blue-500/20 text-blue-500":
-                data.thesis.status === "IN_PROGRESS",
-            })}
+            className={clsx(
+              "rounded-full px-2 py-1 w-fit",
+              {
+                "bg-green-500/20 text-green-500":
+                  data.thesis.status === "AVAILABLE",
+              },
+              {
+                "bg-blue-500/20 text-blue-500":
+                  data.thesis.status === "IN_PROGRESS",
+              },
+              {
+                "bg-gray-500/20 text-gray-500":
+                  data.thesis.status === "PENDING_REVIEW",
+              },
+              {
+                "bg-purple-500/20 text-purple-500":
+                  data.thesis.status === "REVIEWED",
+              },
+              {
+                "bg-yellow-500/20 text-yellow-500":
+                  data.thesis.status === "PUBLISHED",
+              }
+            )}
           >
             {data.thesis.status.replace("_", " ")}
           </div>

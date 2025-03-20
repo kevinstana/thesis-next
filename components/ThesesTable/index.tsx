@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import {
   BasicThesis,
   GeneralViewThesisModalRef,
+  SecretaryThesisModalRef,
   ThesisRequestsModalRef,
   ViewThesisModalRef,
 } from "@/types/app-types";
@@ -21,6 +22,7 @@ import { GeneralViewThesisModal } from "../Modals/ViewThesis/General";
 import { ViewThesisModal } from "../Modals/ViewThesis/AsProfessor";
 import { ThesisRequestsModal } from "../Modals/ThesisRequestsModal";
 import { useUserDetails } from "@/providers/UserDetailsProvier";
+import { SecretaryThesisModal } from "../Modals/ViewThesis/AsSecretary";
 
 export default function ThesesTable({
   thesisPage,
@@ -31,6 +33,7 @@ export default function ThesesTable({
 }>) {
   const [identifiers, setIdentifiers] = useState<string[]>([]);
   const generalViewThesisModalRef = useRef<GeneralViewThesisModalRef>(null);
+  const secretaryThesisModalRef = useRef<SecretaryThesisModalRef>(null);
   const viewThesisModalRef = useRef<ViewThesisModalRef>(null);
   const thesisRequestsModalRef = useRef<ThesisRequestsModalRef>(null);
   const { role } = useUserDetails();
@@ -85,7 +88,7 @@ export default function ThesesTable({
               key={thesis.id}
               viewThesisModalRef={
                 path === "theses" && role === "SECRETARY"
-                  ? generalViewThesisModalRef // replace with secretary modal
+                  ? secretaryThesisModalRef
                   : path === "theses"
                   ? generalViewThesisModalRef
                   : viewThesisModalRef
@@ -108,7 +111,9 @@ export default function ThesesTable({
 
       <ThesisIdentifiersProvider identifiers={identifiers}>
         <GeneralViewThesisModal ref={generalViewThesisModalRef} />
-
+        {role === "SECRETARY" && (
+          <SecretaryThesisModal ref={secretaryThesisModalRef} />
+        )}
         {path === "my-theses" ? (
           <>
             <ViewThesisModal ref={viewThesisModalRef} />

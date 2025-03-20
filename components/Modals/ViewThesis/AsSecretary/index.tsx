@@ -5,8 +5,8 @@ import {
   Course,
   CustomAction,
   DetailedThesisResponse,
+  SecretaryThesisModalRef,
   TasksModalRef,
-  ViewThesisModalRef,
 } from "@/types/app-types";
 import {
   forwardRef,
@@ -36,6 +36,7 @@ import { useNotification } from "@/providers/NotificationProvider";
 import Required from "@/components/Required";
 import CustomActions from "@/components/Popovers";
 import { TasksModal } from "../../Tasks";
+import AssignStudent from "@/components/AssignStudent";
 import ThesisStatus from "@/components/ThesisStatus";
 
 const currentThesis: DetailedThesisResponse = {
@@ -72,7 +73,7 @@ const committee = [
   { elementId: "reviewer2", label: "Reviewer 2" },
 ];
 
-const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
+const SecretaryThesisModal = forwardRef<SecretaryThesisModalRef>((_, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
 
@@ -295,18 +296,6 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       ];
     }
 
-    if (status !== "PUBLISHED" && status !== "AVAILABLE") {
-      customActions = [
-        ...customActions,
-        {
-          name: "Tasks",
-          action: () => {
-            tasksModalRef.current?.openDialog(thesisId, thesis.thesis.title);
-          },
-        },
-      ];
-    }
-
     if (status === "IN_PROGRESS") {
       customActions = [
         ...customActions,
@@ -324,6 +313,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     return customActions;
   }
 
+  const handleOpen = () => {
+    setOpen(false);
+    setTimeout(() => (document.body.style.pointerEvents = ""), 10);
+  };
+
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
@@ -337,7 +331,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           <div className="flex flex-col px-6 py-2">
             <div className="flex w-full justify-between">
               {!isLoading || !isValidating ? (
-                <ThesisStatus thesis_status={thesis.thesis.status} thesisId={thesisId} mutate={mutate}/>
+                <ThesisStatus
+                  thesis_status={thesis.thesis.status}
+                  thesisId={thesisId}
+                  mutate={mutate}
+                />
               ) : (
                 <Skeleton className="rounded-full px-2 py-1 w-24 h-8" />
               )}
@@ -409,13 +407,17 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
                   handleCourseChange={handleCourseChange}
                 />
 
-                {thesis.thesis.studentId && (
-                  <div className="flex flex-col gap-2">
-                    <div className="font-medium text-gray-700">Student</div>
-
-                    <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
-                      {thesis.thesis.studentFirstName}{" "}
-                      {thesis.thesis.studentLastName}
+                {!thesis.thesis.studentId ? (
+                  <AssignStudent thesisId={thesisId} handleOpen={handleOpen} />
+                ) : (
+                  <div className="flex flex-row gap-8">
+                    <div className="space-y-1">
+                      <div className="flex gap-3 text-sm text-gray-700">
+                        Student
+                      </div>
+                      <div className="flex items-center bg-gray-200 px-3 py-1 rounded-md w-fit">
+                        {`${thesis.thesis.studentFirstName} ${thesis.thesis.studentLastName}`}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -457,7 +459,9 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             disabled={pending}
           />
 
-          <CustomActions actions={getCustomActions(thesis.thesis.status)} />
+          {getCustomActions(thesis.thesis.status).length > 0 && (
+            <CustomActions actions={getCustomActions(thesis.thesis.status)} />
+          )}
           <TasksModal ref={tasksModalRef} />
         </div>
       </BaseModalContent>
@@ -465,6 +469,6 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
   );
 });
 
-ViewThesisModal.displayName = "ViewThesisModal";
+SecretaryThesisModal.displayName = "SecretaryThesisModal";
 
-export { ViewThesisModal };
+export { SecretaryThesisModal };

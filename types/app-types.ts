@@ -76,6 +76,11 @@ export type ViewThesisModalRef = {
   openDialog: (id: string) => void;
 };
 
+export type SecretaryThesisModalRef = {
+  openDialog: (id: string) => void;
+};
+
+
 export type ThesisRequestsModalRef = {
   openDialog: (id: string, title: string) => void;
 };

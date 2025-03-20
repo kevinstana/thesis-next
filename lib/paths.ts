@@ -1,11 +1,12 @@
 export const appPathsMap: Record<string, string> = {
-  "users": "Users",
+  users: "Users",
   "external-users": "External Users",
   "hua-users": "Hua Users",
-  "theses": "Theses",
+  theses: "Theses",
   "my-theses": "My Theses",
   "my-assignment": "My Assignment",
   "assigned-reviews": "Assigned Reviews",
+  actions: "Actions",
 };
 
 const adminPaths = new RegExp("^/(users|external-users|hua-users)(?:/.*)?$");

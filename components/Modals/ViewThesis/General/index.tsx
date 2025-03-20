@@ -113,6 +113,18 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
                       {
                         "bg-blue-500/20 text-blue-500":
                           thesis.thesis.status === "IN_PROGRESS",
+                      },
+                      {
+                        "bg-gray-500/20 text-gray-500":
+                          thesis.thesis.status === "PENDING_REVIEW",
+                      },
+                      {
+                        "bg-purple-500/20 text-purple-500":
+                          thesis.thesis.status === "REVIEWED",
+                      },
+                      {
+                        "bg-yellow-500/20 text-yellow-500":
+                          thesis.thesis.status === "PUBLISHED",
                       }
                     )}
                   >

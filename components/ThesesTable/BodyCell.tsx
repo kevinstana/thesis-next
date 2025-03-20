@@ -14,11 +14,17 @@ export default function BodyCell({
     return (
       <td className={baseStyle}>
         <span
-          className={clsx("rounded-full px-2 py-1", 
-          {"bg-green-500/20 text-green-500": cellValue === "AVAILABLE"},
-          // {"bg-red-500/20 text-red-500": cellValue === ?}
-          {"bg-blue-500/20 text-blue-500": cellValue === "IN_PROGRESS"},
-        )}
+          className={clsx(
+            "rounded-full px-2 py-1",
+            { "bg-green-500/20 text-green-500": cellValue === "AVAILABLE" },
+            { "bg-blue-500/20 text-blue-500": cellValue === "IN_PROGRESS" },
+            {
+              "bg-gray-500/20 text-gray-500":
+                cellValue === "PENDING_REVIEW",
+            },
+            { "bg-purple-500/20 text-purple-500": cellValue === "REVIEWED" },
+            { "bg-yellow-500/20 text-yellow-500": cellValue === "PUBLISHED" }
+          )}
         >
           {cellValue}
         </span>

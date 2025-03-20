@@ -217,7 +217,6 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
             setBody(initialBody);
           }}
         />
-        {/* <CreateThesisForm setOpen={setOpen} /> */}
 
         <div
           className="flex flex-col flex-grow justify-between overflow-hidden"
@@ -226,7 +225,6 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
           <form
             className="space-y-6 bg-white px-10 py-5 overflow-auto"
             ref={formRef}
-            // onSubmit={handleSubmit}
           >
             <div className="space-y-1">
               <label
