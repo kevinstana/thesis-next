@@ -12,7 +12,7 @@ export default function BaseModal({
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={() => { setTimeout(() => (document.body.style.pointerEvents = ""), 100) }}>
       <DialogContent className={clsx("fixed inset-0 bg-black bg-opacity-50 z-[100] flex justify-center items-center", className)} aria-describedby="">
         <DialogHeader>
           <DialogTitle />

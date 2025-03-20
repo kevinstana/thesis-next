@@ -84,6 +84,7 @@ const UserProfileModal = forwardRef<UserProfileModalRef>((_, ref) => {
       // mutate();
       notify("success", "Changes saved!");
       setOpen(false)
+      setTimeout(() => (document.body.style.pointerEvents = ""), 10)
     } else {
       notify("error", "Something went wrong.");
     }

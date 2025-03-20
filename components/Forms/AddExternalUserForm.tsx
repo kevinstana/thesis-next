@@ -49,6 +49,7 @@ export default function AddExternalUserForm({
       setErrors(initialErrors);
       formRef.current?.reset();
       setOpen(false)
+      setTimeout(() => (document.body.style.pointerEvents = ""), 10)
       return;
     }
 

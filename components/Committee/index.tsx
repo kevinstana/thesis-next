@@ -52,7 +52,7 @@ export default function CommitteMember({
     }
 
     const { data } = await authFetch(
-      `assign-reviewers?query=${query}`,
+      `assign-reviewers?query=${`${encodeURIComponent(query)}`}`,
       "POST",
       {
         excludedIds,

@@ -8,7 +8,8 @@ import BodyCell from "./BodyCell";
 import View from "@/iconography/View";
 import ActionButton from "../Buttons/ActionButton";
 import { RefObject } from "react";
-import { Bell } from "lucide-react";
+// import { Bell } from "lucide-react";
+import { UserPlus } from "lucide-react";
 
 export default function Row({
   thesis,
@@ -37,9 +38,12 @@ export default function Row({
 
           {thesisRequestsModalRef && thesis.status === "AVAILABLE" ? (
             <ActionButton
-              icon={<Bell size={16} color="#2B555F" />}
+              icon={<UserPlus size={16} color="#2B555F" />}
               handleClick={() => {
-                thesisRequestsModalRef?.current?.openDialog(thesis.id, thesis.title);
+                thesisRequestsModalRef?.current?.openDialog(
+                  thesis.id,
+                  thesis.title
+                );
               }}
             />
           ) : null}

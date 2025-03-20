@@ -95,7 +95,8 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
       setBody(initialBody);
       setExcludedIds([]);
       window.dispatchEvent(new Event("ClearForm"));
-      setOpen(false)
+      setOpen(false);
+      setTimeout(() => (document.body.style.pointerEvents = ""), 10);
       return;
     }
 
@@ -125,6 +126,7 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
     label?: string
   ) {
     const committeeInput = document.getElementsByName("committee-member");
+    const saveButton = document.getElementById("save-button");
 
     if (trigger === "add") {
       setExcludedIds((prev) => [...prev, id]);
@@ -146,6 +148,10 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
           }));
           if (committeeInput.length > 0) {
             committeeInput[0].focus();
+          }
+
+          if (committeeInput.length === 1) {
+            saveButton?.focus();
           }
 
           return;
@@ -275,7 +281,12 @@ const CreateThesisModal = forwardRef<CreateThesisModalRef>((_, ref) => {
 
           <div className="flex flex-wrap items-center justify-end p-6 rounded-b-md border-t border-t-neutral-300">
             <div className="flex gap-2 justify-end">
-              <Button type="button" disabled={pending} onClick={handleSubmit}>
+              <Button
+                id="save-button"
+                type="button"
+                disabled={pending}
+                onClick={handleSubmit}
+              >
                 {pending ? (
                   <div className="flex items-center justify-center">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...

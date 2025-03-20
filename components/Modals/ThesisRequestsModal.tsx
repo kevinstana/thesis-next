@@ -11,6 +11,7 @@ import { ThesisRequestsPage } from "@/types/response-types";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import ThesisRequestCard from "../ThesisRequestsCard";
 import { getPaginationText } from "../Pagination";
+import AssignStudent from "../AssignStudent";
 
 const sharedNavigationButtonStyle =
   "px-3 py-1 rounded border disabled:opacity-50 disabled:cursor-not-allowed text-sm";
@@ -53,6 +54,11 @@ const ThesisRequestsModal = forwardRef<ThesisRequestsModalRef>((_, ref) => {
     },
   }));
 
+  const handleOpen = () => {
+    setOpen(false);
+    setTimeout(() => (document.body.style.pointerEvents = ""), 10);
+  };
+
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
@@ -79,28 +85,26 @@ const ThesisRequestsModal = forwardRef<ThesisRequestsModalRef>((_, ref) => {
             </div>
           ) : (
             <div className="flex flex-col px-4 gap-4">
-              {data?.content.length === 0 ? (
-                <div>No requests found</div>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  <div>Assign Student</div>
-                  {data?.content
-                    .slice()
-                    .sort(
-                      (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime()
-                    )
-                    .map((request) => (
-                      <ThesisRequestCard
-                        key={request.id}
-                        request={request}
-                        mutate={mutate}
-                        close={() => setOpen(false)}
-                      />
-                    ))}
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
+                  <AssignStudent thesisId={thesisId} handleOpen={handleOpen} />
                 </div>
-              )}
+                {data?.content
+                  .slice()
+                  .sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                  )
+                  .map((request) => (
+                    <ThesisRequestCard
+                      key={request.id}
+                      request={request}
+                      mutate={mutate}
+                      close={() => setOpen(false)}
+                    />
+                  ))}
+              </div>
             </div>
           )}
         </div>

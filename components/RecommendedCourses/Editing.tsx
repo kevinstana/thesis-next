@@ -23,7 +23,7 @@ export default function EditingRecommendedCourses({
       return;
     }
 
-    const { data } = await authFetch(`courses?name=${query}`, "POST", {
+    const { data } = await authFetch(`courses?name=${`${query}`}`, "POST", {
       selectedCourses: courses.map((course) => course.name),
     });
     setQueryCourses(data);

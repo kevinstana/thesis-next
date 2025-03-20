@@ -106,6 +106,7 @@ const ApplyForThesisModal = forwardRef<ApplyForThesisModalRef, { mutate: () => v
 
     closeParent()
     setOpen(false)
+    setTimeout(() => (document.body.style.pointerEvents = ""), 10)
     mutate()
   }
 

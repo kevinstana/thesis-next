@@ -237,23 +237,40 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     if (status === 200) {
       notify("success", "Thesis updated!");
       customRevalidateTag("my-theses");
-      mutate();
+      // mutate();
+      setOpen(false);
+      setTimeout(() => (document.body.style.pointerEvents = ""), 10);
     } else {
       notify("error", data.message);
     }
   }
 
   const handleDelete = async () => {
-    const { status } = await authFetch(`theses/${thesisId}`, "DELETE");
+    const { data, status } = await authFetch(`theses/${thesisId}`, "DELETE");
 
     if (status === 200) {
       notify("success", "Thesis deleted");
     } else {
-      notify("error", "Something went wrong");
+      notify("error", data.message);
     }
 
     await customRevalidateTag("my-theses");
     setOpen(false);
+    setTimeout(() => (document.body.style.pointerEvents = ""), 10);
+  };
+
+  const handleReset = async () => {
+    const { data, status } = await authFetch(`theses/${thesisId}/reset`, "POST");
+
+    if (status === 200) {
+      notify("success", "Thesis reset");
+    } else {
+      notify("error", data.message);
+    }
+
+    await customRevalidateTag("my-theses");
+    setOpen(false);
+    setTimeout(() => (document.body.style.pointerEvents = ""), 10);
   };
 
   function getCustomActions(status: string): CustomAction[] {
@@ -275,13 +292,29 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       ];
     }
 
-    if (status !== "PUBLISHED") {
+    if (status !== "PUBLISHED" && status !== "AVAILABLE") {
       customActions = [
         ...customActions,
         {
           name: "Tasks",
           action: () => {
             tasksModalRef.current?.openDialog(thesisId, thesis.thesis.title);
+          },
+        },
+      ];
+    }
+
+    if (status === "IN_PROGRESS") {
+      customActions = [
+        ...customActions,
+        {
+          name: "Reset",
+          action: () => {
+            if (
+              window.confirm("Are you sure you want to reset this thesis?")
+            ) {
+              handleReset();
+            }
           },
         },
       ];
@@ -433,14 +466,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
             type="button"
             text={"Close"}
             className="bg-white border border-neutral-700 hover:bg-neutral-100 text-black py-2 px-4 rounded"
-            // handleClick={() => {setThesisId(""); setOpen(false)}}
             handleClick={() => setOpen(false)}
             disabled={pending}
           />
 
-          <CustomActions
-            actions={getCustomActions(thesis.thesis.status)}
-          />
+          <CustomActions actions={getCustomActions(thesis.thesis.status)} />
           <TasksModal ref={tasksModalRef} />
         </div>
       </BaseModalContent>
