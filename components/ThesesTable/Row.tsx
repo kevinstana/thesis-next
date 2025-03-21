@@ -1,6 +1,7 @@
 import {
   BasicThesis,
   GeneralViewThesisModalRef,
+  ReviewerThesisModalRef,
   ThesisRequestsModalRef,
   ViewThesisModalRef,
 } from "@/types/app-types";
@@ -8,7 +9,6 @@ import BodyCell from "./BodyCell";
 import View from "@/iconography/View";
 import ActionButton from "../Buttons/ActionButton";
 import { RefObject } from "react";
-// import { Bell } from "lucide-react";
 import { UserPlus } from "lucide-react";
 
 export default function Row({
@@ -19,7 +19,7 @@ export default function Row({
 }: Readonly<{
   thesis: BasicThesis;
   headers: (keyof BasicThesis)[];
-  viewThesisModalRef: RefObject<ViewThesisModalRef | GeneralViewThesisModalRef>;
+  viewThesisModalRef: RefObject<ViewThesisModalRef | GeneralViewThesisModalRef | ReviewerThesisModalRef>;
   thesisRequestsModalRef?: RefObject<ThesisRequestsModalRef> | null;
 }>) {
   return (

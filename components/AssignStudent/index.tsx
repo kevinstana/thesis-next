@@ -95,7 +95,7 @@ export default function AssignStudent({
       notify("success", "Student assigned");
       await customRevalidateTag("my-theses");
       handleOpen();
-      return
+      return;
     }
 
     notify("error", data.message);

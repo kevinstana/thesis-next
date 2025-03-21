@@ -93,7 +93,10 @@ const GeneralViewThesisModal = forwardRef<GeneralViewThesisModalRef>(
     return (
       <BaseModal open={open}>
         <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-          <BaseModalHeader title={`Theses / ${thesisId}`} setOpen={setOpen} />
+          <BaseModalHeader
+            title={`Theses / ${thesis.thesis.title}`}
+            setOpen={setOpen}
+          />
 
           <div
             className="flex flex-col flex-grow justify-between overflow-hidden"

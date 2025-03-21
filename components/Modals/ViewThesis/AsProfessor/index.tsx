@@ -94,7 +94,6 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
       onSuccess: (res) => {
-        // to avoid build error, remove it later
         setPending(false);
 
         const data = res.data as DetailedThesisResponse;
@@ -327,7 +326,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <BaseModalHeader title={`My Theses / ${thesisId}`} setOpen={setOpen} />
+        <BaseModalHeader title={`My Theses / ${thesis.thesis.title}`} setOpen={setOpen} />
 
         <div
           className="flex flex-col flex-grow justify-between px-4 pt-4 overflow-hidden"

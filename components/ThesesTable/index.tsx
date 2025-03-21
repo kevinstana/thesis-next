@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import {
   BasicThesis,
   GeneralViewThesisModalRef,
+  ReviewerThesisModalRef,
   SecretaryThesisModalRef,
   ThesisRequestsModalRef,
   ViewThesisModalRef,
@@ -23,6 +24,7 @@ import { ViewThesisModal } from "../Modals/ViewThesis/AsProfessor";
 import { ThesisRequestsModal } from "../Modals/ThesisRequestsModal";
 import { useUserDetails } from "@/providers/UserDetailsProvier";
 import { SecretaryThesisModal } from "../Modals/ViewThesis/AsSecretary";
+import { ReviewerThesisModal } from "../Modals/ViewThesis/AsReviewer";
 
 export default function ThesesTable({
   thesisPage,
@@ -36,6 +38,7 @@ export default function ThesesTable({
   const secretaryThesisModalRef = useRef<SecretaryThesisModalRef>(null);
   const viewThesisModalRef = useRef<ViewThesisModalRef>(null);
   const thesisRequestsModalRef = useRef<ThesisRequestsModalRef>(null);
+  const reviewerThesisModalRef = useRef<ReviewerThesisModalRef>(null);
   const { role } = useUserDetails();
 
   useEffect(() => {
@@ -60,8 +63,7 @@ export default function ThesesTable({
     "status",
   ];
   const thesisKeys = getKeys(theses[0]);
-
-  const headers = [
+    const headers = [
     ...customHeadersOrder.filter((header) => thesisKeys.includes(header)),
     ...thesisKeys.filter((key) => !customHeadersOrder.includes(key)),
   ];
@@ -91,6 +93,8 @@ export default function ThesesTable({
                   ? secretaryThesisModalRef
                   : path === "theses"
                   ? generalViewThesisModalRef
+                  : path === "assigned-reviews"
+                  ? reviewerThesisModalRef
                   : viewThesisModalRef
               }
               thesisRequestsModalRef={
@@ -119,6 +123,9 @@ export default function ThesesTable({
             <ViewThesisModal ref={viewThesisModalRef} />
             <ThesisRequestsModal ref={thesisRequestsModalRef} />
           </>
+        ) : null}
+        {path === "assigned-reviews" ? (
+          <ReviewerThesisModal ref={reviewerThesisModalRef} />
         ) : null}
       </ThesisIdentifiersProvider>
     </TableContainer>
