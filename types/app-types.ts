@@ -80,6 +80,10 @@ export type GradeModalRef = {
   openDialog: (id: string, title: string) => void;
 };
 
+export type PublishThesisModalRef = {
+  openDialog: (id: string, title: string) => void;
+};
+
 export type ReviewerThesisModalRef = {
   openDialog: (id: string) => void;
 };

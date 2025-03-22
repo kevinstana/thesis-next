@@ -9,6 +9,7 @@ import {
   ClipboardList,
   ClipboardPen,
   MonitorCog,
+  Library,
 } from "lucide-react";
 
 const baseStyle = "ml-1 mr-6";
@@ -24,6 +25,11 @@ export const sharedMenuItems = [
     path: "/theses",
     name: "Theses",
     icon: <ScrollText size={iconSize} className={baseStyle} />,
+  },
+  {
+    path: "/published",
+    name: "Published",
+    icon: <Library size={iconSize} className={baseStyle} />,
   },
 ];
 

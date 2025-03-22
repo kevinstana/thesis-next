@@ -1,8 +1,10 @@
+import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
 import SecretaryActions from "@/components/SecretaryActions";
 
 export default function SecretaryActionsPage() {
-
-    return (
-        <SecretaryActions />
-    )
+  return (
+    <NotificationProviderWrapper>
+      <SecretaryActions />
+    </NotificationProviderWrapper>
+  );
 }

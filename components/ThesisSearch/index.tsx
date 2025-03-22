@@ -1,6 +1,6 @@
 "use client";
 
-import { authFetch } from "@/lib/server-actions";
+// import { authFetch } from "@/lib/server-actions";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -9,69 +9,69 @@ export default function ThesisSearch() {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  // const [highlightedIndex, setHighlightedIndex] = useState(0);
+  // const [searchResults, setSearchResults] = useState<string[]>([]);
 
-  async function handleQuery(query: string) {
-    setQuery(query);
-    if (!query) {
-      return;
-    }
+  // async function handleQuery(query: string) {
+  //   setQuery(query);
+  //   if (!query) {
+  //     return;
+  //   }
 
-    const { data } = await authFetch(`theses/search?query=${encodeURIComponent(query)}`, "GET");
-    setSearchResults(data);
-  }
+  //   const { data } = await authFetch(`theses/search?query=${encodeURIComponent(query)}`, "GET");
+  //   setSearchResults(data);
+  // }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
-    if (searchResults.length === 0) return;
+  // function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+  //   if (searchResults.length === 0) return;
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      const newIndex = (highlightedIndex + 1) % searchResults.length;
-      setHighlightedIndex(newIndex);
-      focusItem(newIndex);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      const newIndex =
-        (highlightedIndex - 1 + searchResults.length) % searchResults.length;
-      setHighlightedIndex(newIndex);
-      focusItem(newIndex);
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      handleSelectResult(searchResults[highlightedIndex]);
-    }
-  }
+  //   if (e.key === "ArrowDown") {
+  //     e.preventDefault();
+  //     const newIndex = (highlightedIndex + 1) % searchResults.length;
+  //     setHighlightedIndex(newIndex);
+  //     focusItem(newIndex);
+  //   } else if (e.key === "ArrowUp") {
+  //     e.preventDefault();
+  //     const newIndex =
+  //       (highlightedIndex - 1 + searchResults.length) % searchResults.length;
+  //     setHighlightedIndex(newIndex);
+  //     focusItem(newIndex);
+  //   } else if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     handleSelectResult(searchResults[highlightedIndex]);
+  //   }
+  // }
 
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLElement>) {
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      const newIndex = (highlightedIndex + 1) % searchResults.length;
-      setHighlightedIndex(newIndex);
-      focusItem(newIndex);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      const newIndex =
-        (highlightedIndex - 1 + searchResults.length) % searchResults.length;
-      setHighlightedIndex(newIndex);
-      focusItem(newIndex);
-    } else if (e.key === "Enter") {
+    // if (e.key === "ArrowDown") {
+    //   e.preventDefault();
+    //   const newIndex = (highlightedIndex + 1) % searchResults.length;
+    //   setHighlightedIndex(newIndex);
+    //   focusItem(newIndex);
+    // } else if (e.key === "ArrowUp") {
+    //   e.preventDefault();
+    //   const newIndex =
+    //     (highlightedIndex - 1 + searchResults.length) % searchResults.length;
+    //   setHighlightedIndex(newIndex);
+    //   focusItem(newIndex);
+    if (e.key === "Enter") {
       e.preventDefault();
       handleSelectResult(query);
     }
   }
 
-  function focusItem(index: number) {
-    const items = document.querySelectorAll<HTMLLIElement>(`#theses-search li`);
-    if (items[index]) {
-      items[index].focus();
-    }
-  }
+  // function focusItem(index: number) {
+  //   const items = document.querySelectorAll<HTMLLIElement>(`#theses-search li`);
+  //   if (items[index]) {
+  //     items[index].focus();
+  //   }
+  // }
 
   function handleSelectResult(result: string) {
-    setSearchResults([]);
+    // setSearchResults([]);
     setQuery(result);
-    setHighlightedIndex(0);
+    // setHighlightedIndex(0);
 
     const urlSearchParams = new URLSearchParams(searchParams);
     urlSearchParams.delete("query")
@@ -92,9 +92,10 @@ export default function ThesisSearch() {
           placeholder="Seach..."
           className="h-10 px-4 border rounded-md"
           onKeyDown={handleInputKeyDown}
-          onChange={(e) => handleQuery(e.target.value)}
+          // onChange={(e) => handleQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
         />
-        {searchResults.length > 0 && query && (
+        {/* {searchResults.length > 0 && query && (
           <ul
             id="theses-search"
             className="absolute left-0 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-auto z-[52]"
@@ -116,7 +117,7 @@ export default function ThesisSearch() {
               </li>
             ))}
           </ul>
-        )}
+        )} */}
       </div>
     </div>
   );

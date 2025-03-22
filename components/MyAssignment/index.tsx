@@ -1,17 +1,24 @@
 "use client";
 
-import { DetailedThesisResponse } from "@/types/app-types";
+import {
+  DetailedThesisResponse,
+  PublishThesisModalRef,
+} from "@/types/app-types";
 import Textarea from "../Textarea";
 import ViewingRecommendedCourses from "../RecommendedCourses/Viewing";
 import { clsx } from "clsx";
 import MyAssignmentTasks from "./tasks";
 import { Button } from "../ui/button";
+import { useRef } from "react";
+import { PublishThesisModal } from "../Modals/PublishThesisModal";
 
 export default function MyAssignment({
   data,
 }: {
   data: DetailedThesisResponse;
 }) {
+  const publishThesisModalRef = useRef<PublishThesisModalRef>(null);
+
   return (
     <div className="flex gap-4">
       <div className="hidden lg:block flex-col space-y-6 max-w-[600px] h-[87vh] overflow-y-auto overflow-x-hidden">
@@ -75,10 +82,22 @@ export default function MyAssignment({
 
         {data.thesis.status === "REVIEWED" ? (
           <div className="flex flex-col gap-1">
-            <Button className="w-fit">Publish</Button>
+            <Button
+              className="w-fit"
+              onClick={() =>
+                publishThesisModalRef.current?.openDialog(
+                  data.thesis.id,
+                  data.thesis.title
+                )
+              }
+            >
+              Publish
+            </Button>
           </div>
         ) : null}
       </div>
+
+      <PublishThesisModal ref={publishThesisModalRef} />
 
       <MyAssignmentTasks thesisId={data.thesis.id} />
     </div>

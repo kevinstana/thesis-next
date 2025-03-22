@@ -21,7 +21,6 @@ export default function ThesisStatus({
 
   if (
     thesis_status === "AVAILABLE" ||
-    thesis_status === "REVIEWED" ||
     thesis_status === "PUBLISHED"
   ) {
     return (
@@ -30,9 +29,6 @@ export default function ThesisStatus({
           "font-medium text-sm/[1.5rem] rounded-full px-2 py-1 w-fit",
           {
             "bg-green-500/20 text-green-500": thesis_status === "AVAILABLE",
-          },
-          {
-            "bg-purple-500/20 text-purple-500": thesis_status === "REVIEWED",
           },
           {
             "bg-yello-500/20 text-yellow-500": thesis_status === "PUBLISHED",
@@ -44,7 +40,16 @@ export default function ThesisStatus({
     );
   }
 
-  const availableStatuses = ["IN_PROGRESS", "PENDING_REVIEW"];
+  function getAvailableStatuses(currentStatus: string) {
+    switch (currentStatus) {
+      case "IN_PROGRESS":
+        return ["IN_PROGRESS", "PENDING_REVIEW"];
+      case "PENDING_REVIEW":
+        return ["IN_PROGRESS", "PENDING_REVIEW", "REVIEWED"];
+      case "REVIEWED":
+        return ["IN_PROGRESS", "PENDING_REVIEW", "REVIEWED"];
+    }
+  }
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -66,7 +71,7 @@ export default function ThesisStatus({
       customRevalidateTag("theses");
       mutate();
     } else {
-      notify("error", "Something went wrong");
+      notify("error", data.message ?? "Something went wrong");
     }
   }
 
@@ -77,10 +82,10 @@ export default function ThesisStatus({
           className={clsx(
             "font-medium text-sm/[1.5rem] rounded-full px-2 py-1 w-fit",
             {
-              "bg-green-500/20 text-green-500": thesis_status === "AVAILABLE",
+              "bg-blue-500/20 text-blue-500": thesis_status === "IN_PROGRESS",
             },
             {
-              "bg-blue-500/20 text-blue-500": thesis_status === "IN_PROGRESS",
+              "bg-purple-500/20 text-purple-500": thesis_status === "REVIEWED",
             },
             {
               "bg-gray-500/20 text-gray-500":
@@ -103,7 +108,7 @@ export default function ThesisStatus({
             <option value="" disabled>
               Select a status
             </option>
-            {availableStatuses.map((option) => (
+            {getAvailableStatuses(thesis_status)?.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
