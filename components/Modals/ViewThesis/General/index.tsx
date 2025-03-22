@@ -36,14 +36,17 @@ const currentThesis: DetailedThesisResponse = {
     professorId: 0,
     professorFirstName: "",
     professorLastName: "",
+    professorGrade: 0,
 
     reviewer1Id: 0,
     reviewer1FirstName: "",
     reviewer1LastName: "",
+    reviewer1Grade: 0,
 
     reviewer2Id: 0,
     reviewer2FirstName: "",
     reviewer2LastName: "",
+    reviewer2Grade: 0,
 
     studentId: 0,
     studentFirstName: "",

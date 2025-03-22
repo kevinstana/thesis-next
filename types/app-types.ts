@@ -148,14 +148,17 @@ export type DetailedThesis = {
   professorId: number;
   professorFirstName: string;
   professorLastName: string;
+  professorGrade: number;
 
   reviewer1Id: number;
   reviewer1FirstName: string;
   reviewer1LastName: string;
+  reviewer1Grade: number;
 
   reviewer2Id: number;
   reviewer2FirstName: string;
   reviewer2LastName: string;
+  reviewer2Grade: number;
 
   studentId: number | null;
   studentFirstName: string | null;

@@ -5,6 +5,7 @@ import {
   Course,
   CustomAction,
   DetailedThesisResponse,
+  GradeModalRef,
   TasksModalRef,
   ViewThesisModalRef,
 } from "@/types/app-types";
@@ -37,6 +38,8 @@ import Required from "@/components/Required";
 import CustomActions from "@/components/Popovers";
 import { TasksModal } from "../../Tasks";
 import ThesisStatus from "@/components/ThesisStatus";
+import { GradeModal } from "../AsReviewer/GradeModal";
+import { useUserDetails } from "@/providers/UserDetailsProvier";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -47,14 +50,17 @@ const currentThesis: DetailedThesisResponse = {
     professorId: 0,
     professorFirstName: "",
     professorLastName: "",
+    professorGrade: 0,
 
     reviewer1Id: 0,
     reviewer1FirstName: "",
     reviewer1LastName: "",
+    reviewer1Grade: 0,
 
     reviewer2Id: 0,
     reviewer2FirstName: "",
     reviewer2LastName: "",
+    reviewer2Grade: 0,
 
     studentId: 0,
     studentFirstName: "",
@@ -78,6 +84,8 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
 
   const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
   const [thesisId, setThesisId] = useState<string>("");
+  const gradeModalRef = useRef<GradeModalRef>(null);
+  const { userId } = useUserDetails();
   const [initCommittee, setInitCommittee] = useState<CommitteeMember[]>([]);
 
   const tasksModalRef = useRef<TasksModalRef>(null);
@@ -320,13 +328,38 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
       ];
     }
 
+    if (status === "PENDING_REVIEW") {
+      customActions = [
+        ...customActions,
+        {
+          name: "Grade",
+          action: () => {
+            gradeModalRef.current?.openDialog(thesisId, thesis.thesis.title);
+          },
+        },
+      ];
+    }
+
     return customActions;
+  }
+
+  function getInitGrade() {
+    if (Number(userId) === thesis.thesis.professorId) {
+      return thesis.thesis.professorGrade;
+    } else if (Number(userId) === thesis.thesis.reviewer1Id) {
+      return thesis.thesis.reviewer1Grade;
+    }
+
+    return thesis.thesis.reviewer2Grade;
   }
 
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <BaseModalHeader title={`My Theses / ${thesis.thesis.title}`} setOpen={setOpen} />
+        <BaseModalHeader
+          title={`My Theses / ${thesis.thesis.title}`}
+          setOpen={setOpen}
+        />
 
         <div
           className="flex flex-col flex-grow justify-between px-4 pt-4 overflow-hidden"
@@ -336,7 +369,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
           <div className="flex flex-col px-6 py-2">
             <div className="flex w-full justify-between">
               {!isLoading || !isValidating ? (
-                <ThesisStatus thesis_status={thesis.thesis.status} thesisId={thesisId} mutate={mutate}/>
+                <ThesisStatus
+                  thesis_status={thesis.thesis.status}
+                  thesisId={thesisId}
+                  mutate={mutate}
+                />
               ) : (
                 <Skeleton className="rounded-full px-2 py-1 w-24 h-8" />
               )}
@@ -458,6 +495,11 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
 
           <CustomActions actions={getCustomActions(thesis.thesis.status)} />
           <TasksModal ref={tasksModalRef} />
+          <GradeModal
+            ref={gradeModalRef}
+            initGrade={getInitGrade()}
+            mutate={mutate}
+          />
         </div>
       </BaseModalContent>
     </BaseModal>

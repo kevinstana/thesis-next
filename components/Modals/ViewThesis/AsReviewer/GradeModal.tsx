@@ -5,17 +5,22 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import BaseModal from "../../BaseModal";
 import BaseModalContent from "../../BaseModalContent";
 import ModalHeaderWithArrow from "../../ModalHeaderWithArrow";
-import { authFetch } from "@/lib/server-actions";
+import { authFetch, customRevalidateTag } from "@/lib/server-actions";
 import { useNotification } from "@/providers/NotificationProvider";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-const GradeModal = forwardRef<GradeModalRef>((_, ref) => {
+const GradeModal = forwardRef<
+  GradeModalRef,
+  { mutate: () => void; initGrade: number }
+>(({ mutate, initGrade }, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
   const [thesisId, setThesisId] = useState<string>("");
   const [thesisTitle, setthesisTitle] = useState<string>("");
-  const [grade, setGrade] = useState<number>(1);
+  const [grade, setGrade] = useState<number>(
+    initGrade >= 1 && initGrade >= 10 ? initGrade : 1
+  );
   const { notify } = useNotification();
 
   useImperativeHandle(ref, () => ({
@@ -40,6 +45,8 @@ const GradeModal = forwardRef<GradeModalRef>((_, ref) => {
       });
       if (status === 200) {
         setPending(false);
+        mutate();
+        customRevalidateTag("assigned-reviews");
         notify("success", "Thesis graded");
         setOpen(false);
         setTimeout(() => (document.body.style.pointerEvents = ""), 10);

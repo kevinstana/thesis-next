@@ -26,6 +26,7 @@ import { Skeleton } from "../../../ui/skeleton";
 import ViewingRecommendedCourses from "@/components/RecommendedCourses/Viewing";
 import ShadcnActionButton from "@/components/Buttons/ShadcnActionButton";
 import { GradeModal } from "./GradeModal";
+import { useUserDetails } from "@/providers/UserDetailsProvier";
 
 const currentThesis: DetailedThesisResponse = {
   thesis: {
@@ -36,14 +37,17 @@ const currentThesis: DetailedThesisResponse = {
     professorId: 0,
     professorFirstName: "",
     professorLastName: "",
+    professorGrade: 0,
 
     reviewer1Id: 0,
     reviewer1FirstName: "",
     reviewer1LastName: "",
+    reviewer1Grade: 0,
 
     reviewer2Id: 0,
     reviewer2FirstName: "",
     reviewer2LastName: "",
+    reviewer2Grade: 0,
 
     studentId: 0,
     studentFirstName: "",
@@ -61,6 +65,7 @@ const ReviewerThesisModal = forwardRef<ReviewerThesisModalRef>((_, ref) => {
   const [thesisId, setThesisId] = useState<string>("");
   const gradeModalRef = useRef<GradeModalRef>(null);
   const { identifiers } = useThesisIdentifiers();
+  const { userId } = useUserDetails();
   const [thesis, setThesis] = useState<DetailedThesisResponse>(currentThesis);
 
   const { isLoading, isValidating, mutate } = useSWR(
@@ -89,10 +94,23 @@ const ReviewerThesisModal = forwardRef<ReviewerThesisModalRef>((_, ref) => {
     },
   }));
 
+  function getInitGrade() {
+    if (Number(userId) === thesis.thesis.professorId) {
+      return thesis.thesis.professorGrade;
+    } else if (Number(userId) === thesis.thesis.reviewer1Id) {
+      return thesis.thesis.reviewer1Grade;
+    }
+
+    return thesis.thesis.reviewer2Grade;
+  }
+
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
-        <BaseModalHeader title={`Theses / ${thesis.thesis.title}`} setOpen={setOpen} />
+        <BaseModalHeader
+          title={`Theses / ${thesis.thesis.title}`}
+          setOpen={setOpen}
+        />
 
         <div
           className="flex flex-col flex-grow justify-between overflow-hidden"
@@ -248,10 +266,12 @@ const ReviewerThesisModal = forwardRef<ReviewerThesisModalRef>((_, ref) => {
             <ShadcnActionButton
               type="button"
               text="Grade"
-              handleClick={() => gradeModalRef.current?.openDialog(thesisId, thesis.thesis.title)}
+              handleClick={() =>
+                gradeModalRef.current?.openDialog(thesisId, thesis.thesis.title)
+              }
             />
 
-            <GradeModal ref={gradeModalRef} />
+            <GradeModal ref={gradeModalRef} initGrade={getInitGrade()} mutate={mutate} />
           </div>
         )}
       </BaseModalContent>
