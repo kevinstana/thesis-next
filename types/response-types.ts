@@ -47,9 +47,9 @@ export type Task = {
 };
 
 export type TaskFile = {
-  fileName: string,
-  fileSize: number
-}
+  fileName: string;
+  fileSize: number;
+};
 
 export type DetailedTask = {
   id: number;
@@ -58,10 +58,40 @@ export type DetailedTask = {
   priority: string;
   status: string;
   createdAt: string;
-  files: TaskFile[]
-}
+  files: TaskFile[];
+};
 
 export type TaskPage = {
   content: DetailedTask[];
+  page: Page;
+};
+
+export type Published = {
+  id: number;
+  title: string;
+  description: string;
+  professorId: number;
+  professorFirstName: string;
+  professorLastName: string;
+  professorGrade: number;
+  reviewer1Id: number;
+  reviewer1FirstName: string;
+  reviewer1LastName: string;
+  reviewer1Grade: number;
+  reviewer2Id: number;
+  reviewer2FirstName: string;
+  reviewer2LastName: string;
+  reviewer2Grade: number;
+  studentId: number;
+  studentFirstName: string;
+  studentLastName: string;
+  status: string;
+  publishedAt: string;
+  fileName: string;
+  fileSize: number;
+};
+
+export type PublishedPage = {
+  content: Published[];
   page: Page;
 };
