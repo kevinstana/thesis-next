@@ -25,8 +25,6 @@ export default async function Page(
   urlSearchParams.append("size", String(size));
   urlSearchParams.append("query", searchParams?.query ?? "");
 
-  console.log(urlSearchParams.toString());
-
   const res = await getPublished(urlSearchParams.toString());
   const data = res.data as PublishedPage;
 

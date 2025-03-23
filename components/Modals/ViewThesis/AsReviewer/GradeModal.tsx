@@ -1,7 +1,7 @@
 "use client";
 
 import { GradeModalRef } from "@/types/app-types";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import BaseModal from "../../BaseModal";
 import BaseModalContent from "../../BaseModalContent";
 import ModalHeaderWithArrow from "../../ModalHeaderWithArrow";
@@ -12,16 +12,20 @@ import { Loader2 } from "lucide-react";
 
 const GradeModal = forwardRef<
   GradeModalRef,
-  { mutate: () => void; initGrade: number, closeParent:() => void  }
+  { mutate: () => void; initGrade: number; closeParent: () => void }
 >(({ mutate, initGrade, closeParent }, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
   const [thesisId, setThesisId] = useState<string>("");
   const [thesisTitle, setthesisTitle] = useState<string>("");
   const [grade, setGrade] = useState<number>(
-    initGrade >= 5 && initGrade >= 10 ? initGrade : 5
+    initGrade >= 5 && initGrade <= 10 ? initGrade : 5
   );
   const { notify } = useNotification();
+
+  useEffect(() => {
+    setGrade(initGrade >= 5 && initGrade <= 10 ? initGrade : 5);
+  }, [initGrade]);
 
   useImperativeHandle(ref, () => ({
     openDialog: (id, title) => {
@@ -50,7 +54,7 @@ const GradeModal = forwardRef<
         notify("success", "Thesis graded");
         setOpen(false);
         setTimeout(() => (document.body.style.pointerEvents = ""), 10);
-        closeParent()
+        closeParent();
       } else {
         setPending(false);
         notify("error", "Something went wrong");

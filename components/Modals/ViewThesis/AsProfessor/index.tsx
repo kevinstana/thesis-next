@@ -11,6 +11,7 @@ import {
 } from "@/types/app-types";
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -343,7 +344,7 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     return customActions;
   }
 
-  function getInitGrade() {
+  const getInitGrade = useCallback(() => {
     if (Number(userId) === thesis.thesis.professorId) {
       return thesis.thesis.professorGrade;
     } else if (Number(userId) === thesis.thesis.reviewer1Id) {
@@ -351,8 +352,14 @@ const ViewThesisModal = forwardRef<ViewThesisModalRef>((_, ref) => {
     }
 
     return thesis.thesis.reviewer2Grade;
-  }
-
+  }, [
+    thesis.thesis.professorGrade,
+    thesis.thesis.professorId,
+    thesis.thesis.reviewer1Grade,
+    thesis.thesis.reviewer1Id,
+    thesis.thesis.reviewer2Grade,
+    userId,
+  ]);
   return (
     <BaseModal open={open}>
       <BaseModalContent className="bg-white w-[60%] h-[90%] rounded-md flex flex-col relative">
