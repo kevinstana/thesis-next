@@ -271,7 +271,15 @@ const ReviewerThesisModal = forwardRef<ReviewerThesisModalRef>((_, ref) => {
               }
             />
 
-            <GradeModal ref={gradeModalRef} initGrade={getInitGrade()} mutate={mutate} />
+            <GradeModal
+              ref={gradeModalRef}
+              initGrade={getInitGrade()}
+              mutate={mutate}
+              closeParent={() => {
+                setOpen(false);
+                setTimeout(() => (document.body.style.pointerEvents = ""), 10);
+              }}
+            />
           </div>
         )}
       </BaseModalContent>

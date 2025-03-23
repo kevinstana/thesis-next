@@ -12,14 +12,14 @@ import { Loader2 } from "lucide-react";
 
 const GradeModal = forwardRef<
   GradeModalRef,
-  { mutate: () => void; initGrade: number }
->(({ mutate, initGrade }, ref) => {
+  { mutate: () => void; initGrade: number, closeParent:() => void  }
+>(({ mutate, initGrade, closeParent }, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
   const [thesisId, setThesisId] = useState<string>("");
   const [thesisTitle, setthesisTitle] = useState<string>("");
   const [grade, setGrade] = useState<number>(
-    initGrade >= 1 && initGrade >= 10 ? initGrade : 1
+    initGrade >= 5 && initGrade >= 10 ? initGrade : 5
   );
   const { notify } = useNotification();
 
@@ -50,6 +50,7 @@ const GradeModal = forwardRef<
         notify("success", "Thesis graded");
         setOpen(false);
         setTimeout(() => (document.body.style.pointerEvents = ""), 10);
+        closeParent()
       } else {
         setPending(false);
         notify("error", "Something went wrong");

@@ -30,8 +30,8 @@ export default function Dates({
       onSuccess: (res) => {
         setTmpFromDate(res.data.from);
         setTmpToDate(res.data.to);
-        setFromDate(new Date(res.data.from).toISOString().split("T")[0]);
-        setToDate(new Date(res.data.to).toISOString().split("T")[0]);
+        setFromDate(res.data.from ? new Date(res.data.from).toISOString().split("T")[0] : "");
+        setToDate(res.data.to ? new Date(res.data.to).toISOString().split("T")[0] : "");
       },
     }
   );
