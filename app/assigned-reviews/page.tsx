@@ -1,11 +1,12 @@
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
-import ThesesTableOptions from "@/components/ThesesTable/Options";
 import getSession from "@/lib/getSession";
 import { BasicThesisPage } from "@/types/response-types";
 import ThesesTable from "@/components/ThesesTable";
 import { Role } from "@/types/app-types";
 import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsProviderWrapper";
 import { getAssignedReviews } from "./actions";
+import AssignedReviewsSearch from "./search";
+import Filters from "./filters";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -30,6 +31,7 @@ export default async function AssignedReviews(
   const urlSearchParams = new URLSearchParams();
   urlSearchParams.append("page", String(page));
   urlSearchParams.append("size", String(size));
+  urlSearchParams.append("query", searchParams?.query ?? "");
 
   const res = await getAssignedReviews(urlSearchParams.toString());
   const data = res.data as BasicThesisPage;
@@ -38,7 +40,10 @@ export default async function AssignedReviews(
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
         <UserDetailsProviderWrapper role={role} userId={session?.user?.id}>
-          <ThesesTableOptions path="assigned-reviews" role={role} />
+          <div className="flex justify-between">
+            <Filters path="assigned-reviews" />
+            <AssignedReviewsSearch />
+          </div>
           <ThesesTable thesisPage={data} path="assigned-reviews" />
         </UserDetailsProviderWrapper>
       </NotificationProviderWrapper>

@@ -31,13 +31,15 @@ export default function PublishedList({ data }: { data: PublishedPage }) {
         )}
       </div>
 
-      <Pagination
-        size={data.page.size}
-        number={data.page.number}
-        totalElements={data.page.totalElements}
-        totalPages={data.page.totalPages}
-        path="published"
-      />
+      {data.content.length > 0 ? (
+        <Pagination
+          size={data.page.size}
+          number={data.page.number}
+          totalElements={data.page.totalElements}
+          totalPages={data.page.totalPages}
+          path="published"
+        />
+      ) : null}
     </div>
   );
 }

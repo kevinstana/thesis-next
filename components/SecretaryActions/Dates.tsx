@@ -117,7 +117,7 @@ export default function Dates({
             <input
               name="fromDate"
               type="date"
-              className="w-32"
+              className="w-40"
               value={fromDate}
               onChange={handleFromDateChange}
             />
@@ -132,7 +132,7 @@ export default function Dates({
             <input
               name="toDate"
               type="date"
-              className="w-32"
+              className="w-40"
               value={toDate}
               onChange={handleToDateChange}
             />

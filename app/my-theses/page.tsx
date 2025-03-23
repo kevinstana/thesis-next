@@ -1,11 +1,12 @@
 import NotificationProviderWrapper from "@/components/ClientWrappers/NotificationProviderWrapper";
-import ThesesTableOptions from "@/components/ThesesTable/Options";
 import getSession from "@/lib/getSession";
 import { getTheses } from "./actions";
 import { BasicThesisPage } from "@/types/response-types";
 import ThesesTable from "@/components/ThesesTable";
 import { Role } from "@/types/app-types";
 import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsProviderWrapper";
+import MyThesisSearch from "./search";
+import Filters from "./filters";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -30,6 +31,7 @@ export default async function ThesesPage(
   const urlSearchParams = new URLSearchParams();
   urlSearchParams.append("page", String(page));
   urlSearchParams.append("size", String(size));
+  urlSearchParams.append("query", searchParams?.query ?? "");
 
   const res = await getTheses(urlSearchParams.toString());
   const data = res.data as BasicThesisPage;
@@ -38,7 +40,10 @@ export default async function ThesesPage(
     <div className="flex flex-col gap-2">
       <NotificationProviderWrapper>
         <UserDetailsProviderWrapper role={role} userId={session?.user?.id}>
-          <ThesesTableOptions path="my-theses" role={role} />
+          <div className="flex justify-between">
+            <Filters path="my-theses" />
+          <MyThesisSearch />
+          </div>
           <ThesesTable thesisPage={data} path="my-theses" />
         </UserDetailsProviderWrapper>
       </NotificationProviderWrapper>
