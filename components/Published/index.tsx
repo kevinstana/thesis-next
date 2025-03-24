@@ -3,16 +3,16 @@
 import { PublishedPage } from "@/types/response-types";
 import PublishedCard from "./card";
 import Filters from "./filters";
-import PublishedSearch from "./search";
 import Pagination from "../Pagination";
 import { clsx } from "clsx";
+import GenericSearch from "../Search";
 
 export default function PublishedList({ data }: { data: PublishedPage }) {
   return (
     <div className="border border-neutral-300 rounded-lg">
       <div className="flex items-center p-4  border-b border-b-neutral-300 justify-between">
         <Filters path="published" />
-        <PublishedSearch />
+        <GenericSearch path="published" />
       </div>
       <div
         className={clsx(

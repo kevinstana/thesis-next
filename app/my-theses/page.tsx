@@ -5,8 +5,9 @@ import { BasicThesisPage } from "@/types/response-types";
 import ThesesTable from "@/components/ThesesTable";
 import { Role } from "@/types/app-types";
 import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsProviderWrapper";
-import MyThesisSearch from "./search";
-import Filters from "./filters";
+import GenericSearch from "@/components/Search";
+import GenericFilters from "@/components/GenericFilters";
+import { isValidStatus } from "@/lib/utils";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -15,6 +16,7 @@ export default async function ThesesPage(
     searchParams?: Promise<{
       page?: string;
       size?: string;
+      status?: string;
       query?: string;
     }>;
   }>
@@ -33,6 +35,16 @@ export default async function ThesesPage(
   urlSearchParams.append("size", String(size));
   urlSearchParams.append("query", searchParams?.query ?? "");
 
+  const statusesStr = String(searchParams?.status);
+  const statuses: string[] =
+    statusesStr.length > 0 ? String(searchParams?.status).split(",") : [];
+
+  const validStatuses: string[] = statuses.filter(isValidStatus);
+
+  if (validStatuses.length > 0) {
+    urlSearchParams.append("statuses", validStatuses.join(","));
+  }
+
   const res = await getTheses(urlSearchParams.toString());
   const data = res.data as BasicThesisPage;
 
@@ -41,8 +53,8 @@ export default async function ThesesPage(
       <NotificationProviderWrapper>
         <UserDetailsProviderWrapper role={role} userId={session?.user?.id}>
           <div className="flex justify-between">
-            <Filters path="my-theses" />
-          <MyThesisSearch />
+            <GenericFilters path="my-theses" />
+            <GenericSearch path="my-theses" />
           </div>
           <ThesesTable thesisPage={data} path="my-theses" />
         </UserDetailsProviderWrapper>

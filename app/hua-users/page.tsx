@@ -16,6 +16,7 @@ export default async function HuaUsersPage(
       size?: string;
       roles?: string;
       enabled?: string;
+      query?: string;
     }>;
   }>
 ) {
@@ -45,6 +46,12 @@ export default async function HuaUsersPage(
     urlSearchParams.append("enabled", "true");
   } else if (enabled === "false") {
     urlSearchParams.append("enabled", "false");
+  }
+
+  if (searchParams?.query) {
+    urlSearchParams.delete("roles");
+    urlSearchParams.delete("enabled");
+    urlSearchParams.append("query", searchParams.query);
   }
 
   const res = await getHuaUsers(urlSearchParams.toString());

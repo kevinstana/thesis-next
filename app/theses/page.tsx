@@ -44,9 +44,6 @@ export default async function ThesesPage(
   if (validStatuses.length > 0) {
     urlSearchParams.append("statuses", validStatuses.join(","));
   } 
-  // else {
-  //   urlSearchParams.append("statuses", "AVAILABLE");
-  // }
 
   if (searchParams?.query) {
     urlSearchParams.delete("statuses");

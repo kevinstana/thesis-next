@@ -1,13 +1,12 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function MyThesisSearch() {
+export default function GenericSearch({path}: {path: string}) {
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLElement>) {
     if (e.key === "Enter") {
@@ -19,11 +18,11 @@ export default function MyThesisSearch() {
   function handleSelectResult(result: string) {
     setQuery(result);
 
-    const urlSearchParams = new URLSearchParams(searchParams);
+    const urlSearchParams = new URLSearchParams();
     urlSearchParams.delete("query")
     urlSearchParams.append("query", `${encodeURIComponent(result)}`);
 
-    router.push(`/my-theses?${urlSearchParams}`);
+    router.push(`/${path}?${urlSearchParams}`);
   }
 
   return (
