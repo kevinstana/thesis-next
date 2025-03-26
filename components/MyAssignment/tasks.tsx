@@ -1,7 +1,7 @@
 import { authFetch } from "@/lib/server-actions";
 import { TaskPage } from "@/types/response-types";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import TaskCard from "../TaskCards";
 import { getPaginationText } from "../Pagination";
@@ -29,6 +29,12 @@ export default function MyAssignmentTasks({ thesisId }: { thesisId: string }) {
       },
     }
   );
+
+  useEffect(() => {
+    if (thesisId) {
+      mutate();
+    }
+  }, [pageNumber, mutate, thesisId]);
 
   return (
     <div className="flex flex-col border w-full h-[87vh] rounded-md overflow-hidden">
