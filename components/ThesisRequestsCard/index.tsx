@@ -89,7 +89,7 @@ export default function ThesisRequestCard({
       return;
     }
 
-    notify("error", "Something went wrong");
+    notify("error", data.message);
   }
 
   async function handleUndo() {

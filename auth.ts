@@ -2,7 +2,7 @@ import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { isAdminPath, isProfessorPath, isStudentPath } from "./lib/paths";
+import { isAdminPath, isProfessorPath, isSecretaryPath, isStudentPath } from "./lib/paths";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -148,6 +148,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         if (role !== "STUDENT" && isStudentPath(url)) {
+          return NextResponse.redirect(new URL("/theses", request.url));
+        }
+
+        if (role !== "SECRETARY" && isSecretaryPath(url)) {
           return NextResponse.redirect(new URL("/theses", request.url));
         }
 

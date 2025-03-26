@@ -25,7 +25,7 @@ function formatDate(timestamp: string) {
   return dateFormatter.format(date);
 }
 
-function getFinalGrade(a: number, b: number, c: number) {
+export function getFinalGrade(a: number, b: number, c: number) {
   const average = (a + b + c) / 3;
   return Math.round(average * 10) / 10;
 }

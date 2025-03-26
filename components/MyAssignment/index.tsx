@@ -11,6 +11,8 @@ import MyAssignmentTasks from "./tasks";
 import { Button } from "../ui/button";
 import { useRef } from "react";
 import { PublishThesisModal } from "../Modals/PublishThesisModal";
+import { Award, NotebookPen, Users } from "lucide-react";
+import { getFinalGrade } from "../Published/card";
 
 export default function MyAssignment({
   data,
@@ -19,38 +21,111 @@ export default function MyAssignment({
 }) {
   const publishThesisModalRef = useRef<PublishThesisModalRef>(null);
 
+  const showGrades =
+    data.thesis.status === "REVIEWED" || data.thesis.status === "PUBLISHED";
+
   return (
     <div className="flex gap-4">
-      <div className="hidden lg:block flex-col px-2 space-y-6 max-w-[600px] h-[87vh] overflow-y-auto overflow-x-hidden">
+      <div className="hidden lg:block flex-col px-2 space-y-6 max-w-[600px] h-[87vh] overflow-y-auto overflow-x-hidden pb-8">
         <div className="flex flex-col gap-1">
-          <h1 className="text-black text-wrap font-bold">Title:</h1>
-          <div className="w-[500px] break-words">{data.thesis.title}</div>
+          <h2 className="text-black text-wrap font-bold">Title:</h2>
+          <p className="max-w-[440px] break-words">{data.thesis.title}</p>
         </div>
 
         <div className="flex flex-col">
-          <h1 className="text-black font-bold">Description:</h1>
+          <h2 className="text-black font-bold">Description:</h2>
           <Textarea initDescription={data.thesis.description} pretty readonly />
         </div>
 
         <ViewingRecommendedCourses courses={data.recommendedCourses} />
 
-        <div className="flex flex-col gap-1">
-          <h1 className="text-black font-bold">Professor:</h1>
-          <div className="w-[500px]">{`${data.thesis.professorFirstName} ${data.thesis.professorLastName}`}</div>
+        <div className="flex flex-col gap-6">
+          <div>
+            <div className="flex flex-row gap-1 items-center">
+              <Users className="h-4 w-4 shrink-0" />
+              <span className="underline font-bold">Committee</span>
+            </div>
+            <div className="flex flex-row gap-4">
+              <div className="flex flex-col gap-2 mt-1 font-semibold">
+                <span>Professor:</span>
+                <span>Reviewer 1:</span>
+                <span>Reviewer 2:</span>
+              </div>
+
+              <div className="flex flex-col gap-2 mt-1">
+                <div>
+                  <span>
+                    {data.thesis.professorFirstName}{" "}
+                    {data.thesis.professorLastName}
+                  </span>
+                </div>
+                <div>
+                  <span>
+                    {data.thesis.reviewer1FirstName}{" "}
+                    {data.thesis.reviewer1LastName}
+                  </span>
+                </div>
+                <div>
+                  <span>
+                    {data.thesis.reviewer2FirstName}{" "}
+                    {data.thesis.reviewer2LastName}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {showGrades ? (
+            <div className="flex flex-col gap-6">
+              <div>
+                <div className="flex flex-row gap-1 items-center">
+                  <NotebookPen className="h-4 w-4 shrink-0" />
+                  <span className="underline font-bold">Grades</span>
+                </div>
+                <div className="flex flex-row gap-4">
+                  <div className="flex flex-col gap-2 mt-1 font-semibold">
+                    <span>Professor:</span>
+                    <span>Reviewer 1:</span>
+                    <span>Reviewer 2:</span>
+                  </div>
+
+                  <div className="flex flex-col gap-2 mt-1">
+                    <div>
+                      <span>{data.thesis.professorGrade}</span>
+                    </div>
+                    <div>
+                      <span>{data.thesis.reviewer1Grade}</span>
+                    </div>
+                    <div>
+                      <span>{data.thesis.reviewer2Grade}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex flex-row gap-1 items-center">
+                  <Award className="h-4 w-4 shrink-0" />
+                  <span className="underline font-bold">Final Grade</span>
+                </div>
+                <div className="flex flex-col gap-2 mt-1">
+                  <div>
+                    <span className="font-semibold">
+                      {getFinalGrade(
+                        data.thesis.professorGrade,
+                        data.thesis.reviewer1Grade,
+                        data.thesis.reviewer2Grade
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-1">
-          <h1 className="text-black font-bold">Reviewer 1:</h1>
-          <div className="w-[500px]">{`${data.thesis.reviewer1FirstName} ${data.thesis.reviewer1LastName}`}</div>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <h1 className="text-black font-bold">Reviewer 2:</h1>
-          <div className="w-[500px]">{`${data.thesis.reviewer2FirstName} ${data.thesis.reviewer2LastName}`}</div>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <h1 className="text-black font-bold">Status:</h1>
+          <h2 className="text-black font-bold">Status:</h2>
           <div
             className={clsx(
               "rounded-full px-2 py-1 w-fit",
