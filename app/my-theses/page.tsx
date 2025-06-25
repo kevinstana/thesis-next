@@ -8,6 +8,7 @@ import UserDetailsProviderWrapper from "@/components/ClientWrappers/UserDetailsP
 import GenericSearch from "@/components/Search";
 import GenericFilters from "@/components/GenericFilters";
 import { isValidStatus } from "@/lib/utils";
+import ThesesTableOptions from "@/components/ThesesTable/Options";
 
 const pageSizes: string[] = ["5", "10", "15", "20", "ALL"];
 
@@ -53,7 +54,10 @@ export default async function ThesesPage(
       <NotificationProviderWrapper>
         <UserDetailsProviderWrapper role={role} userId={session?.user?.id}>
           <div className="flex justify-between">
-            <GenericFilters path="my-theses" />
+            <div className="flex items-center gap-1">
+              <ThesesTableOptions path="my-theses" role={role} />
+              <GenericFilters path="my-theses" />
+            </div>
             <GenericSearch path="my-theses" />
           </div>
           <ThesesTable thesisPage={data} path="my-theses" />
