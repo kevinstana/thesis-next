@@ -1,7 +1,7 @@
 "use client";
 
 import CreateThesisModalModalWrapper from "../Modals/CreateThesisModal";
-// import Filters from "./Filters";
+import Filters from "./Filters";
 import { Role } from "@/types/app-types";
 
 export default function ThesesTableOptions({path, role}: {path: string, role: Role}) {
@@ -9,7 +9,7 @@ export default function ThesesTableOptions({path, role}: {path: string, role: Ro
   return (
     <div className="flex items-center gap-1">
       {role === "PROFESSOR" && path === "my-theses" ? <CreateThesisModalModalWrapper /> : null}
-      {/* <Filters path={path} /> */}
+      {path === "theses" ? <Filters path={path} /> : null}
     </div>
   );
 }
